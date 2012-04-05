@@ -1,0 +1,16 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <jdbc:embedded-database type="H2" id="ds"/>
+
+    <bean class="org.springsource.examples.sawt.xml.CustomerService" id="cs">
+        <property name="dataSource" ref="ds"/>
+    </bean>
+
+    <bean class="org.springsource.examples.sawt.xml.Client" id="client">
+        <property name="customerService" ref="cs"/>
+    </bean>
+
+
+</beans>

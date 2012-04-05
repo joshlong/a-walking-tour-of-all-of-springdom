@@ -1,0 +1,37 @@
+- do the initial demo of the pre-packaged, hand-waivy Spring solution to outdo Java EE web profile: ("most of the time i do the following demo at conferences, jugs, etc")
+   -- transactions
+   -- services
+   -- RDBMS database persistence
+   -- a component model
+   -- a web framework
+   -- REST
+
+ - show them that in almost trivial amounts of code, you can do the same thing with Spring (eq. to JavaEE web profile) and it runs on anything, not just a new JavaEE 6 appserver: tomcat, cloud, jetty, weblogic 3
+  - then show them, with Spring Roo, it becomes almost trivial to outdo that
+ - then say, but thats not the demo i came here to do. the spring framework nails that demo. Let's look at the details, though, and what other stuff for hwich there are no competition demos
+ - first, core Spring...
+ -- remind them that core spring is - as often as not - consumed through the projects that build on top of it, rarely directly. t's hard for me - a guy who'se been using it since day 1 - to believe.
+ -- there's lots of interesting stuff (lets have a look!)
+ -- the projects are simple,
+ -- introduce OXM !!
+ -- introduce transaction management
+ -- introduce AOP support and so on
+ - services:
+ -- the simple cases: jpa (of of course, the other guys have that too). How many have u have done jdbc? Ok, "then this ought to impress you" (introduce jdbc example, and establish
+    that even if they don't understand what's happening witht he other demos, they should trust the code reduction is simialarly huge)
+ -- show them caching and spring cache (talk at length about how u can decompose objects -- say that we *could* serialize the complex entity but instead were choosing
+    to manually decompose the fields for searchability later, using complex keys)
+ -- show them the NoSQL Spring Data support (Redis needs to be installed!)
+ - show them the Spring Batch support for big data in "existing" data models (all of this stuff should be introduced with graphs and images and so on)
+ -- introduce Batch, in terms of the import file from fiel system example, to load it into our CRM database using any of the zillions of POJOs, worst case
+ -- you will need to setup the h2 spring batch table schema; the .sql file is *in* the Spring Batch jar
+    (/home/jlong/.m2/repository/org/springframework/batch/spring-batch-core/2.1.7.RELEASE/spring-batch-core-2.1.7.RELEASE.jar!/org/springframework/batch/core/schema-h2.sql)
+    and i've put it in the resources for this project.
+ -- then say, well how do we 'deteect' the new file?
+ -- then recap with the Spring core scheduler/  trigger support
+ -- then say, 'but there's a better way, lets look at Spring Integration'
+ -- all the while doing this, remind them that the only support (and it's not any simpler or more helpful) fromthe other guys thats comparable to this is the JPA support. everything else, theres no support at all
+ - then introduce them to another case of using Spring Integration for messaging; show the example with JMS and AMQP
+
+
+

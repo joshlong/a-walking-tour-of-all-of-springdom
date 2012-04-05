@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:batch="http://www.springframework.org/schema/batch"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:int="http://www.springframework.org/schema/integration"
+        xmlns:file="http://www.springframework.org/schema/integration/file"
+        xmlns:stream="http://www.springframework.org/schema/integration/stream"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
+    http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file-2.0.xsd
+    http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream-2.0.xsd
+    ">
+
+    <import resource="../batch/context.xml"/>
+
+    <context:component-scan base-package="org.springsource.examples.sawt.services.integration"/>
+
+    <context:property-placeholder location="/services.properties"/>
+
+
+    <file:inbound-channel-adapter channel="inboundFiles" directory="#{systemProperties['user.home']}/Desktop/in">
+        <int:poller>
+            <int:interval-trigger interval="1000"/>
+        </int:poller>
+    </file:inbound-channel-adapter>
+
+    <int:channel id="inboundFiles"/>
+
+    <int:transformer input-channel="inboundFiles" ref="fileToJobRequestTransformer" output-channel="jobs"/>
+
+    <int:channel id="jobs"/>
+
+    <int:service-activator input-channel="jobs" ref="jobMessageHandler" output-channel="completedJobs"/>
+
+    <int:channel id="completedJobs"/>
+
+    <stream:stdout-channel-adapter append-newline="true" channel="completedJobs"/>
+
+</beans>

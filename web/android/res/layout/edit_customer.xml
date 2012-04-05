@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="top"
+        android:padding="10px"
+        android:scrollbars="vertical"
+
+        >
+
+    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:id="@+id/edit_form">
+
+        <TextView android:id="@+id/customer_id_label" android:enabled="false" style="@style/label"
+                  android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+
+        <TextView android:id="@+id/search_query_label" android:text="@string/edit_first_name_label" style="@style/label"
+                  android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+
+        <EditText android:id="@+id/edit_first_name" android:layout_width="fill_parent"
+                  android:layout_height="wrap_content" android:autoText="false" android:inputType="text"
+                  android:lines="1"/>
+
+        <TextView android:id="@+id/search_query_label" android:text="@string/edit_last_name_label" style="@style/label"
+                  android:layout_width="fill_parent" android:layout_height="wrap_content"/>
+
+        <EditText android:id="@+id/edit_last_name" android:layout_width="fill_parent"
+                  android:layout_height="wrap_content" android:autoText="false" android:inputType="text"
+                  android:lines="1"/>
+
+    </LinearLayout>
+
+
+    <Button android:text="@string/save_label"
+            android:id="@+id/save_customer"
+            android:layout_below="@id/edit_form"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+</RelativeLayout>
