@@ -1,13 +1,5 @@
 package org.springsource.examples.spring31.services;
 
-import static java.lang.Class.forName;
-
-import java.sql.Driver;
-import java.util.Arrays;
-import java.util.Properties;
-
-import javax.sql.DataSource;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.dialect.H2Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +17,13 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
+import java.sql.Driver;
+import java.util.Arrays;
+import java.util.Properties;
+
+import static java.lang.Class.forName;
 
 @Configuration
 @PropertySource("/config.properties")
@@ -70,7 +69,7 @@ public class ServicesConfiguration {
         Properties props = new Properties();
         props.setProperty(org.hibernate.cfg.Environment.HBM2DDL_AUTO, "create");
         props.setProperty(org.hibernate.cfg.Environment.DIALECT, H2Dialect.class.getName());
-        props.setProperty(org.hibernate.cfg.Environment.SHOW_SQL,"true");
+        props.setProperty(org.hibernate.cfg.Environment.SHOW_SQL, "true");
 
         return new LocalSessionFactoryBuilder(this.dataSource())
                 .addAnnotatedClasses(Customer.class)

@@ -23,13 +23,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(   loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class CustomerServiceTest {
-    
+
     @Configuration
     @Import(ServicesConfiguration.class)
-    @ComponentScan(basePackageClasses =  CustomerService.class )
-    static class CustomerConfiguration { 
+    @ComponentScan(basePackageClasses = CustomerService.class)
+    static class CustomerConfiguration {
     }
 
     @Autowired
@@ -71,19 +71,19 @@ public class CustomerServiceTest {
         assertEquals(customer.getLastName(), this.lastName);
         assertEquals(customer.getSignupDate(), this.signupDate);
     }
-    
-    @Test 
-    public void testUpdatingACustomer () throws Exception {
+
+    @Test
+    public void testUpdatingACustomer() throws Exception {
         Customer customer = customerService.createCustomer(this.firstName, this.lastName, this.signupDate);
         assertNotNull("the customer can't be null", customer);
         assertEquals(customer.getFirstName(), this.firstName);
         assertEquals(customer.getLastName(), this.lastName);
-        assertEquals(customer.getSignupDate(), this.signupDate);  
-        
-        customerService.updateCustomer( customer.getId(),  "Joshua",customer.getLastName(), customer.getSignupDate());
-        
-        customer = customerService.getCustomerById( customer.getId());
-        assertEquals(customer.getFirstName(),  "Joshua");
-        
+        assertEquals(customer.getSignupDate(), this.signupDate);
+
+        customerService.updateCustomer(customer.getId(), "Joshua", customer.getLastName(), customer.getSignupDate());
+
+        customer = customerService.getCustomerById(customer.getId());
+        assertEquals(customer.getFirstName(), "Joshua");
+
     }
 }

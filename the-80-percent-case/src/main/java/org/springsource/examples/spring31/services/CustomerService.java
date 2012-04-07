@@ -1,8 +1,5 @@
 package org.springsource.examples.spring31.services;
 
-import java.util.Date;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
@@ -11,6 +8,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class CustomerService {
@@ -43,14 +43,14 @@ public class CustomerService {
     @Cacheable(CUSTOMERS_REGION)
     @Transactional(readOnly = true)
     public Customer getCustomerById(Integer id) {
-        log.debug( String.format("fetching customer# %s" , id));
+        log.debug(String.format("fetching customer# %s", id));
         return (Customer) sessionFactory.getCurrentSession().get(Customer.class, id);
     }
 
     @CacheEvict(CUSTOMERS_REGION)
     @Transactional
     public void deleteCustomer(Integer id) {
-        log.debug( String.format("deleting customer# %s" , id));
+        log.debug(String.format("deleting customer# %s", id));
 
         Customer customer = getCustomerById(id);
         sessionFactory.getCurrentSession().delete(customer);
@@ -59,8 +59,8 @@ public class CustomerService {
     @CacheEvict(CUSTOMERS_REGION)
     @Transactional
     public void updateCustomer(Integer id, String fn, String ln, Date birthday) {
-        
-        log.debug( String.format("updating customer# %s" , id));
+
+        log.debug(String.format("updating customer# %s", id));
         Customer customer = getCustomerById(id);
         customer.setLastName(ln);
         customer.setSignupDate(birthday);
