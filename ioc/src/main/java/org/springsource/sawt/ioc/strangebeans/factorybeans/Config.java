@@ -10,7 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.orm.hibernate3.HibernateTransactionManager;
 import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
-import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBuilder;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springsource.sawt.ioc.strangebeans.factorybeans.entities.Customer;
@@ -25,6 +25,7 @@ import javax.sql.DataSource;
 @PropertySource("classpath:/config.properties")
 @EnableTransactionManagement    /// nb: we're transparently enabling transaction managment
 public class Config {
+
     @Autowired
     private Environment environment;
     private String entityPackage = Customer.class.getPackage().getName();
@@ -46,7 +47,7 @@ public class Config {
     /// @Bean WE DONT WANT THIS ONE
     AnnotationSessionFactoryBean hibernate3SessionFactoryFactoryBean() {
         AnnotationSessionFactoryBean annotationSessionFactoryBean = new AnnotationSessionFactoryBean();
-        annotationSessionFactoryBean.setAnnotatedPackages(entityPackage);
+        annotationSessionFactoryBean.setAnnotatedPackages(new String[] {entityPackage});
         annotationSessionFactoryBean.setDataSource(dataSource());
         return annotationSessionFactoryBean;
     }
@@ -54,9 +55,8 @@ public class Config {
     // ahh.... much better!
     @Bean
     public SessionFactory hibernate3SessionFactory() throws Throwable {
-        return new AnnotationSessionFactoryBuilder()
-                .setDataSource(dataSource())
-                .setAnnotatedPackages(entityPackage)
+        return new LocalSessionFactoryBuilder(this.dataSource())
+                .scanPackages( this.entityPackage )
                 .buildSessionFactory();
     }
 }

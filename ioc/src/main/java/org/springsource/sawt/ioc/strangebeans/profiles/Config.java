@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.orm.hibernate3.HibernateTransactionManager;
-import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBuilder;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springsource.sawt.ioc.strangebeans.factorybeans.entities.Customer;
 
@@ -22,9 +22,8 @@ public class Config {
 
     @Bean
     public SessionFactory hibernate3SessionFactory() throws Throwable {
-        return new AnnotationSessionFactoryBuilder()
-                .setDataSource(dataSourceProvider.dataSource())
-                .setAnnotatedPackages(entityPackage)
+        return new LocalSessionFactoryBuilder(this.dataSourceProvider.dataSource())
+                .scanPackages( this.entityPackage )
                 .buildSessionFactory();
     }
 
