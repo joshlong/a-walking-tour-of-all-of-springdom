@@ -1,0 +1,26 @@
+package org.springsource.sawt.ioc.strangebeans.profiles;
+
+
+import org.h2.Driver;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+
+import javax.sql.DataSource;
+
+@Configuration
+@Profile("production")
+public class ProductionDataSource implements DataSourceProvider, InitializingBean {
+
+    @Override
+    public DataSource dataSource() {
+        Driver d = new Driver();
+        return new SimpleDriverDataSource(d, "jdbc:h2:tcp://localhost/~/prod_crm");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("starting " + getClass().getName());
+    }
+}

@@ -14,6 +14,7 @@
         <module>web</module> -->
 
         <module>the-80-percent-case</module>
+        <module>ioc</module>
     </modules>
 
     <properties>
