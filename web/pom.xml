@@ -3,65 +3,29 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springsource.examples</groupId>
-        <artifactId>sawt</artifactId>
+        <groupId>org.springsource.examples.sawt</groupId>
+        <artifactId>core</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>org.springsource.examples.web</groupId>
+
     <artifactId>web</artifactId>
+
     <packaging>pom</packaging>
 
     <modules>
-        <module>gwt</module>
+        <module>mvc</module>
+        <!--    <module>gwt</module>
         <module>mobilemvc</module>
         <module>mvc</module>
         <module>rest</module>
         <module>flex</module>
-        <module>android</module>
+        <module>android</module>-->
     </modules>
 
-    <dependencyManagement>
-        <dependencies>
-
-
-            <dependency>
-                <groupId>org.tuckey</groupId>
-                <artifactId>urlrewritefilter</artifactId>
-                <version>3.1.0</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                    </exclusion>
-
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>jcl-over-slf4j</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-                <version>2.5</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet.jsp</groupId>
-                <artifactId>jsp-api</artifactId>
-                <version>2.1</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>jstl</artifactId>
-                <version>1.2</version>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>servlet-api</artifactId>
+        </dependency>
+    </dependencies>
 </project>

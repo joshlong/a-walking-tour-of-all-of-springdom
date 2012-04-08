@@ -25,7 +25,7 @@ public class AnimalFarmConfig {
         return new AnnotationAwareAspectJAutoProxyCreator();
     }
 
-  @Bean
+    @Bean
     public MethodTimeLoggingAspect aspect() {
         return new MethodTimeLoggingAspect();
     }

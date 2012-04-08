@@ -12,7 +12,7 @@ import org.springsource.examples.sawt.services.jdbc.Config;
 @EnableWebMvc
 @Configuration
 @Import(Config.class)
-public class FlexConfig  extends WebMvcConfigurerAdapter {
+public class FlexConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public InternalResourceViewResolver resolver() {

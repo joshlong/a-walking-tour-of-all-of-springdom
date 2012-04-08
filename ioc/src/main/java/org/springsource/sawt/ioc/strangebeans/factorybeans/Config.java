@@ -19,7 +19,6 @@ import javax.sql.DataSource;
 
 /**
  * Simple config demonstrating some {@link org.springframework.beans.factory.FactoryBean}s in action.
- *
  */
 @Configuration
 @PropertySource("classpath:/config.properties")
@@ -47,7 +46,7 @@ public class Config {
     /// @Bean WE DONT WANT THIS ONE
     AnnotationSessionFactoryBean hibernate3SessionFactoryFactoryBean() {
         AnnotationSessionFactoryBean annotationSessionFactoryBean = new AnnotationSessionFactoryBean();
-        annotationSessionFactoryBean.setAnnotatedPackages(new String[] {entityPackage});
+        annotationSessionFactoryBean.setAnnotatedPackages(new String[]{entityPackage});
         annotationSessionFactoryBean.setDataSource(dataSource());
         return annotationSessionFactoryBean;
     }
@@ -56,7 +55,7 @@ public class Config {
     @Bean
     public SessionFactory hibernate3SessionFactory() throws Throwable {
         return new LocalSessionFactoryBuilder(this.dataSource())
-                .scanPackages( this.entityPackage )
+                .scanPackages(this.entityPackage)
                 .buildSessionFactory();
     }
 }

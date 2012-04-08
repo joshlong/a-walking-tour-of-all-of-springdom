@@ -78,6 +78,6 @@ public class Config {
 
     @Bean
     public Binding marketDataBinding() {
-        return BindingBuilder.from(customerQueue()).to(customerExchange()).with(this.customersQueueAndExchangeName);
+        return BindingBuilder.bind(customerQueue()).to(customerExchange()).with(this.customersQueueAndExchangeName);
     }
 }

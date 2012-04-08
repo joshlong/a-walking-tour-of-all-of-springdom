@@ -4,6 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import( org.springsource.examples.sawt.services.jdbc.Config.class)
-public class WebConfig
-{ }
+@Import(org.springsource.examples.sawt.services.jdbc.Config.class)
+public class WebConfig {
+}

@@ -1,7 +1,7 @@
 package org.springsource.examples.sawt.services.nosql.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.keyvalue.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springsource.examples.sawt.CustomerService;
 import org.springsource.examples.sawt.services.model.Customer;
@@ -16,12 +16,11 @@ public class NoSqlRedisCustomerService implements CustomerService {
     private String uniqueIdKey = "customerId";
 
     private long uniqueId() {
-
         return this.redisTemplate.opsForValue().increment(uniqueIdKey, 1);
     }
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     private String lastNameKey(long id) {
         return "customer:ln:" + id;
@@ -33,8 +32,8 @@ public class NoSqlRedisCustomerService implements CustomerService {
 
     @Override
     public Customer getCustomerById(long id) {
-        String ln = this.redisTemplate.opsForValue().get(lastNameKey(id));
-        String fn = this.redisTemplate.opsForValue().get(firstNameKey(id));
+        String ln = (String) this.redisTemplate.opsForValue().get(lastNameKey(id));
+        String fn = (String) this.redisTemplate.opsForValue().get(firstNameKey(id));
         return new Customer(id, fn, ln);
     }
 

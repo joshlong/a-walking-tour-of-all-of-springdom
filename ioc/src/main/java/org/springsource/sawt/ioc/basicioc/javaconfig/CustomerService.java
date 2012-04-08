@@ -13,7 +13,7 @@ public class CustomerService {
 
     public void setDataSource(DataSource ds) {
         this.dataSource = ds;
-        System.out.println( "the data source has been set " + ToStringBuilder.reflectionToString(this.dataSource));
+        System.out.println("the data source has been set " + ToStringBuilder.reflectionToString(this.dataSource));
     }
 
 

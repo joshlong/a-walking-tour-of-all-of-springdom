@@ -22,6 +22,6 @@ public class AnimalFarmConfig {
     static public SoxComplianceSuite complianceSuite() throws Throwable {
         return new SoxComplianceSuite();
     }
- 
+
 
 }

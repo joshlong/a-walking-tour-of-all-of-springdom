@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springsource.examples.sawt.CustomerService;
 import org.springsource.examples.sawt.services.model.Customer;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Controller
 public class CustomerController {
 
@@ -30,9 +27,9 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/display", method = RequestMethod.GET)
-    public String  customer(@RequestParam("id") Long id, Model model ) {
+    public String customer(@RequestParam("id") Long id, Model model) {
         Customer customerById = this.customerService.getCustomerById(id);
-        model.addAttribute( "customer", customerById);
+        model.addAttribute("customer", customerById);
         return "customers/display";
     }
 

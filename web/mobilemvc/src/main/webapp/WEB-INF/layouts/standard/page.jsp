@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-     <style type="text/css">
+    <style type="text/css">
         body, html {
             font-family: helvetica, arial, sans-serif;
             font-size: 90%;
@@ -19,13 +19,14 @@
         }
     </style>
     <script type="text/javascript">
-        djConfig={
-          parseOnLoad: true
+        djConfig = {
+            parseOnLoad:true
         };
     </script>
 
-    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/soria/soria.css" />
-    <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"  ></script>
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/soria/soria.css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"></script>
     <script type="text/javascript">
         dojo.require("dijit.layout.BorderContainer");
         dojo.require("dijit.layout.TabContainer");
@@ -61,10 +62,16 @@
     </div>
     <div dojoType="dijit.layout.ContentPane" region="center">
 
-        <div id= "customerContainer">
+        <div id="customerContainer">
             <table>
-                <tr><td>First Name:</td><td><span id = "fn"> </span></td></tr>
-                <tr><td>Last Name:</td><td><span id = "ln"> </span></td></tr>
+                <tr>
+                    <td>First Name:</td>
+                    <td><span id="fn"> </span></td>
+                </tr>
+                <tr>
+                    <td>Last Name:</td>
+                    <td><span id="ln"> </span></td>
+                </tr>
             </table>
 
         </div>
@@ -81,41 +88,41 @@
 
     var customerLookupTopic = '/customerLookup';
 
-    dojo.ready(function(evt) {
+    dojo.ready(function (evt) {
 
 
         var lookupLink = dojo.byId('lookup');
         var customerId = dojo.byId('cid');
 
-        dojo.subscribe(customerLookupTopic, function(cid) {
+        dojo.subscribe(customerLookupTopic, function (cid) {
             var url = "http://localhost:8080/customer/" + cid;
             dojo.xhrGet({
-                url: url ,
-                headers: { Accept:'application/json' },
-                handleAs: 'json',
-                load:function( cr ) {
+                url:url,
+                headers:{ Accept:'application/json' },
+                handleAs:'json',
+                load:function (cr) {
                     //var cc = dojo.byId('customerContainer');
-                    alert(cr.firstName + ' '+cr.lastName)
-                    var fn =dojo.byId('fn'),
-                        ln = dojo.byId('ln');
+                    alert(cr.firstName + ' ' + cr.lastName)
+                    var fn = dojo.byId('fn'),
+                            ln = dojo.byId('ln');
 
                     fn.innerHTML = cr.firstName;
                     ln.innerHTML = cr.lastName;
 
 
                 },
-                error: function(e) {
-                    alert( "that doesn't appear to be a valid customer ID#! Please try again!");
+                error:function (e) {
+                    alert("that doesn't appear to be a valid customer ID#! Please try again!");
                 }
             });
 
         });
-        dojo.connect(customerId, 'change', function(evt) {
+        dojo.connect(customerId, 'change', function (evt) {
             var customerId = parseInt(dojo.byId('cid').value);
             dojo.publish(customerLookupTopic, [ customerId  ]);
         });
 
-        dojo.connect(lookupLink, 'click', function(evt) {
+        dojo.connect(lookupLink, 'click', function (evt) {
             var customerId = parseInt(dojo.byId('cid').value);
             dojo.publish(customerLookupTopic, [customerId ]);
         });

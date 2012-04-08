@@ -23,7 +23,7 @@ public class Config {
     @Bean
     public SessionFactory hibernate3SessionFactory() throws Throwable {
         return new LocalSessionFactoryBuilder(this.dataSourceProvider.dataSource())
-                .scanPackages( this.entityPackage )
+                .scanPackages(this.entityPackage)
                 .buildSessionFactory();
     }
 

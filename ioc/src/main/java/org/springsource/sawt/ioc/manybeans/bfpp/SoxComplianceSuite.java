@@ -41,7 +41,7 @@ public class SoxComplianceSuite implements BeanFactoryPostProcessor {
 
         if (!definitionExists(AnnotationAwareAspectJAutoProxyCreator.class, beanFactory))
             BeanDefinitionReaderUtils.registerWithGeneratedName(
-            		new RootBeanDefinition(AnnotationAwareAspectJAutoProxyCreator.class), registry);
+                    new RootBeanDefinition(AnnotationAwareAspectJAutoProxyCreator.class), registry);
 
         if (!definitionExists(MethodTimeLoggingAspect.class, beanFactory))
             BeanDefinitionReaderUtils.registerWithGeneratedName(new RootBeanDefinition(MethodTimeLoggingAspect.class), registry);

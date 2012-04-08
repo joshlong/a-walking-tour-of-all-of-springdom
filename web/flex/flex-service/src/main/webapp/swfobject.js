@@ -14,7 +14,7 @@ if (typeof deconcept.util == "undefined") {
 if (typeof deconcept.SWFObjectUtil == "undefined") {
     deconcept.SWFObjectUtil = {};
 }
-deconcept.SWFObject = function(_1, id, w, h, _5, c, _7, _8, _9, _a) {
+deconcept.SWFObject = function (_1, id, w, h, _5, c, _7, _8, _9, _a) {
     if (!document.getElementById) {
         return;
     }
@@ -41,10 +41,10 @@ deconcept.SWFObject = function(_1, id, w, h, _5, c, _7, _8, _9, _a) {
     this.installedVer = deconcept.SWFObjectUtil.getPlayerVersion();
     if (!window.opera && document.all && this.installedVer.major > 7) {
         if (!deconcept.unloadSet) {
-            deconcept.SWFObjectUtil.prepUnload = function() {
-                __flash_unloadHandler = function() {
+            deconcept.SWFObjectUtil.prepUnload = function () {
+                __flash_unloadHandler = function () {
                 };
-                __flash_savedUnloadHandler = function() {
+                __flash_savedUnloadHandler = function () {
                 };
                 window.attachEvent("onunload", deconcept.SWFObjectUtil.cleanupSWFs);
             };
@@ -66,24 +66,24 @@ deconcept.SWFObject = function(_1, id, w, h, _5, c, _7, _8, _9, _a) {
         this.setAttribute("redirectUrl", _9);
     }
 };
-deconcept.SWFObject.prototype = {useExpressInstall:function(_d) {
+deconcept.SWFObject.prototype = {useExpressInstall:function (_d) {
     this.xiSWFPath = !_d ? "expressinstall.swf" : _d;
     this.setAttribute("useExpressInstall", true);
-},setAttribute:function(_e, _f) {
+}, setAttribute:function (_e, _f) {
     this.attributes[_e] = _f;
-},getAttribute:function(_10) {
+}, getAttribute:function (_10) {
     return this.attributes[_10] || "";
-},addParam:function(_11, _12) {
+}, addParam:function (_11, _12) {
     this.params[_11] = _12;
-},getParams:function() {
+}, getParams:function () {
     return this.params;
-},addVariable:function(_13, _14) {
+}, addVariable:function (_13, _14) {
     this.variables[_13] = _14;
-},getVariable:function(_15) {
+}, getVariable:function (_15) {
     return this.variables[_15] || "";
-},getVariables:function() {
+}, getVariables:function () {
     return this.variables;
-},getVariablePairs:function() {
+}, getVariablePairs:function () {
     var _16 = [];
     var key;
     var _18 = this.getVariables();
@@ -91,7 +91,7 @@ deconcept.SWFObject.prototype = {useExpressInstall:function(_d) {
         _16[_16.length] = key + "=" + _18[key];
     }
     return _16;
-},getSWFHTML:function() {
+}, getSWFHTML:function () {
     var _19 = "";
     if (navigator.plugins && navigator.mimeTypes && navigator.mimeTypes.length) {
         if (this.getAttribute("doExpressInstall")) {
@@ -127,9 +127,9 @@ deconcept.SWFObject.prototype = {useExpressInstall:function(_d) {
         _19 += "</object>";
     }
     return _19;
-},write:function(_20) {
+}, write:function (_20) {
     if (this.getAttribute("useExpressInstall")) {
-        var _21 = new deconcept.PlayerVersion([6,0,65]);
+        var _21 = new deconcept.PlayerVersion([6, 0, 65]);
         if (this.installedVer.versionIsValid(_21) && !this.installedVer.versionIsValid(this.getAttribute("version"))) {
             this.setAttribute("doExpressInstall", true);
             this.addVariable("MMredirectURL", escape(this.getAttribute("xiRedirectUrl")));
@@ -148,8 +148,8 @@ deconcept.SWFObject.prototype = {useExpressInstall:function(_d) {
     }
     return false;
 }};
-deconcept.SWFObjectUtil.getPlayerVersion = function() {
-    var _23 = new deconcept.PlayerVersion([0,0,0]);
+deconcept.SWFObjectUtil.getPlayerVersion = function () {
+    var _23 = new deconcept.PlayerVersion([0, 0, 0]);
     if (navigator.plugins && navigator.mimeTypes.length) {
         var x = navigator.plugins["Shockwave Flash"];
         if (x && x.description) {
@@ -163,27 +163,27 @@ deconcept.SWFObjectUtil.getPlayerVersion = function() {
                 try {
                     _26++;
                     axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash." + _26);
-                    _23 = new deconcept.PlayerVersion([_26,0,0]);
-                } catch(e) {
+                    _23 = new deconcept.PlayerVersion([_26, 0, 0]);
+                } catch (e) {
                     axo = null;
                 }
             }
         } else {
             try {
                 var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
-            } catch(e) {
+            } catch (e) {
                 try {
                     var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6");
-                    _23 = new deconcept.PlayerVersion([6,0,21]);
+                    _23 = new deconcept.PlayerVersion([6, 0, 21]);
                     axo.AllowScriptAccess = "always";
-                } catch(e) {
+                } catch (e) {
                     if (_23.major == 6) {
                         return _23;
                     }
                 }
                 try {
                     axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
-                } catch(e) {
+                } catch (e) {
                 }
             }
             if (axo != null) {
@@ -193,12 +193,12 @@ deconcept.SWFObjectUtil.getPlayerVersion = function() {
     }
     return _23;
 };
-deconcept.PlayerVersion = function(_29) {
+deconcept.PlayerVersion = function (_29) {
     this.major = _29[0] != null ? parseInt(_29[0]) : 0;
     this.minor = _29[1] != null ? parseInt(_29[1]) : 0;
     this.rev = _29[2] != null ? parseInt(_29[2]) : 0;
 };
-deconcept.PlayerVersion.prototype.versionIsValid = function(fv) {
+deconcept.PlayerVersion.prototype.versionIsValid = function (fv) {
     if (this.major < fv.major) {
         return false;
     }
@@ -216,7 +216,7 @@ deconcept.PlayerVersion.prototype.versionIsValid = function(fv) {
     }
     return true;
 };
-deconcept.util = {getRequestParameter:function(_2b) {
+deconcept.util = {getRequestParameter:function (_2b) {
     var q = document.location.search || document.location.hash;
     if (_2b == null) {
         return q;
@@ -231,20 +231,20 @@ deconcept.util = {getRequestParameter:function(_2b) {
     }
     return "";
 }};
-deconcept.SWFObjectUtil.cleanupSWFs = function() {
+deconcept.SWFObjectUtil.cleanupSWFs = function () {
     var _2f = document.getElementsByTagName("OBJECT");
     for (var i = _2f.length - 1; i >= 0; i--) {
         _2f[i].style.display = "none";
         for (var x in _2f[i]) {
             if (typeof _2f[i][x] == "function") {
-                _2f[i][x] = function() {
+                _2f[i][x] = function () {
                 };
             }
         }
     }
 };
 if (!document.getElementById && document.all) {
-    document.getElementById = function(id) {
+    document.getElementById = function (id) {
         return document.all[id];
     };
 }

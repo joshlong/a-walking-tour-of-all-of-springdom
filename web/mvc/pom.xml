@@ -3,44 +3,31 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springsource.examples.web</groupId>
+        <groupId>org.springsource.examples.sawt</groupId>
         <artifactId>web</artifactId>
-
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <packaging>war</packaging>
+
     <artifactId>mvc</artifactId>
+
+
+    <packaging>war</packaging>
+
+
     <dependencies>
 
         <dependency>
-            <groupId>org.springsource.examples</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>core-services</artifactId>
-            <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
+            <version>${version}</version>
 
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>jcl-over-slf4j</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.tuckey</groupId>
-            <artifactId>urlrewritefilter</artifactId>
-        </dependency>
+        <!--
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -52,6 +39,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>

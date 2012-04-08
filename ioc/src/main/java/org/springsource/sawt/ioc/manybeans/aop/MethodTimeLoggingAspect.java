@@ -3,7 +3,6 @@ package org.springsource.sawt.ioc.manybeans.aop;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
 
 /**
  * Simple {@link Aspect} that both filters out the candidate beans and intercepts appropriately.

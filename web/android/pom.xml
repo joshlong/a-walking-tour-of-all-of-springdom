@@ -28,7 +28,7 @@
         <android-version>2.3.1</android-version>
         <spring-android-version>1.0.0.BUILD-SNAPSHOT</spring-android-version>
         <spring-social-version>1.0.0.M2</spring-social-version>
-         <simple-version>2.4.1</simple-version>
+        <simple-version>2.4.1</simple-version>
         <android-rome-version>1.0.0-r2</android-rome-version>
     </properties>
 
@@ -126,24 +126,25 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.8.2</version>
         </dependency>
-         <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-core-asl</artifactId>
-      <version>1.8.2</version>
-    </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.8.2</version>
+        </dependency>
         <dependency>
             <groupId>org.simpleframework</groupId>
             <artifactId>simple-xml</artifactId>
-            <version>2.5.3</version>     <exclusions>
-                  <exclusion>
-                      <artifactId>stax</artifactId>
-                      <groupId>stax</groupId>
-                  </exclusion>
-                  <exclusion>
-                      <artifactId>stax-api</artifactId>
-                      <groupId>stax</groupId>
-                  </exclusion>
-              </exclusions>
+            <version>2.5.3</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>stax</artifactId>
+                    <groupId>stax</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>stax-api</artifactId>
+                    <groupId>stax</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 

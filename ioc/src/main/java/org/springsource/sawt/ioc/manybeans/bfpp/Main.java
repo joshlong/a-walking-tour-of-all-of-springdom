@@ -7,7 +7,7 @@ import org.springsource.sawt.ioc.manybeans.Dog;
 public class Main {
     public static void main(String[] args) throws Throwable {
         AnnotationConfigApplicationContext annotationConfigApplicationContext =
-        		new AnnotationConfigApplicationContext(AnimalFarmConfig.class);
+                new AnnotationConfigApplicationContext(AnimalFarmConfig.class);
 
         Cat cat = annotationConfigApplicationContext.getBean(Cat.class);
         cat.meow();

@@ -2,7 +2,6 @@ package org.springsource.examples.sawt.services.cache;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
