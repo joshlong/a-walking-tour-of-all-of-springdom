@@ -14,16 +14,18 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springsource.examples.sawt.services.model.Customer;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.Driver;
 
@@ -32,44 +34,43 @@ import java.sql.Driver;
  *
  * @author Josh Long
  */
-@Configuration("batchConfiguration")
+@Configuration
+@PropertySource("/services.properties")
+@ImportResource("/org/springsource/examples/sawt/services/batch/context.xml")
 public class Config {
+
+    @Autowired
+    private Environment environment;
 
     private Log log = LogFactory.getLog(getClass());
 
-    @Value("${jdbc.sql.customers.insert}")
     private String insertCustomersSql;
-
-    @Value("${dataSource.url}")
-    private String url;
-
-    @Value("${dataSource.user}")
-    private String user;
-
-    @Value("${dataSource.password}")
-    private String password;
-
-    @Value("${dataSource.driverClass}")
+    private String url, user, password;
     private Class<? extends Driver> driverClassName;
 
     @Bean
-    public PlatformTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource());
+    public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @PostConstruct
+    public void init() {
+        this.insertCustomersSql = environment.getProperty("jdbc.sql.customers.insert");
+        this.password = environment.getProperty("dataSource.password");
+        this.user = environment.getProperty("dataSource.user");
+        this.driverClassName = environment.getPropertyAsClass("dataSource.driverClass", Driver.class);
+        this.url = environment.getProperty("dataSource.batchUrl");
     }
 
     @Bean
     public DataSource dataSource() {
+
         SimpleDriverDataSource simpleDriverDataSource = new SimpleDriverDataSource();
         simpleDriverDataSource.setPassword(password);
         simpleDriverDataSource.setUrl(url);
         simpleDriverDataSource.setUsername(user);
         simpleDriverDataSource.setDriverClass(driverClassName);
         return simpleDriverDataSource;
-    }
-
-    @Bean
-    public PlatformTransactionManager platformTransactionManager() {
-        return new DataSourceTransactionManager(dataSource());
     }
 
     @Bean   // sets up infrastructure and scope
@@ -79,12 +80,10 @@ public class Config {
         return jobRegistryBeanPostProcessor;
     }
 
-    @Bean(name = "jobRepository")
-    public JobRepositoryFactoryBean jobRepository() throws Exception {
-        JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
-        jobRepositoryFactoryBean.setDataSource(this.dataSource());
-        jobRepositoryFactoryBean.setTransactionManager(this.platformTransactionManager());
-        return jobRepositoryFactoryBean;
+
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(dataSource());
     }
 
     @Bean
@@ -92,10 +91,29 @@ public class Config {
         return new MapJobRegistry();
     }
 
+    @Bean(name = "jobRepository")
+    public JobRepository jobRepository() throws Exception {
+        JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
+        jobRepositoryFactoryBean.setDataSource(this.dataSource());
+        jobRepositoryFactoryBean.setTransactionManager(this.transactionManager());
+        jobRepositoryFactoryBean.afterPropertiesSet();
+        return (JobRepository) jobRepositoryFactoryBean.getObject();
+    }
+
+    @Bean  // thread safe and stateless, no need to make it step-scoped.
+    public JdbcBatchItemWriter writer() {
+        JdbcBatchItemWriter<Customer> jdbcBatchItemWriter = new JdbcBatchItemWriter<Customer>();
+        jdbcBatchItemWriter.setAssertUpdates(true);
+        jdbcBatchItemWriter.setDataSource(this.dataSource());
+        jdbcBatchItemWriter.setSql(this.insertCustomersSql);
+        jdbcBatchItemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Customer>());
+        return jdbcBatchItemWriter;
+    }
+
     @Bean
     public SimpleJobLauncher jobLauncher() throws Exception {
         SimpleJobLauncher simpleJobLauncher = new SimpleJobLauncher();
-        simpleJobLauncher.setJobRepository((JobRepository) this.jobRepository().getObject());
+        simpleJobLauncher.setJobRepository(this.jobRepository());//.getObject());
         return simpleJobLauncher;
     }
 
@@ -134,15 +152,5 @@ public class Config {
         };
     }
 
-
-    @Bean  // thread safe and stateless, no need to make it step-scoped.
-    public JdbcBatchItemWriter writer() {
-        JdbcBatchItemWriter<Customer> jdbcBatchItemWriter = new JdbcBatchItemWriter<Customer>();
-        jdbcBatchItemWriter.setAssertUpdates(true);
-        jdbcBatchItemWriter.setDataSource(this.dataSource());
-        jdbcBatchItemWriter.setSql(this.insertCustomersSql);
-        jdbcBatchItemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Customer>());
-        return jdbcBatchItemWriter;
-    }
 
 }

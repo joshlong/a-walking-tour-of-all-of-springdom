@@ -19,7 +19,7 @@
         <spring.amqp.version>1.0.0.M2</spring.amqp.version>
         <activemq.version>5.5.0</activemq.version>
         <spring.ws.version>2.0.1.RELEASE</spring.ws.version>
-        <org.springframework.version>3.1.0.RELEASE</org.springframework.version>
+        <org.springframework.version>3.1.1.RELEASE</org.springframework.version>
         <org.springframework.security-version>3.0.3.RELEASE</org.springframework.security-version>
         <spring.integration.version>2.1.1.RELEASE</spring.integration.version>
     </properties>

@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -16,14 +16,13 @@ import java.util.Date;
 public class Main {
     static public void main(String[] args) throws Throwable {
 
-
         Log log = LogFactory.getLog(Main.class);
 
-        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("/org/springsource/examples/sawt/services/batch/context.xml");
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(Config.class.getPackage().getName());
+        applicationContext.start();
 
         JobLauncher jobLauncher = applicationContext.getBean(JobLauncher.class);
         Job job = applicationContext.getBean("importData", Job.class);
-
 
         Resource samplesResource = new ClassPathResource("/sample/a.csv");
         String absFilePath = "file:///" + samplesResource.getFile().getAbsolutePath();
