@@ -5,7 +5,9 @@ import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
+import org.springsource.examples.sawt.services.batch.BatchConfiguration;
 
 import javax.inject.Inject;
 
@@ -16,7 +18,8 @@ import javax.inject.Inject;
  * @author Josh Long
  */
 @Configuration
-@ImportResource("/org/springsource/examples/sawt/services/batch/context.xml")
+@Import(BatchConfiguration.class)
+@ImportResource(  "/org/springsource/examples/sawt/services/integration/context.xml" )
 public class IntegrationConfiguration {
 
     @Inject private JobLauncher jobLauncher;

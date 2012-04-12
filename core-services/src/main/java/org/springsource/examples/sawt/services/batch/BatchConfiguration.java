@@ -100,7 +100,7 @@ public class BatchConfiguration {
         return (JobRepository) jobRepositoryFactoryBean.getObject();
     }
 
-    @Bean  // thread safe and stateless, no need to make it step-scoped.
+    @Bean ( name = "writer") // thread safe and stateless, no need to make it step-scoped.
     public JdbcBatchItemWriter<Customer> writer() {
         JdbcBatchItemWriter<Customer> jdbcBatchItemWriter = new JdbcBatchItemWriter<Customer>();
         jdbcBatchItemWriter.setAssertUpdates(true);
@@ -117,7 +117,7 @@ public class BatchConfiguration {
         return simpleJobLauncher;
     }
 
-    @Bean
+    @Bean  (name = "reader")
     @Scope("step")
     public FlatFileItemReader<Customer> reader(@Value("#{jobParameters['input.file']}") Resource resource) throws Exception {
 

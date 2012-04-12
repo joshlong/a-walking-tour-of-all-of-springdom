@@ -15,7 +15,7 @@ public class Main {
 
         Log log = LogFactory.getLog(Main.class);
 
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(Config.class.getPackage().getName());
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(BatchConfiguration.class );
         applicationContext.start();
 
         JobLauncher jobLauncher = applicationContext.getBean(JobLauncher.class);
