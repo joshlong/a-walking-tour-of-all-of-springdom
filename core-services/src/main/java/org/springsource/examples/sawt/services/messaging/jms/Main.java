@@ -18,8 +18,7 @@ public class Main {
         Log log = LogFactory.getLog(Main.class);
 
 
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(Config.class);
-
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(Config.class.getPackage().getName());
 
         JmsTemplate jmsTemplate = applicationContext.getBean(JmsTemplate.class);
 

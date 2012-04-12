@@ -10,9 +10,6 @@ import org.springframework.core.io.Resource;
 
 import java.util.Date;
 
-/**
- * simple
- */
 public class Main {
     static public void main(String[] args) throws Throwable {
 

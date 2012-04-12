@@ -23,8 +23,6 @@ import java.sql.Driver;
 @Configuration
 @PropertySource("classpath:/services.properties")
 @EnableTransactionManagement
-@ComponentScan(basePackageClasses = Config.class, excludeFilters = {@ComponentScan.Filter(Configuration.class)})
-
 public class Config {
 
     @Inject

@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Component
+@Transactional
 public class JpaCustomerService implements CustomerService {
 
     @PersistenceContext
@@ -19,7 +20,6 @@ public class JpaCustomerService implements CustomerService {
         return this.entityManager.find(Customer.class, id);
     }
 
-    @Transactional
     public Customer createCustomer(String fn, String ln) {
         Customer newCustomer = new Customer();
         newCustomer.setFirstName(fn);
@@ -28,7 +28,6 @@ public class JpaCustomerService implements CustomerService {
         return newCustomer;
     }
 
-    @Transactional
     public Customer updateCustomer(long id, String fn, String ln) {
         Customer customer = this.getCustomerById(id);
         customer.setFirstName(fn);

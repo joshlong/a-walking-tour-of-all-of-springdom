@@ -101,7 +101,7 @@ public class Config {
     }
 
     @Bean  // thread safe and stateless, no need to make it step-scoped.
-    public JdbcBatchItemWriter writer() {
+    public JdbcBatchItemWriter<Customer> writer() {
         JdbcBatchItemWriter<Customer> jdbcBatchItemWriter = new JdbcBatchItemWriter<Customer>();
         jdbcBatchItemWriter.setAssertUpdates(true);
         jdbcBatchItemWriter.setDataSource(this.dataSource());
@@ -113,13 +113,13 @@ public class Config {
     @Bean
     public SimpleJobLauncher jobLauncher() throws Exception {
         SimpleJobLauncher simpleJobLauncher = new SimpleJobLauncher();
-        simpleJobLauncher.setJobRepository(this.jobRepository());//.getObject());
+        simpleJobLauncher.setJobRepository(this.jobRepository());
         return simpleJobLauncher;
     }
 
     @Bean
     @Scope("step")
-    public FlatFileItemReader reader(@Value("#{jobParameters['input.file']}") Resource resource) throws Exception {
+    public FlatFileItemReader<Customer> reader(@Value("#{jobParameters['input.file']}") Resource resource) throws Exception {
 
         log.debug(String.format("building FlatFileItemReader to read in the file %s", resource.getFile().getAbsolutePath()));
 
