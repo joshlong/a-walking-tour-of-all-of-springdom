@@ -10,17 +10,17 @@
     <artifactId>core-services</artifactId>
 
     <dependencies>
-
-
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb-cross-store</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
-
         </dependency>
         <dependency>
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
-
         </dependency>
         <dependency>
             <groupId>org.springframework.amqp</groupId>
@@ -158,9 +158,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-
         </dependency>
-
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
@@ -172,9 +170,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -187,7 +183,6 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
         </dependency>
-
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>

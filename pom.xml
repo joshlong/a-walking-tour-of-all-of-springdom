@@ -15,6 +15,7 @@
     </modules>
     <properties>
         <java.version>1.6</java.version>
+        <spring.data.mongo.version>1.0.0.RELEASE</spring.data.mongo.version>
         <com.rabbitmq.version>2.5.0</com.rabbitmq.version>
         <spring.amqp.version>1.0.0.RELEASE</spring.amqp.version>
         <activemq.version>5.5.0</activemq.version>
@@ -46,6 +47,34 @@
                     <exclusion>
                         <groupId>org.slf4j</groupId>
                         <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- Spring Data dependencies -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb-cross-store</artifactId>
+                <version>${spring.data.mongo.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aspects</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-orm</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-test</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
