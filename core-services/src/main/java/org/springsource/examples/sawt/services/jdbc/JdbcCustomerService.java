@@ -26,6 +26,7 @@ public class JdbcCustomerService implements CustomerService {
 
     @Inject
     private Environment environment;
+
     @Inject
     private JdbcTemplate jdbcTemplate;
 

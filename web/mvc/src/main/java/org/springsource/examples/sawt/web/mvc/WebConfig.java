@@ -9,12 +9,12 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import org.springsource.examples.sawt.services.jdbc.Config;
+import org.springsource.examples.sawt.services.jdbc.JdbcConfiguration;
 //import org.springsource.examples.spring31.services.config.Servic esConfiguration;
 
 @Configuration
 @EnableWebMvc
-@Import(Config.class)
+@Import(JdbcConfiguration.class)
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
