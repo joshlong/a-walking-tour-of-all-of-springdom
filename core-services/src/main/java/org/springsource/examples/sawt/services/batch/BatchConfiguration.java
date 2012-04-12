@@ -37,7 +37,7 @@ import java.sql.Driver;
 @Configuration
 @PropertySource("/services.properties")
 @ImportResource("/org/springsource/examples/sawt/services/batch/context.xml")
-public class Config {
+public class BatchConfiguration {
 
     @Autowired
     private Environment environment;
