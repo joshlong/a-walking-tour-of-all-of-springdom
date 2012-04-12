@@ -10,10 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  */
 public class Main {
     public static void main(String[] args) throws Throwable {
-
-        AnnotationConfigApplicationContext annotationConfigApplicationContext
-                = new AnnotationConfigApplicationContext( IntegrationConfiguration.class);
-
+        AnnotationConfigApplicationContext annotationConfigApplicationContext =
+                new AnnotationConfigApplicationContext(IntegrationConfiguration.class);
     }
-
 }

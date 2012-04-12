@@ -6,7 +6,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -32,10 +31,10 @@ public class JpaConfiguration {
 
         LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         localContainerEntityManagerFactoryBean.setDataSource(dataSource());
-        localContainerEntityManagerFactoryBean.setPackagesToScan( Customer.class.getPackage().getName() );
+        localContainerEntityManagerFactoryBean.setPackagesToScan(Customer.class.getPackage().getName());
 
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-        jpaVendorAdapter.setGenerateDdl( true);
+        jpaVendorAdapter.setGenerateDdl(true);
 
         localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
@@ -50,7 +49,6 @@ public class JpaConfiguration {
     }
 
     @Bean
-    @SuppressWarnings("unchecked")
     public DataSource dataSource() throws Exception {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         dataSource.setPassword(environment.getProperty("dataSource.password"));

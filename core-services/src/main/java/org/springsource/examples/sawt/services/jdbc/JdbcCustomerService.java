@@ -19,6 +19,7 @@ import java.util.Map;
 
 @SuppressWarnings("unchecked")
 @Component
+@Transactional
 public class JdbcCustomerService implements CustomerService {
 
     private String customerByIdQuery;
@@ -36,8 +37,6 @@ public class JdbcCustomerService implements CustomerService {
         this.updateCustomerQuery = environment.getProperty("jdbc.sql.customers.update");
     }
 
-
-    @Transactional
     public Customer createCustomer(String fn, String ln) {
 
         Map<String, Object> args = new HashMap<String, Object>();
@@ -58,7 +57,6 @@ public class JdbcCustomerService implements CustomerService {
         return jdbcTemplate.queryForObject(customerByIdQuery, customerRowMapper, id);
     }
 
-    @Transactional
     public Customer updateCustomer(long id, String fn, String ln) {
         this.jdbcTemplate.update(updateCustomerQuery, fn, ln, id);
         return getCustomerById(id);

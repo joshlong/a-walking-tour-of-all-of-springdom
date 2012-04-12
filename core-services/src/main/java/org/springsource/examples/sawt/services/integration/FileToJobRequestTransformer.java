@@ -40,7 +40,6 @@ public class FileToJobRequestTransformer {
         for (String k : map.keySet())
             log.debug(String.format("header %s = %s", k, map.get(k)));
 
-
         JobParameters parms = new JobParametersBuilder()
                 .addDate("date", new Date())
                 .addString("input.file", "file:///" + file.getAbsolutePath())

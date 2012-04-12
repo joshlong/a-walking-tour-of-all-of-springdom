@@ -19,18 +19,19 @@
 
     <context:property-placeholder location="/services.properties"/>
 
-    <int:channel id="jobsToLaunch" />
-    <int:channel id="filesReceived" />
-    <int:channel id="jobExecutions" />
+    <int:channel id="jobsToLaunch"/>
+    <int:channel id="filesReceived"/>
+    <int:channel id="jobExecutions"/>
 
-    <file:inbound-channel-adapter auto-create-directory="true"  channel="filesReceived" directory="#{systemProperties['user.home']}/Desktop/in">
-        <int:poller fixed-rate="1000" />
+    <file:inbound-channel-adapter auto-create-directory="true" channel="filesReceived"
+                                  directory="#{systemProperties['user.home']}/Desktop/in">
+        <int:poller fixed-rate="1000"/>
     </file:inbound-channel-adapter>
 
-    <int:transformer  ref="fileToJobRequestTransformer" input-channel="filesReceived" output-channel="jobsToLaunch"  />
+    <int:transformer ref="fileToJobRequestTransformer" input-channel="filesReceived" output-channel="jobsToLaunch"/>
 
-    <int:service-activator  input-channel="jobsToLaunch" ref="jobMessageHandler"  output-channel="jobExecutions"  />
+    <int:service-activator input-channel="jobsToLaunch" ref="jobMessageHandler" output-channel="jobExecutions"/>
 
-    <stream:stdout-channel-adapter id="jobsPrinted" append-newline="true" channel="jobExecutions" />
+    <stream:stdout-channel-adapter id="jobsPrinted" append-newline="true" channel="jobExecutions"/>
 
 </beans>

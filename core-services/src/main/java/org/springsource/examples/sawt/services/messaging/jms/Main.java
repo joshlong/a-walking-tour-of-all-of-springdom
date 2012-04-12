@@ -12,13 +12,13 @@ import org.springsource.examples.sawt.services.model.Customer;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 
+// TODO make sure that you have ActiveMQ or HornetQ up and running!
 public class Main {
     public static void main(String[] args) throws Exception {
 
         Log log = LogFactory.getLog(Main.class);
 
-
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(Config.class.getPackage().getName());
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(JmsConfiguration.class.getPackage().getName());
 
         JmsTemplate jmsTemplate = applicationContext.getBean(JmsTemplate.class);
 

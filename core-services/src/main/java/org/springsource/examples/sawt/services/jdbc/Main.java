@@ -9,7 +9,7 @@ import org.springsource.examples.sawt.services.model.Customer;
 public class Main {
     public static void main(String args[]) throws Throwable {
 
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(JdbcConfiguration.class);
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(JdbcConfiguration.class.getPackage().getName());
 
         Log log = LogFactory.getLog(Main.class);
 

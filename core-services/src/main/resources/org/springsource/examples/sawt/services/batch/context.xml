@@ -8,7 +8,6 @@
 		        ">
 
 
-
     <job id="importData" job-repository="jobRepository">
         <step id="step1">
             <tasklet transaction-manager="transactionManager">

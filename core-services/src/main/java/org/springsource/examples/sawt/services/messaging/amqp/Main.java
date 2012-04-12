@@ -10,12 +10,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springsource.examples.sawt.services.model.Customer;
 
 
+// TODO make sure that you have RabbitMQ up and running
 public class Main {
     public static void main(String[] args) throws Exception {
 
         Log log = LogFactory.getLog(Main.class);
 
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(Config.class);
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(AmqpConfiguration.class);
 
         AmqpTemplate amqpTemplate = applicationContext.getBean(AmqpTemplate.class);
 
@@ -29,8 +30,9 @@ public class Main {
         Customer ogCustomer = (Customer) amqpTemplate.receiveAndConvert(queue);
         log.info("converted message: " + ToStringBuilder.reflectionToString(ogCustomer));
 
-        Message m = amqpTemplate.receive(queue);
-        String msgBody = new String(m.getBody());
+        Message message = amqpTemplate.receive(queue);
+        String msgBody = new String(message.getBody());
         log.info("unconverted message: " + msgBody);
+
     }
 }
