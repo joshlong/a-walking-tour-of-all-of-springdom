@@ -4,13 +4,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
-/**
- * Simple {@link Aspect} that both filters out the candidate beans and intercepts appropriately.
- * <p/>
- * You can decouple these two aspects appropriately into "pointcuts" and "advice."
- * <p/>
- * The pointcuts then may be used with different "advice."
- */
 @Aspect
 public class MethodTimeLoggingAspect {
 
