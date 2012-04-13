@@ -9,6 +9,7 @@
     <modules>
         <!-- <module>advanced-di</module> <module>basic-di</module> <module>core-services</module> <module>core-services-cache</module> <module>web</module> -->
         <module>core-services</module>
+        <module>core-services-nosql</module>
         <module>web</module>
         <module>the-80-percent-case</module>
         <module>ioc</module>
@@ -23,9 +24,12 @@
         <org.springframework.version>3.1.1.RELEASE</org.springframework.version>
         <org.springframework.security-version>3.0.3.RELEASE</org.springframework.security-version>
         <spring.integration.version>2.1.1.RELEASE</spring.integration.version>
+        <org.aspectj.version>1.6.11</org.aspectj.version>
     </properties>
     <dependencyManagement>
         <dependencies>
+
+
             <dependency>
                 <groupId>aopalliance</groupId>
                 <artifactId>aopalliance</artifactId>
@@ -213,12 +217,12 @@
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
-                <version>1.6.8</version>
+                <version>${org.aspectj.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
-                <version>1.6.8</version>
+                <version>${org.aspectj.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
@@ -270,6 +274,16 @@
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>8.4-702.jdbc4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${org.springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aspects</artifactId>
+                <version>${org.springframework.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>

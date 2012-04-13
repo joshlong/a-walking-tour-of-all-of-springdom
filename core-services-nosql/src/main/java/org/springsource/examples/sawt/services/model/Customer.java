@@ -1,41 +1,36 @@
-package org.springsource.examples.sawt.services.nosql.mongodb.xstore;
+package org.springsource.examples.sawt.services.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.springframework.data.mongodb.crossstore.RelatedDocument;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 @Entity
+@XmlRootElement(name = "customer", namespace = Constants.NAMESPACE)
 @Table(name = "customer")
-public class MongoCustomer  implements Serializable {
-
-     // all were doing is adding a notion of which products the {@link Customer} has purchased
+public class Customer implements java.io.Serializable {
 
     private Long id;
-
     private String firstName;
-
     private String lastName;
 
-    @RelatedDocument
-    private MongoProductList mongoProductList ;
-
-    public MongoCustomer() {
+    public Customer() {
     }
 
-    public MongoCustomer(String fn, String ln) {
+    public Customer(String fn, String ln) {
         this.firstName = fn;
         this.lastName = ln;
     }
 
-    public MongoCustomer(long id, String firstName, String lastName) {
+    public Customer(long id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-
+    @XmlAttribute(name = "id", required = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -47,7 +42,7 @@ public class MongoCustomer  implements Serializable {
         this.id = id;
     }
 
-
+    @XmlAttribute(name = "first-name", required = false)
     @Column(name = "first_name", nullable = false)
     public String getFirstName() {
         return this.firstName;
@@ -57,7 +52,8 @@ public class MongoCustomer  implements Serializable {
         this.firstName = firstName;
     }
 
-     @Column(name = "last_name", nullable = false)
+    @XmlAttribute(name = "last-name", required = false)
+    @Column(name = "last_name", nullable = false)
     public String getLastName() {
         return this.lastName;
     }
@@ -70,8 +66,6 @@ public class MongoCustomer  implements Serializable {
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
-
 }
-
 
 

@@ -20,6 +20,13 @@ public class Product {
         this.name = name;
     }
 
+    public Product (){}
+    public Product  ( String name, double price){
+
+        this.name = name;
+        this.price = price;
+    }
+
     double price ;
     String name ;
 }

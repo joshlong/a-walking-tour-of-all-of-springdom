@@ -1,6 +1,7 @@
 package org.springsource.examples.sawt.services.nosql.mongodb.xstore;
 
 import com.mongodb.Mongo;
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -28,7 +29,7 @@ import java.sql.Driver;
 
 @Configuration
 @PropertySource("/services.properties")
-@EnableTransactionManagement
+@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 public class MongoDbCrossStoreConfiguration {
 
     @Inject
