@@ -5,15 +5,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles2.TilesView;
-import org.springsource.examples.sawt.services.jdbc.Config;
+import org.springsource.examples.sawt.services.jpa.JpaConfiguration;
 
 
 @Configuration
 @EnableWebMvc
-@Import(Config.class)
+@Import(JpaConfiguration.class)
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
@@ -24,10 +28,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Override
-    public void configureResourceHandling(ResourceConfigurer configurer) {
-        configurer.addPathMapping("/js/**")
-                .addResourceLocation("/js/");
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+      registry.addResourceHandler("/js*//**").addResourceLocations("/js/") ;
     }
+    /*
+    @Override
+    public void configureResourceHandling(ResourceConfigurer configurer) {
+        configurer.addPathMapping("/js*//**")
+                .addResourceLocation("/js/");
+    }*/
 
     @Bean
     public TilesConfigurer tilesConfigurer() {
@@ -41,7 +50,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Override
-    public void configureInterceptors(InterceptorConfigurer configurer) {
-        configurer.addInterceptor(new DeviceResolverHandlerInterceptor());
+    public void addInterceptors(InterceptorRegistry registry) {
+     registry.addInterceptor(new DeviceResolverHandlerInterceptor()) ;
     }
 }

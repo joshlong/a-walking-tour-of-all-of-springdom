@@ -11,6 +11,7 @@
         <module>core-services</module>
         <module>core-services-nosql</module>
         <module>web</module>
+        <module>android</module>
         <module>the-80-percent-case</module>
         <module>ioc</module>
     </modules>
@@ -82,6 +83,53 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
+            <dependency>
+                <groupId>javax.servlet.jsp.jstl</groupId>
+                <artifactId>jstl-api</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.web</groupId>
+                <artifactId>jstl-impl</artifactId>
+                <version>1.2</version>
+            </dependency>
+
+            <!-- Apache Tiles -->
+            <dependency>
+                <groupId>org.apache.tiles</groupId>
+                <artifactId>tiles-jsp</artifactId>
+                <version>2.2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tiles</groupId>
+                <artifactId>tiles-el</artifactId>
+                <version>2.2.2</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.springframework.mobile</groupId>
+                <artifactId>spring-mobile-device</artifactId>
+                 <version>1.0.0.RC1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.simpleframework</groupId>
+                <artifactId>simple-xml</artifactId>
+                <version>2.5.3</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>stax</artifactId>
+                        <groupId>stax</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>stax-api</artifactId>
+                        <groupId>stax</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
             <dependency>
                 <groupId>redis.clients</groupId>
                 <artifactId>jedis</artifactId>
@@ -122,7 +170,9 @@
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>3.0.20100224</version>
+<!--
                 <scope>provided</scope>
+-->
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
@@ -423,4 +473,11 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>org.springframework.maven.milestone</id>
+            <name>Spring Maven Milestone Repository</name>
+            <url>http://maven.springframework.org/milestone</url>
+        </repository>
+    </repositories>
 </project>
