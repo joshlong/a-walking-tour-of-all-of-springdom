@@ -15,6 +15,7 @@
     <modules>
         <module>mvc</module>
         <module>mobilemvc</module>
+        <module>rest</module>
         <!--    <module>gwt</module>
         <module>mobilemvc</module>
         <module>mvc</module>

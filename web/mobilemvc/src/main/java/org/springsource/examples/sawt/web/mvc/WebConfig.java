@@ -31,12 +31,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
       registry.addResourceHandler("/js*//**").addResourceLocations("/js/") ;
     }
-    /*
-    @Override
-    public void configureResourceHandling(ResourceConfigurer configurer) {
-        configurer.addPathMapping("/js*//**")
-                .addResourceLocation("/js/");
-    }*/
 
     @Bean
     public TilesConfigurer tilesConfigurer() {

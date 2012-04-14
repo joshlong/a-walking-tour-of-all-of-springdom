@@ -4,11 +4,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springsource.examples.sawt.services.jdbc.Config;
+import org.springsource.examples.sawt.services.jpa.JpaConfiguration;
 
 @EnableWebMvc
-@Import(Config.class)
+@Import(JpaConfiguration.class)
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter {
-
+public class WebConfig {
 }
