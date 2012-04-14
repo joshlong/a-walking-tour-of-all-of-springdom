@@ -204,11 +204,7 @@
                 <artifactId>spring-integration-stream</artifactId>
                 <version>${spring.integration.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-impl</artifactId>
-                <version>2.1.7</version>
-            </dependency>
+
             <dependency>
                 <groupId>org.codehaus.castor</groupId>
                 <artifactId>castor</artifactId>
@@ -259,11 +255,7 @@
                 <artifactId>jaxb-impl</artifactId>
                 <version>2.1.7</version>
             </dependency>
-            <dependency>
-                <groupId>org.codehaus.castor</groupId>
-                <artifactId>castor</artifactId>
-                <version>1.2</version>
-            </dependency>
+
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
@@ -390,11 +382,7 @@
                 <artifactId>jackson-core-asl</artifactId>
                 <version>1.7.4</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <version>${org.springframework.version}</version>
-                <artifactId>spring-orm</artifactId>
-            </dependency>
+
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
