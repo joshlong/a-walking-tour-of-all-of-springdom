@@ -55,10 +55,3 @@ public class Welcome extends Activity {
         editBtn.setOnClickListener(editCustomerBtn);
     }
 }
-
-/**
- * CrmApplication application = CrmApplication.crmApplicationInstance( this) ;
- *
- * CustomerService cs = application.getCustomerService(); Customer c =
- * cs.getCustomerById(71L); showEditorFor(c);
- */

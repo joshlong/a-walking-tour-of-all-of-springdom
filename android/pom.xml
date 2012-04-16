@@ -16,6 +16,7 @@
     <packaging>apk</packaging>
 
     <properties>
+        <android.sdk.path>/Users/jlong/bin/android-sdk-macosx</android.sdk.path>
         <android-platform>10</android-platform>
         <android-emulator>nexus</android-emulator>
         <maven-android-plugin-version>2.8.4</maven-android-plugin-version>
@@ -36,7 +37,9 @@
             <artifactId>android-maven-plugin</artifactId>
             <version>3.0.0-alpha-13</version>
             <configuration>
+
                 <sdk>
+
                     <platform>10</platform>
                 </sdk>
                 <dex>
