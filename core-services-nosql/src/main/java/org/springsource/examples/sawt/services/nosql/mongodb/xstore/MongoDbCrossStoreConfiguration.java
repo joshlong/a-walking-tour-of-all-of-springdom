@@ -31,7 +31,7 @@ import java.sql.Driver;
 
 @Configuration
 @PropertySource("/services.properties")
-@EnableTransactionManagement (mode = AdviceMode.ASPECTJ)
+@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 public class MongoDbCrossStoreConfiguration {
 
     @Inject
@@ -39,7 +39,7 @@ public class MongoDbCrossStoreConfiguration {
 
     @Bean
     public MongoDbFactory mongoDbFactory() throws Throwable {
-        Mongo mongo = new Mongo( );
+        Mongo mongo = new Mongo();
         return new SimpleMongoDbFactory(mongo, "products");
     }
 
@@ -65,12 +65,12 @@ public class MongoDbCrossStoreConfiguration {
     }
 
     @Bean
-    public static PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
+    public  static PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
     @Bean
-    static public PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
+      public static PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
         return new PersistenceAnnotationBeanPostProcessor();
     }
 
@@ -84,7 +84,7 @@ public class MongoDbCrossStoreConfiguration {
     public DataSource dataSource() throws Exception {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
         dataSource.setPassword(environment.getProperty("dataSource.password"));
-        dataSource.setUrl(environment.getProperty("dataSource.url"));
+        dataSource.setUrl(environment.getProperty("dataSource.xstoreUrl"));
         dataSource.setUsername(environment.getProperty("dataSource.user"));
         dataSource.setDriverClass(environment.getPropertyAsClass("dataSource.driverClass", Driver.class));
         return dataSource;
@@ -96,11 +96,7 @@ public class MongoDbCrossStoreConfiguration {
         LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         localContainerEntityManagerFactoryBean.setDataSource(dataSource());
         localContainerEntityManagerFactoryBean.setPackagesToScan(MongoCustomer.class.getPackage().getName());
-
-        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-        jpaVendorAdapter.setGenerateDdl(true);
-
-        localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+        localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter());
 
         // look ma, no persistence.xml !
         return localContainerEntityManagerFactoryBean;
@@ -114,12 +110,8 @@ public class MongoDbCrossStoreConfiguration {
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-        hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
+        hibernateJpaVendorAdapter.setDatabase(Database.H2);
         hibernateJpaVendorAdapter.setGenerateDdl(true);
         return hibernateJpaVendorAdapter;
     }
-
-
-
-
 }

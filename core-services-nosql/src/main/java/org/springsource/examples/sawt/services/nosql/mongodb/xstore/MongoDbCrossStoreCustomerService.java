@@ -14,6 +14,23 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 
+/**
+ * To verify:
+ jlongmbp17:code jlong$ mongo  products
+ MongoDB shell version: 2.0.1
+ connecting to: products
+ > show collections
+ org.springsource.examples.sawt.services.nosql.mongodb.xstore.MongoCustomer
+ system.indexes
+ > db.org.springsource.examples.sawt.services.nosql.mongodb.xstore.MongoCustomer
+ products.org.springsource.examples.sawt.services.nosql.mongodb.xstore.MongoCustomer
+ > db.org.springsource.examples.sawt.services.nosql.mongodb.xstore.MongoCustomer.find({})
+ { "_id" : ObjectId("4f8ba5b003640ce436ff2a5f"), "_entity_id" : NumberLong(1), "_entity_class" : "org.springsource.examples.sawt.services.nosql.mongodb.xstore.MongoCustomer", "_entity_field_name" : "mongoProductInfo", "_class" : "org.springsource.examples.sawt.services.nosql.mongodb.xstore.MongoProductInfo", "products" : [ { "price" : 104.22, "name" : "Shamwow" } ], "_entity_field_class" : "org.springsource.examples.sawt.services.nosql.mongodb.xstore.MongoProductInfo" }
+ { "_id" : ObjectId("4f8ba5eb036432ac050e94f8"), "_entity_id" : NumberLong(2), "_entity_class" : "org.springsource.examples.sawt.services.nosql.mongodb.xstore.MongoCustomer", "_entity_field_name" : "mongoProductInfo", "_class" : "org.springsource.examples.sawt.services.nosql.mongodb.xstore.MongoProductInfo", "products" : [ { "price" : 104.22, "name" : "Shamwow" } ], "_entity_field_class" : "org.springsource.examples.sawt.services.nosql.mongodb.xstore.MongoProductInfo" }
+ ...
+ >
+
+ */
 @Transactional
 @Service
 public class MongoDbCrossStoreCustomerService {
@@ -26,9 +43,10 @@ public class MongoDbCrossStoreCustomerService {
         return this.entityManager.find(MongoCustomer.class, id);
     }
 
-    @Autowired private MongoTemplate mongoTemplate ;
+    @Autowired
+    private MongoTemplate mongoTemplate ;
 
-    StringBuffer debug (){
+    private   StringBuffer debug (){
         final StringBuffer mongoData = new StringBuffer();
         mongoTemplate.execute( MongoProductInfo.class.getName(), new CollectionCallback<String>() {
             public String doInCollection(DBCollection collection) throws MongoException, DataAccessException {
@@ -43,9 +61,6 @@ public class MongoDbCrossStoreCustomerService {
 
         return mongoData;
     }
-
-
-
 
     public MongoCustomer createCustomer(String fn, String ln) {
         MongoCustomer newCustomer = new MongoCustomer();
@@ -66,6 +81,7 @@ public class MongoDbCrossStoreCustomerService {
         customer.setFirstName(fn);
         customer.setLastName(ln);
         this.entityManager.merge(customer);
+        System.out.println(debug());
         return getCustomerById(id);
     }
 
@@ -74,6 +90,7 @@ public class MongoDbCrossStoreCustomerService {
         MongoCustomer mongoCustomer = getCustomerById(customerId);
         mongoCustomer.getMongoProductInfo().addProduct(new Product(product, price));
         this.entityManager.merge(mongoCustomer);
+        System.out.println(debug());
         return mongoCustomer;
     }
 }

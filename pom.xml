@@ -171,9 +171,6 @@
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>3.0.20100224</version>
-<!--
-                <scope>provided</scope>
--->
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>

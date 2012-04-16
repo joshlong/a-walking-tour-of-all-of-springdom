@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /**
  * Simple entity designed to hold the state for a customer's purchase
  */
-@Document(collection =  "products")
+//@Document(collection =  "products")
 public class Product {
     public double getPrice() {
         return price;

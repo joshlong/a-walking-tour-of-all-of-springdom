@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document
+//@Document(collection = "productsInfo")
 public class MongoProductInfo {
     private List<Product> products = new ArrayList<Product>();
 

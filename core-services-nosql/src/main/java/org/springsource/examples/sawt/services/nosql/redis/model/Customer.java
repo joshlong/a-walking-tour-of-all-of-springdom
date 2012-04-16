@@ -1,6 +1,8 @@
-package org.springsource.examples.sawt.services.model;
+package org.springsource.examples.sawt.services.nosql.redis.model;
+
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.springsource.examples.sawt.services.model.Constants;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;

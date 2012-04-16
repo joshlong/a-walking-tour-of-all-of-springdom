@@ -4,22 +4,25 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.data.mongodb.crossstore.RelatedDocument;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-public class MongoCustomer   {
+public class MongoCustomer {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    @RelatedDocument @Transient  private MongoProductInfo mongoProductInfo = new MongoProductInfo();
-    private String firstName;
-    private String lastName;
+    @RelatedDocument
+    @Transient
+    MongoProductInfo mongoProductInfo = new MongoProductInfo();
+
+    String firstName;
+
+    String lastName;
 
     public MongoProductInfo getMongoProductInfo() {
-        if( this.mongoProductInfo == null )
+        if (this.mongoProductInfo == null)
             this.mongoProductInfo = new MongoProductInfo();
 
         return this.mongoProductInfo;
