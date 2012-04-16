@@ -15,18 +15,13 @@
 
     <packaging>apk</packaging>
 
-    <organization>
-        <name>SpringSource</name>
-        <url>http://www.springsource.org</url>
-    </organization>
-
     <properties>
         <android-platform>10</android-platform>
         <android-emulator>nexus</android-emulator>
         <maven-android-plugin-version>2.8.4</maven-android-plugin-version>
         <maven.compiler.plugin.version>2.3.2</maven.compiler.plugin.version>
         <android.version>2.3.1</android.version>
-        <spring.android.version>1.0.0.RC1</spring.android.version>
+        <spring.android.version>1.0.0.M4</spring.android.version>
         <!--<spring-social-version>1.0.0.M2</spring-social-version>-->
         <simple-version>2.4.1</simple-version>
         <android-rome-version>1.0.0-r2</android-rome-version>
@@ -36,49 +31,34 @@
         <sourceDirectory>src</sourceDirectory>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-         <!--   <plugin>
-                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-                <artifactId>maven-android-plugin</artifactId>
-                <version>${maven-android-plugin-version}</version>
-                <configuration>
-                    <sdk>
-                        <platform>${android-platform}</platform>
-                    </sdk>
-                    <emulator>
-                        <avd>${android-emulator}</avd>
-                    </emulator>
-                    <deleteConflictingFiles>true</deleteConflictingFiles>
-                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
-                </configuration>
-                <extensions>true</extensions>
-            </plugin>   -->
-            <plugin>
+        <plugin>
+            <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+            <artifactId>android-maven-plugin</artifactId>
+            <version>3.0.0-alpha-13</version>
+            <configuration>
+                <sdk>
+                    <platform>10</platform>
+                </sdk>
+                <dex>
+                    <jvmArguments>
+                        <jvmArgument>-Xms256m</jvmArgument>
+                        <jvmArgument>-Xmx512m</jvmArgument>
+                    </jvmArguments>
+                </dex>
+<!--
+                <deleteConflictingFiles>true</deleteConflictingFiles>
+-->
+                <undeployBeforeDeploy>true</undeployBeforeDeploy>
+            </configuration>
+            <extensions>true</extensions>
+        </plugin>
+
+      <!--  <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
 
                 <version>${maven.compiler.plugin.version}</version>
             </plugin>
-            <plugin>
-                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-                <artifactId>android-maven-plugin</artifactId>
-                <version>3.0.0-alpha-13</version>
-                <configuration>
-                    <sdk>
-                        <platform>${androidplatform}</platform>
-                    </sdk>
-                    <dex>
-                        <jvmArguments>
-                            <jvmArgument>-Xms256m</jvmArgument>
-                            <jvmArgument>-Xmx512m</jvmArgument>
-                        </jvmArguments>
-                    </dex>
-<!--
-                    <deleteConflictingFiles>true</deleteConflictingFiles>
 -->
-                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
-                </configuration>
-                <extensions>true</extensions>
-            </plugin>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -148,13 +128,11 @@
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <!--<version>1.8.2</version>-->
-        </dependency>
+         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
-            <!--<version>1.8.2</version>-->
-        </dependency>
+         </dependency>
         <dependency>
             <groupId>org.simpleframework</groupId>
             <artifactId>simple-xml</artifactId>
@@ -194,8 +172,7 @@
             <name>Android ROME Feed Reader Repository</name>
             <url>https://android-rome-feed-reader.googlecode.com/svn/maven2/releases</url>
         </repository>
-        <!-- For testing against latest Spring snapshots -->
-        <repository>
+         <repository>
             <id>org.springframework.maven.snapshot</id>
             <name>Spring Maven Snapshot Repository</name>
             <url>http://maven.springframework.org/snapshot</url>
@@ -206,8 +183,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        <!-- For developing against latest Spring milestones -->
-        <repository>
+         <repository>
             <id>org.springframework.maven.milestone</id>
             <name>Spring Maven Milestone Repository</name>
             <url>http://maven.springframework.org/milestone</url>
