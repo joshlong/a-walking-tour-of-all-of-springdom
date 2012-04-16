@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-        <modelVersion>4.0.0</modelVersion>
-        <parent>
-            <groupId>org.springsource.examples.sawt</groupId>
-            <artifactId>core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </parent>
-
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springsource.examples.sawt</groupId>
+        <artifactId>core</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
 
     <artifactId>android</artifactId>
@@ -32,28 +31,28 @@
         <sourceDirectory>src</sourceDirectory>
         <finalName>${project.artifactId}</finalName>
         <plugins>
-        <plugin>
-            <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-            <artifactId>android-maven-plugin</artifactId>
-            <version>3.0.0-alpha-13</version>
-            <configuration>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <version>3.0.0-alpha-13</version>
+                <configuration>
 
-                <sdk>
+                    <sdk>
 
-                    <platform>10</platform>
-                </sdk>
-                <dex>
-                    <jvmArguments>
-                        <jvmArgument>-Xms256m</jvmArgument>
-                        <jvmArgument>-Xmx512m</jvmArgument>
-                    </jvmArguments>
-                </dex>
- 
-                <undeployBeforeDeploy>true</undeployBeforeDeploy>
-            </configuration>
-            <extensions>true</extensions>
-        </plugin>
- 
+                        <platform>10</platform>
+                    </sdk>
+                    <dex>
+                        <jvmArguments>
+                            <jvmArgument>-Xms256m</jvmArgument>
+                            <jvmArgument>-Xmx512m</jvmArgument>
+                        </jvmArguments>
+                    </dex>
+
+                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                </configuration>
+                <extensions>true</extensions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -68,15 +67,15 @@
 
 
     <dependencies>
-      
+
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-         </dependency>
+        </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
-         </dependency>
+        </dependency>
         <dependency>
             <groupId>org.simpleframework</groupId>
             <artifactId>simple-xml</artifactId>
@@ -116,7 +115,7 @@
             <name>Android ROME Feed Reader Repository</name>
             <url>https://android-rome-feed-reader.googlecode.com/svn/maven2/releases</url>
         </repository>
-         <repository>
+        <repository>
             <id>org.springframework.maven.snapshot</id>
             <name>Spring Maven Snapshot Repository</name>
             <url>http://maven.springframework.org/snapshot</url>
@@ -127,7 +126,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-         <repository>
+        <repository>
             <id>org.springframework.maven.milestone</id>
             <name>Spring Maven Milestone Repository</name>
             <url>http://maven.springframework.org/milestone</url>

@@ -3,7 +3,10 @@ package org.springsource.examples.sawt.services.nosql.redis.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Customer implements java.io.Serializable {
@@ -16,7 +19,8 @@ public class Customer implements java.io.Serializable {
     String firstName;
     String lastName;
 
-    public Customer(){}
+    public Customer() {
+    }
 
     public Long getId() {
         return id;
@@ -47,10 +51,6 @@ public class Customer implements java.io.Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
-
-
-
 
 
     @Override

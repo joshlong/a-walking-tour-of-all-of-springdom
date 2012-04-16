@@ -26,7 +26,7 @@ public class Main {
 
         for (int i = 0; i < 10; i++) {
             Customer retrievedCustomer = customerService.getCustomerById(customer.getId());
-            log.info(String.format("customer.id (%s) == retreivedCustomer.id (%s)?  %s", customer.getId(), retrievedCustomer.getId(), customer.getId() .equals (retrievedCustomer.getId())));
+            log.info(String.format("customer.id (%s) == retreivedCustomer.id (%s)?  %s", customer.getId(), retrievedCustomer.getId(), customer.getId().equals(retrievedCustomer.getId())));
         }
 
         Customer updatedCustomer = customerService.updateCustomer(customer.getId(), "JPA", "Lover");

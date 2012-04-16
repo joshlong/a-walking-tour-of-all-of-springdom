@@ -20,7 +20,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.inject.Inject;
@@ -65,17 +64,17 @@ public class MongoDbCrossStoreConfiguration {
     }
 
     @Bean
-    public  static PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
+    public static PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
     @Bean
-      public static PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
+    public static PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
         return new PersistenceAnnotationBeanPostProcessor();
     }
 
     @Bean
-    public JpaTransactionManager  transactionManager() throws Exception {
+    public JpaTransactionManager transactionManager() throws Exception {
         EntityManagerFactory entityManagerFactory = entityManagerFactory().getObject();
         return new JpaTransactionManager(entityManagerFactory);
     }

@@ -14,7 +14,6 @@ import javax.servlet.ServletRegistration;
 import java.util.Set;
 
 public class SampleWebApplicationInitializer implements WebApplicationInitializer {
-
     private AnnotationConfigWebApplicationContext applicationContextForServletContext(ServletContext sc, String... pkgs) {
         final AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
         applicationContext.setServletContext(sc);

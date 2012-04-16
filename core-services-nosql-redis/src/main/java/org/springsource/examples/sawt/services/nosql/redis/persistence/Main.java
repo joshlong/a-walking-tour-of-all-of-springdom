@@ -8,10 +8,8 @@ import org.springsource.examples.sawt.CustomerService;
 import org.springsource.examples.sawt.services.nosql.redis.model.Customer;
 
 /**
- *
  * Simple implementation of {@link org.springsource.examples.sawt.CustomerService}
  * that works with a NoSQL store - in this case - Redis.
- *
  */
 public class Main {
 
@@ -27,7 +25,7 @@ public class Main {
         log.info(String.format("customer.id (%s) == retrievedCustomer.id (%s)?  %s",
                 customer.getId(),
                 retrievedCustomer.getId(),
-                customer.getId()==(retrievedCustomer.getId())));
+                customer.getId() == (retrievedCustomer.getId())));
 
         Customer updatedCustomer = customerService.updateCustomer(customer.getId(), "NoSql", "Lover");
 

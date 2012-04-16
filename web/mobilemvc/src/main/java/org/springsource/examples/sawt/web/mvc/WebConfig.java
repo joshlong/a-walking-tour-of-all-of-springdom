@@ -29,7 +29,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-      registry.addResourceHandler("/js*//**").addResourceLocations("/js/") ;
+        registry.addResourceHandler("/js*//**").addResourceLocations("/js/");
     }
 
     @Bean
@@ -45,6 +45,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-     registry.addInterceptor(new DeviceResolverHandlerInterceptor()) ;
+        registry.addInterceptor(new DeviceResolverHandlerInterceptor());
     }
 }

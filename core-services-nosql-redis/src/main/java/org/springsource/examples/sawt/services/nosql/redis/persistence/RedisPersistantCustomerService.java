@@ -32,7 +32,7 @@ public class RedisPersistantCustomerService implements CustomerService {
 
     @Override
     public Customer getCustomerById(long id) {
-        String ln = (String) this.redisTemplate.opsForValue().get(lastNameKey(id))  ;
+        String ln = (String) this.redisTemplate.opsForValue().get(lastNameKey(id));
         String fn = (String) this.redisTemplate.opsForValue().get(firstNameKey(id));
         return new Customer(id, fn, ln);
     }

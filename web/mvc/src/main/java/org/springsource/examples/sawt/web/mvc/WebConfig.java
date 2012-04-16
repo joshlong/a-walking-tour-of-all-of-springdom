@@ -2,19 +2,16 @@ package org.springsource.examples.sawt.web.mvc;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import org.springsource.examples.sawt.services.jdbc.JdbcConfiguration;
-//import org.springsource.examples.spring31.services.config.Servic esConfiguration;
 
 @Configuration
 @EnableWebMvc
-@Import(JdbcConfiguration.class)
+//@Import(JpaConfiguration.class)
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
