@@ -45,21 +45,12 @@
                         <jvmArgument>-Xmx512m</jvmArgument>
                     </jvmArguments>
                 </dex>
-<!--
-                <deleteConflictingFiles>true</deleteConflictingFiles>
--->
+ 
                 <undeployBeforeDeploy>true</undeployBeforeDeploy>
             </configuration>
             <extensions>true</extensions>
         </plugin>
-
-      <!--  <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-
-                <version>${maven.compiler.plugin.version}</version>
-            </plugin>
--->
-
+ 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -74,57 +65,7 @@
 
 
     <dependencies>
-        <!--
-          <dependency>
-              <groupId>org.springframework.android</groupId>
-              <artifactId>spring-android-auth</artifactId>
-              <version>${spring-android-version}</version>
-          </dependency>
-          <dependency>
-              <groupId>org.springframework.social</groupId>
-              <artifactId>spring-social-twitter</artifactId>
-              <version>${spring-social-version}</version>
-              <exclusions>
-                  <exclusion>
-                      <artifactId>spring-social-web</artifactId>
-                      <groupId>org.springframework.social</groupId>
-                  </exclusion>
-                  <exclusion>
-                      <artifactId>commons-logging</artifactId>
-                      <groupId>commons-logging</groupId>
-                  </exclusion>
-              </exclusions>
-          </dependency>
-          <dependency>
-              <groupId>commons-logging</groupId>
-              <artifactId>commons-logging</artifactId>
-              <version>1.1.1</version>
-              <scope>provided</scope>
-          </dependency>
-
-
-          <dependency>
-
-              <groupId>org.simpleframework</groupId>
-              <artifactId>simple-xml</artifactId>
-              <version>${simple-version}</version>
-              <exclusions>
-                  <exclusion>
-                      <artifactId>stax</artifactId>
-                      <groupId>stax</groupId>
-                  </exclusion>
-                  <exclusion>
-                      <artifactId>stax-api</artifactId>
-                      <groupId>stax</groupId>
-                  </exclusion>
-              </exclusions>
-          </dependency>
-          <dependency>
-              Using ROME for RSS and ATOM feeds
-              <groupId>com.google.code.android-rome-feed-reader</groupId>
-              <artifactId>android-rome-feed-reader</artifactId>
-              <version>${android-rome-version}</version>
-          </dependency> -->
+      
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
