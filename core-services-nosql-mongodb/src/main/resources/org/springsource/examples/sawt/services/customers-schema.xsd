@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns:crm="http://samples.springsource.org/sawt/customers/schemas"
+           targetNamespace="http://samples.springsource.org/sawt/customers/schemas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+    <xs:element name="customerLookupRequest" type="crm:customerLookupRequest"/>
+
+    <xs:element name="customerLookupResponse" type="crm:customerLookupResponse"/>
+
+    <xs:complexType name="customer">
+        <xs:sequence/>
+        <xs:attribute name="id" type="xs:long" use="required"/>
+        <xs:attribute name="first-name" type="xs:string"/>
+        <xs:attribute name="last-name" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="customerLookupResponse">
+        <xs:attribute name="customer" type="crm:customer"/>
+    </xs:complexType>
+
+    <xs:complexType name="customerLookupRequest">
+        <xs:attribute name="id" type="xs:long" use="required"/>
+    </xs:complexType>
+
+
+</xs:schema>
+
