@@ -2,15 +2,9 @@ package org.springsource.examples.sawt.services.nosql.redis.model;
 
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.springsource.examples.sawt.services.model.Constants;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
 
-
-//@Entity
-@XmlRootElement(name = "customer", namespace = Constants.NAMESPACE)
 @Table(name = "customer")
 public class Customer implements java.io.Serializable {
 
@@ -32,7 +26,7 @@ public class Customer implements java.io.Serializable {
         this.lastName = lastName;
     }
 
-    @XmlAttribute(name = "id", required = false)
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -44,7 +38,6 @@ public class Customer implements java.io.Serializable {
         this.id = id;
     }
 
-    @XmlAttribute(name = "first-name", required = false)
     @Column(name = "first_name", nullable = false)
     public String getFirstName() {
         return this.firstName;
@@ -54,7 +47,7 @@ public class Customer implements java.io.Serializable {
         this.firstName = firstName;
     }
 
-    @XmlAttribute(name = "last-name", required = false)
+
     @Column(name = "last_name", nullable = false)
     public String getLastName() {
         return this.lastName;
