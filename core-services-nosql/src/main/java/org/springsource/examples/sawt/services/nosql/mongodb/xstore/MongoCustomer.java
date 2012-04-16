@@ -9,8 +9,11 @@ import java.io.Serializable;
 @Entity
 public class MongoCustomer   {
 
-    // all were doing is adding a notion of which products the {@link Customer} has purchased
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @RelatedDocument @Transient  private MongoProductInfo mongoProductInfo = new MongoProductInfo();
     private String firstName;
     private String lastName;
@@ -30,13 +33,6 @@ public class MongoCustomer   {
         return id;
     }
 
-    public MongoCustomer(){}
-
-    public MongoCustomer(String firstName, String lastName, Long id) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.id = id;
-    }
 
     public void setId(Long id) {
         this.id = id;

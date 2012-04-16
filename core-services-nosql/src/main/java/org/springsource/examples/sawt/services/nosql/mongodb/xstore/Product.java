@@ -1,8 +1,11 @@
 package org.springsource.examples.sawt.services.nosql.mongodb.xstore;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 /**
  * Simple entity designed to hold the state for a customer's purchase
  */
+@Document(collection =  "products")
 public class Product {
     public double getPrice() {
         return price;
@@ -21,8 +24,8 @@ public class Product {
     }
 
     public Product (){}
-    public Product  ( String name, double price){
 
+    public Product  ( String name, double price){
         this.name = name;
         this.price = price;
     }

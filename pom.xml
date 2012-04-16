@@ -11,7 +11,7 @@
         <module>core-services</module>
         <module>core-services-nosql</module>
         <module>web</module>
-        <module>android</module>
+        <!--<module>android</module>-->
 
         <module>the-80-percent-case</module>
         <module>ioc</module>

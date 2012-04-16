@@ -15,8 +15,10 @@ import org.springframework.data.mongodb.crossstore.MongoChangeSetPersister;
 import org.springframework.data.mongodb.crossstore.MongoDocumentBacking;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
+import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -29,32 +31,15 @@ import java.sql.Driver;
 
 @Configuration
 @PropertySource("/services.properties")
-@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
+@EnableTransactionManagement (mode = AdviceMode.ASPECTJ)
 public class MongoDbCrossStoreConfiguration {
 
     @Inject
     private Environment environment;
 
     @Bean
-    public EntityManagerFactory entityManagerFactory() throws Exception {
-
-        LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        localContainerEntityManagerFactoryBean.setDataSource(dataSource());
-        localContainerEntityManagerFactoryBean.setPackagesToScan(MongoCustomer.class.getPackage().getName());
-
-        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-        jpaVendorAdapter.setGenerateDdl(true);
-
-        localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
-        // look ma, no persistence.xml !
-        localContainerEntityManagerFactoryBean.afterPropertiesSet();
-        return localContainerEntityManagerFactoryBean.getObject();
-    }
-
-    @Bean
     public MongoDbFactory mongoDbFactory() throws Throwable {
-        Mongo mongo = new Mongo("127.0.0.1");
+        Mongo mongo = new Mongo( );
         return new SimpleMongoDbFactory(mongo, "products");
     }
 
@@ -74,14 +59,9 @@ public class MongoDbCrossStoreConfiguration {
     @Bean
     public MongoChangeSetPersister changeSetPersister() throws Throwable {
         MongoChangeSetPersister mongoChangeSetPersister = new MongoChangeSetPersister();
-        mongoChangeSetPersister.setEntityManagerFactory(entityManagerFactory());
+        mongoChangeSetPersister.setEntityManagerFactory(entityManagerFactory().getObject());
         mongoChangeSetPersister.setMongoTemplate(mongoTemplate());
         return mongoChangeSetPersister;
-    }
-
-    @Bean
-    public MongoTemplate mongoTemplate() throws Throwable {
-        return new MongoTemplate(mongoDbFactory());
     }
 
     @Bean
@@ -96,7 +76,7 @@ public class MongoDbCrossStoreConfiguration {
 
     @Bean
     public PlatformTransactionManager transactionManager() throws Exception {
-        EntityManagerFactory entityManagerFactory = entityManagerFactory();
+        EntityManagerFactory entityManagerFactory = entityManagerFactory().getObject();
         return new JpaTransactionManager(entityManagerFactory);
     }
 
@@ -109,4 +89,37 @@ public class MongoDbCrossStoreConfiguration {
         dataSource.setDriverClass(environment.getPropertyAsClass("dataSource.driverClass", Driver.class));
         return dataSource;
     }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws Exception {
+
+        LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        localContainerEntityManagerFactoryBean.setDataSource(dataSource());
+        localContainerEntityManagerFactoryBean.setPackagesToScan(MongoCustomer.class.getPackage().getName());
+
+        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+        jpaVendorAdapter.setGenerateDdl(true);
+
+        localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+
+        // look ma, no persistence.xml !
+        return localContainerEntityManagerFactoryBean;
+    }
+
+    @Bean
+    public MongoTemplate mongoTemplate() throws Throwable {
+        return new MongoTemplate(mongoDbFactory());
+    }
+
+    @Bean
+    public JpaVendorAdapter jpaVendorAdapter() {
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+        hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
+        hibernateJpaVendorAdapter.setGenerateDdl(true);
+        return hibernateJpaVendorAdapter;
+    }
+
+
+
+
 }

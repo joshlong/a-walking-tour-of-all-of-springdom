@@ -16,8 +16,7 @@ public class RestCustomerController {
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.POST)
     @ResponseBody
     public Customer updateCustomer(@RequestBody Customer c) {
-        return this.customerService.updateCustomer(c.getId(), c.getFirstName(),
-                c.getLastName());
+        return this.customerService.updateCustomer(c.getId(), c.getFirstName(), c.getLastName());
     }
 
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
