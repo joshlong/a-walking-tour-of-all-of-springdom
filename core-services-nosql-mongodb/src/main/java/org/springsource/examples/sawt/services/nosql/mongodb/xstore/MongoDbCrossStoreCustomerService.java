@@ -62,6 +62,7 @@ public class MongoDbCrossStoreCustomerService {
         return mongoData;
     }
 
+    @Transactional
     public MongoCustomer createCustomer(String fn, String ln) {
         MongoCustomer newCustomer = new MongoCustomer();
         newCustomer.setFirstName(fn);
@@ -71,7 +72,7 @@ public class MongoDbCrossStoreCustomerService {
         this.entityManager.flush();
         this.entityManager.refresh(newCustomer);
 
-        System.out.println(debug());
+      //  System.out.println(debug());
         return newCustomer;
     }
 

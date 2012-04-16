@@ -75,7 +75,7 @@ public class MongoDbCrossStoreConfiguration {
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager() throws Exception {
+    public JpaTransactionManager  transactionManager() throws Exception {
         EntityManagerFactory entityManagerFactory = entityManagerFactory().getObject();
         return new JpaTransactionManager(entityManagerFactory);
     }

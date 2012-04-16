@@ -1,7 +1,5 @@
 package org.springsource.examples.sawt.services.nosql.mongodb.xstore;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.ArrayList;
 import java.util.List;
 
