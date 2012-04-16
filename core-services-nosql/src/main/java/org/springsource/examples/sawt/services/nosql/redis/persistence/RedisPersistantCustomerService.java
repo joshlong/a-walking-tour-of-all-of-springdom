@@ -3,9 +3,8 @@ package org.springsource.examples.sawt.services.nosql.redis.persistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springsource.examples.sawt.CustomerService;
-import org.springsource.examples.sawt.services.model.Customer;
+import org.springsource.examples.sawt.services.nosql.redis.model.Customer;
 
 /**
  * implementation of the {@link org.springsource.examples.sawt.CustomerService} interface that

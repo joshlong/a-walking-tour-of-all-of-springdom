@@ -16,7 +16,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springsource.examples.sawt.services.model.Customer;
+import org.springsource.examples.sawt.services.nosql.redis.model.Customer;
+
 
 import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;

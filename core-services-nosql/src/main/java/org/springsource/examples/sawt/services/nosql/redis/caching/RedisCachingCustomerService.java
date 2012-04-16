@@ -3,10 +3,9 @@ package org.springsource.examples.sawt.services.nosql.redis.caching;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springsource.examples.sawt.CustomerService;
-import org.springsource.examples.sawt.services.model.Customer;
+import org.springsource.examples.sawt.services.nosql.redis.model.Customer;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
