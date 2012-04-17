@@ -11,7 +11,6 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 @Configuration
 @EnableWebMvc
-//@Import(JpaConfiguration.class)
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean

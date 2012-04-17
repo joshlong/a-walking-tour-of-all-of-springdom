@@ -1,14 +1,14 @@
 package org.springsource.examples.sawt.services.jpa;
 
-import org.springframework.stereotype.Component;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springsource.examples.sawt.CustomerService;
 import org.springsource.examples.sawt.services.model.Customer;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-@Component
+@Service
 @Transactional
 public class JpaCustomerService implements CustomerService {
 

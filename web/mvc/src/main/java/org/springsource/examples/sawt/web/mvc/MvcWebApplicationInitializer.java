@@ -1,18 +1,10 @@
 package org.springsource.examples.sawt.web.mvc;
 
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
-import org.springsource.examples.sawt.services.jpa.JpaCustomerService;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import java.util.Set;
+public class MvcWebApplicationInitializer /* implements WebApplicationInitializer */ {
 
-public class MvcWebApplicationInitializer implements WebApplicationInitializer {
-
-    private AnnotationConfigWebApplicationContext applicationContextForServletContext(
+/** 
+ *     private AnnotationConfigWebApplicationContext applicationContextForServletContext(
             ServletContext sc, String... pkgs) {
         final AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
         applicationContext.setServletContext(sc);
@@ -38,4 +30,5 @@ public class MvcWebApplicationInitializer implements WebApplicationInitializer {
 
     }
 
+ */
 }

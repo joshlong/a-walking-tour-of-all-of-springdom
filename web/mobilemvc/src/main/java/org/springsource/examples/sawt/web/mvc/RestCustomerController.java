@@ -10,18 +10,16 @@ import org.springsource.examples.sawt.services.model.Customer;
 @RequestMapping(headers = "Accept=application/json, application/xml")
 public class RestCustomerController {
 
-    @Autowired
-    private CustomerService customerService;
+    @Autowired private CustomerService customerService;
 
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.POST)
     @ResponseBody
     public Customer updateCustomer(@RequestBody Customer c) {
-        return this.customerService.updateCustomer(c.getId(), c.getFirstName(),
-                c.getLastName());
+        return this.customerService.updateCustomer(c.getId(), c.getFirstName(), c.getLastName());
     }
 
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
-    @ResponseBody
+    @ResponseBody 
     public Customer loadCustomerById(@PathVariable("customerId") long customerId) {
         return this.customerService.getCustomerById(customerId);
     }

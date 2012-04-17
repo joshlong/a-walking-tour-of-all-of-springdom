@@ -3,7 +3,6 @@ package org.springsource.examples.sawt.services.nosql.mongodb.xstore;
 /**
  * Simple entity designed to hold the state for a customer's purchase
  */
-//@Document(collection =  "products")
 public class Product {
     public double getPrice() {
         return price;

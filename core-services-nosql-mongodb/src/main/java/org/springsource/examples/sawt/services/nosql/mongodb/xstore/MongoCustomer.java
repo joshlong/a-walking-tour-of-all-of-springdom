@@ -13,7 +13,7 @@ public class MongoCustomer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @RelatedDocument
+    @RelatedDocument  
     @Transient
     MongoProductInfo mongoProductInfo = new MongoProductInfo();
 

@@ -21,11 +21,12 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @ModelAttribute  // so that Spring MVC has something to bind form values to
+    // so that Spring MVC has something to bind form values to
+    @ModelAttribute  
     public Customer customer() {
         return new Customer();
     }
-
+    
     @RequestMapping(value = "/display", method = RequestMethod.GET)
     public String customer(@RequestParam("id") Long id, Model model) {
         Customer customerById = this.customerService.getCustomerById(id);
