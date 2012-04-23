@@ -40,7 +40,7 @@ public class Main {
         }
         log.info(String.format("Exit status: %s", jobExecution.getExitStatus().getExitCode()));
         JobInstance jobInstance = jobExecution.getJobInstance();
-
+        
         log.info(String.format("job instance Id: %d", jobInstance.getId()));
 
 

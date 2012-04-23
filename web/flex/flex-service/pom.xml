@@ -2,11 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springsource.examples.web</groupId>
-        <artifactId>flex</artifactId>
+      <parent>
 
-        <version>1.0-SNAPSHOT</version>
+ 		     <groupId>org.springsource.examples.sawt</groupId>
+
+
+	         <artifactId>flex</artifactId>
+
+	        <version>1.0-SNAPSHOT</version>
+ 
     </parent>
     <packaging>war</packaging>
     <artifactId>flex-service</artifactId>
@@ -20,7 +24,7 @@
             <artifactId>spring-oxm</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springsource.examples</groupId>
+			   <groupId>org.springsource.examples.sawt</groupId>
             <artifactId>core-services</artifactId>
             <version>${project.version}</version>
             <exclusions>
