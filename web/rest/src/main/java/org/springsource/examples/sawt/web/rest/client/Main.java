@@ -17,7 +17,7 @@ public class Main {
         RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
 
 
-        String url = "http://127.0.0.1:8080/"; // root
+        String url = "http://127.0.0.1:8080/rest/"; // root
 
 
         Customer c = new Customer("New", "Customer" + System.currentTimeMillis());

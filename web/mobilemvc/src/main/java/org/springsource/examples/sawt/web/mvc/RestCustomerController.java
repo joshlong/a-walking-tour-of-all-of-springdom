@@ -1,5 +1,7 @@
 package org.springsource.examples.sawt.web.mvc;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,7 @@ public class RestCustomerController {
 
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.POST)
     @ResponseBody
-    public Customer updateCustomer(@RequestBody Customer c) {
+    public Customer updateCustomer(    @RequestBody Customer c ) {
         return this.customerService.updateCustomer(c.getId(), c.getFirstName(), c.getLastName());
     }
 

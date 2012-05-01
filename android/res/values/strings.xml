@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="base_uri">http://175.100.146.8:8080/mobilemvc/</string>
+    <string name="base_uri">http://192.168.147.1:8080/mobilemvc/</string>
 
     <string name="load_customer_label">Edit Customer (By ID)</string>
 

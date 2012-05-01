@@ -19,7 +19,7 @@ public class RestCustomerController {
         return this.customerService.updateCustomer(c.getId(), c.getFirstName(), c.getLastName());
     }
 
-    @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET  )
     @ResponseBody
     public Customer loadCustomerById(@PathVariable("customerId") long customerId) {
         return this.customerService.getCustomerById(customerId);
