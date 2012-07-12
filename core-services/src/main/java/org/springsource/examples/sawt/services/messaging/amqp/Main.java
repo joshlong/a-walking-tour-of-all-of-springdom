@@ -21,7 +21,7 @@ public class Main {
         AmqpTemplate amqpTemplate = applicationContext.getBean(AmqpTemplate.class);
 
         Customer customer = new Customer("Mario", "Gray");
-
+        
         String queue = "customers";
 
         amqpTemplate.convertAndSend(queue, customer);

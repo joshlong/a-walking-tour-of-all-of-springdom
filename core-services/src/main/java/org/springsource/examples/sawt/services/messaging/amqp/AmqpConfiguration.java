@@ -26,65 +26,68 @@ public class AmqpConfiguration {
     @Inject
     private Environment environment;
 
-    private String customersQueueAndExchangeName = "customers";
+	private String customersQueueAndExchangeName = "customers";
 
-    @Bean
-    public RabbitTemplate rabbitTemplate() {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
-        rabbitTemplate.setMessageConverter(jsonMessageConverter());
-        return rabbitTemplate;
-    }
+	@Bean
+	public RabbitTemplate rabbitTemplate() {
+		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
+		rabbitTemplate.setMessageConverter(jsonMessageConverter());
+		return rabbitTemplate;
+	}
 
-    @Bean
-    public RabbitTransactionManager amqpTransactionManager() {
-        return new RabbitTransactionManager(this.connectionFactory());
-    }
+	@Bean
+	public RabbitTransactionManager amqpTransactionManager() {
+		return new RabbitTransactionManager(this.connectionFactory());
+	}
 
-    @Bean    // optional, this provides both Marshaller and Unmarshaller interfaces
-    public CastorMarshaller oxmMarshaller() {
-        return new CastorMarshaller();
-    }
+	@Bean
+	// optional, this provides both Marshaller and Unmarshaller interfaces
+	public CastorMarshaller oxmMarshaller() {
+		return new CastorMarshaller();
+	}
 
-    @Bean
-    public MessageConverter jsonMessageConverter() {
-        MarshallingMessageConverter marshallingMessageConverter = new MarshallingMessageConverter();
-        marshallingMessageConverter.setMarshaller(this.oxmMarshaller());
-        marshallingMessageConverter.setUnmarshaller(this.oxmMarshaller());
-        return marshallingMessageConverter;
-    }
+	@Bean
+	public MessageConverter jsonMessageConverter() {
+		MarshallingMessageConverter marshallingMessageConverter = new MarshallingMessageConverter();
+		marshallingMessageConverter.setMarshaller(this.oxmMarshaller());
+		marshallingMessageConverter.setUnmarshaller(this.oxmMarshaller());
+		return marshallingMessageConverter;
+	}
 
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-        cachingConnectionFactory.setUsername(environment.getProperty("amqp.broker.username"));
-        cachingConnectionFactory.setPassword(environment.getProperty("amqp.broker.password"));
-        cachingConnectionFactory.setHost("127.0.0.1");
-        cachingConnectionFactory.setPort(5672);
-      //  cachingConnectionFactory.setPort(60705);
-        return cachingConnectionFactory;
-    }
+	@Bean
+	public ConnectionFactory connectionFactory() {
+		CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
+		cachingConnectionFactory.setUsername(environment.getProperty("amqp.broker.username"));
+		cachingConnectionFactory.setPassword(environment.getProperty("amqp.broker.password"));
+		cachingConnectionFactory.setHost(environment.getProperty("amqp.broker.host"));
+		cachingConnectionFactory.setPort(environment.getProperty( "amqp.broker.port", Integer.class));
+		// cachingConnectionFactory.setPort(60705);
+		return cachingConnectionFactory;
+	}
 
-    @Bean
-    public AmqpAdmin amqpAdmin() {
-        return new RabbitAdmin(this.connectionFactory());
-    }
+	@Bean
+	public AmqpAdmin amqpAdmin() {
+		return new RabbitAdmin(this.connectionFactory());
+	}
 
-    @Bean
-    public Queue customerQueue() {
-        Queue q = new Queue(this.customersQueueAndExchangeName);
-        amqpAdmin().declareQueue(q);
-        return q;
-    }
+	@Bean
+	public Queue customerQueue() {
+		Queue q = new Queue(this.customersQueueAndExchangeName);
+		amqpAdmin().declareQueue(q);
+		return q;
+	}
 
-    @Bean
-    public DirectExchange customerExchange() {
-        DirectExchange directExchange = new DirectExchange(customersQueueAndExchangeName);
-        this.amqpAdmin().declareExchange(directExchange);
-        return directExchange;
-    }
+	@Bean
+	public DirectExchange customerExchange() {
+		DirectExchange directExchange = new DirectExchange(
+				customersQueueAndExchangeName);
+		this.amqpAdmin().declareExchange(directExchange);
+		return directExchange;
+	}
 
-    @Bean
-    public Binding marketDataBinding() {
-        return BindingBuilder.bind(customerQueue()).to(customerExchange()).with(this.customersQueueAndExchangeName);
-    }
+	@Bean
+	public Binding marketDataBinding() {
+		return BindingBuilder.bind(customerQueue()).to(customerExchange())
+				.with(this.customersQueueAndExchangeName);
+	}
 }
