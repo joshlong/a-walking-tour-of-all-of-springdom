@@ -11,7 +11,7 @@
         <module>core-services-nosql-mongodb</module>
         <module>core-services-nosql-redis</module>
         <module>web</module>
-        <module>android</module>
+        <!--<module>android</module> -->
         <module>the-80-percent-case</module>
         <module>ioc</module>
     </modules>

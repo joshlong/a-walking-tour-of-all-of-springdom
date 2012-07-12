@@ -58,6 +58,9 @@ public class AmqpConfiguration {
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
         cachingConnectionFactory.setUsername(environment.getProperty("amqp.broker.username"));
         cachingConnectionFactory.setPassword(environment.getProperty("amqp.broker.password"));
+        cachingConnectionFactory.setHost("127.0.0.1");
+        cachingConnectionFactory.setPort(5672);
+      //  cachingConnectionFactory.setPort(60705);
         return cachingConnectionFactory;
     }
 
