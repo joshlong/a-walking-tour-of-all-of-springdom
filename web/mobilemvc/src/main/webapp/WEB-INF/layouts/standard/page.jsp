@@ -30,6 +30,7 @@
     <script type="text/javascript">
         dojo.require("dijit.layout.BorderContainer");
         dojo.require("dijit.layout.TabContainer");
+        dojo.require("dojox.xml.parser");  
         dojo.require("dijit.layout.AccordionContainer");
         dojo.require("dijit.form.NumberTextBox");
         dojo.require("dijit.layout.ContentPane");
@@ -82,20 +83,24 @@
         <tiles:insertAttribute name="footer"/>
     </div>
 </div>
-
+ 
+ <span style = "display:none" id = "context">${context}</span>
+ 
 
 <script language="javascript" type="text/javascript">
 
     var customerLookupTopic = '/customerLookup';
 
     dojo.ready(function (evt) {
-
-
+		
+		var ctx = dojox.xml.parser.textContent(dojo.byId('context'));
+		//alert(ctx)
         var lookupLink = dojo.byId('lookup');
         var customerId = dojo.byId('cid');
 
         dojo.subscribe(customerLookupTopic, function (cid) {
-            var url = "http://localhost:8080/customer/" + cid;
+            var url =(  "http://localhost:8080" + ctx +"/customer/" + cid)//.replace("//","/");
+            alert(url);
             dojo.xhrGet({
                 url:url,
                 headers:{ Accept:'application/json' },

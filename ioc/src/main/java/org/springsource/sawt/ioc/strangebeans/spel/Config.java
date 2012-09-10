@@ -14,7 +14,7 @@ import java.io.File;
 public class Config {
 
     @Value("#{ T(Math).random()  }")
-    private double aRandomValue = 896;
+    private double aRandomValue ;
 
     @Value("#{systemProperties['user.home']}")
     private String userHome;

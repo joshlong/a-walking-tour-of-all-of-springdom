@@ -119,7 +119,7 @@ public class BatchConfiguration {
 
     @Bean(name = "reader")
     @Scope("step")
-    public FlatFileItemReader<Customer> reader(@Value("#{jobParameters['input.file']}") Resource resource) throws Exception {
+    public FlatFileItemReader<Customer> reader( @Value("#{jobParameters['input.file']}") Resource resource) throws Exception {
 
         log.debug(String.format("building FlatFileItemReader to read in the file %s", resource.getFile().getAbsolutePath()));
 

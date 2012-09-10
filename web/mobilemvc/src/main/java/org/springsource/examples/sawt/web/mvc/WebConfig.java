@@ -14,11 +14,12 @@ import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles2.TilesView;
 import org.springsource.examples.sawt.services.jpa.JpaConfiguration;
 
+// http://localhost:8080/mobilemvc/display?id=23
 
 @Configuration
 @EnableWebMvc
 @Import(JpaConfiguration.class)
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig  extends WebMvcConfigurerAdapter {
 
     @Bean
     public ViewResolver viewResolver() {
@@ -26,12 +27,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         viewResolver.setViewClass(TilesView.class);
         return viewResolver;
     }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/js*//**").addResourceLocations("/js/");
-    }
-
+    
     @Bean
     public TilesConfigurer tilesConfigurer() {
         TilesConfigurer configurer = new TilesConfigurer();
@@ -42,6 +38,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         configurer.setCheckRefresh(true);
         return configurer;
     }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/js*//**").addResourceLocations("/js/");
+    }
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

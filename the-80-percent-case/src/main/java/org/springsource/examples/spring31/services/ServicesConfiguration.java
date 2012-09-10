@@ -70,7 +70,7 @@ public class ServicesConfiguration {
         props.setProperty(org.hibernate.cfg.Environment.HBM2DDL_AUTO, "create");
         props.setProperty(org.hibernate.cfg.Environment.DIALECT, H2Dialect.class.getName());
         props.setProperty(org.hibernate.cfg.Environment.SHOW_SQL, "true");
-
+        	
         return new LocalSessionFactoryBuilder(this.dataSource())
                 .addAnnotatedClasses(Customer.class)
                 .addProperties(props)

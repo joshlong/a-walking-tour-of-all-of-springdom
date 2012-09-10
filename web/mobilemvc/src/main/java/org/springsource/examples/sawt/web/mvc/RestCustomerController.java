@@ -1,5 +1,7 @@
 package org.springsource.examples.sawt.web.mvc;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,8 +29,9 @@ public class RestCustomerController {
     public Customer loadCustomerById(@PathVariable("customerId") long customerId) {
         return this.customerService.getCustomerById(customerId);
     }
-
-    @RequestMapping(value = "/customers", method = RequestMethod.POST)
+ 
+    
+    @RequestMapping(value = "/customers", method = RequestMethod.PUT)
     @ResponseBody
     public Customer addCustomer(@RequestBody Customer customer) {
         return this.customerService.createCustomer(customer.getFirstName(), customer.getLastName());

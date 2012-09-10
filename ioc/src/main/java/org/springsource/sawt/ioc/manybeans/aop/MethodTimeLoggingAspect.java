@@ -10,7 +10,9 @@ public class MethodTimeLoggingAspect {
     @Around("@annotation(org.springsource.sawt.ioc.manybeans.Loggable)")
     public Object logMethodTimes(ProceedingJoinPoint invocation) throws Throwable {
         long start = System.currentTimeMillis();
-        Object result = invocation.proceed();
+
+        Object result = invocation.proceed(); // call the method
+
         long stop = System.currentTimeMillis();
         System.out.println(invocation.getSignature().getName() + ": " + (stop - start) + "ms");
         return result;

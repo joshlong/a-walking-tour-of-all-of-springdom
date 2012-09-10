@@ -7,6 +7,6 @@ public class Main {
         AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(MongoDbCrossStoreConfiguration.class.getPackage().getName());
         MongoDbCrossStoreCustomerService customerServiceDb = ac.getBean(MongoDbCrossStoreCustomerService.class);
         MongoCustomer mongoCustomer = customerServiceDb.createCustomer("Josh", "Long");
-        customerServiceDb.addProduct(mongoCustomer.getId(), "Shamwow", 104.22);
+        customerServiceDb.addProduct(mongoCustomer.getId(), "Shamwow in Shanghai", 104.22);
     }
 }

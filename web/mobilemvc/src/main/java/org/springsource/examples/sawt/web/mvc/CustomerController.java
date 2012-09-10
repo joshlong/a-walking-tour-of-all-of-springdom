@@ -1,5 +1,7 @@
 package org.springsource.examples.sawt.web.mvc;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,12 @@ public class CustomerController {
     }
     
     @RequestMapping(value = "/display", method = RequestMethod.GET)
-    public String customer(@RequestParam("id") Long id, Model model) {
+    public String customer(@RequestParam("id") Long id, Model model , HttpServletRequest request) {
         Customer customerById = this.customerService.getCustomerById(id);
+        String ctxPath = request.getContextPath();
+        
         model.addAttribute("customer", customerById);
+        model.addAttribute("context",  ctxPath );
         return "customers/display";
     }
 
