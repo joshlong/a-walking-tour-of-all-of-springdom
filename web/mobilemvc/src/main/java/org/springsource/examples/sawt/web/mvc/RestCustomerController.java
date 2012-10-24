@@ -3,6 +3,7 @@ package org.springsource.examples.sawt.web.mvc;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +14,7 @@ import org.springsource.examples.sawt.CustomerService;
 import org.springsource.examples.sawt.services.model.Customer;
 
 @Controller
-@RequestMapping(headers = "Accept=application/json, application/xml")
+@RequestMapping(    headers = "Accept=application/json, application/xml")
 public class RestCustomerController {
 
     @Autowired private CustomerService customerService;

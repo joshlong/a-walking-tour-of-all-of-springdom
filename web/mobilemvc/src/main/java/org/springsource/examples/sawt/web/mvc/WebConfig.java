@@ -19,7 +19,9 @@ import org.springsource.examples.sawt.services.jpa.JpaConfiguration;
 @Configuration
 @EnableWebMvc
 @Import(JpaConfiguration.class)
-public class WebConfig  extends WebMvcConfigurerAdapter {
+public class WebConfig 
+ extends WebMvcConfigurerAdapter {
+  
 
     @Bean
     public ViewResolver viewResolver() {
@@ -49,4 +51,5 @@ public class WebConfig  extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new DeviceResolverHandlerInterceptor());
     }
+	
 }
