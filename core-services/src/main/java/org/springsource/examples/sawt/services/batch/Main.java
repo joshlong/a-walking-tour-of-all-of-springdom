@@ -7,10 +7,12 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Date;
 
 public class Main {
+
     static public void main(String[] args) throws Throwable {
 
         Log log = LogFactory.getLog(Main.class);
@@ -40,7 +42,7 @@ public class Main {
         }
         log.info(String.format("Exit status: %s", jobExecution.getExitStatus().getExitCode()));
         JobInstance jobInstance = jobExecution.getJobInstance();
-        
+
         log.info(String.format("job instance Id: %d", jobInstance.getId()));
 
 

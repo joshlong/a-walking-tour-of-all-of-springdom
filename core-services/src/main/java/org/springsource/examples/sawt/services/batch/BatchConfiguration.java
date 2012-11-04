@@ -105,7 +105,7 @@ public class BatchConfiguration {
         JdbcBatchItemWriter<Customer> jdbcBatchItemWriter = new JdbcBatchItemWriter<Customer>();
         jdbcBatchItemWriter.setAssertUpdates(true);
         jdbcBatchItemWriter.setDataSource(this.dataSource());
-        jdbcBatchItemWriter.setSql(this.insertCustomersSql);
+        jdbcBatchItemWriter.setSql( " INSERT INTO customer( first_name, last_name) VALUES ( :firstName , :lastName ) ");
         jdbcBatchItemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Customer>());
         return jdbcBatchItemWriter;
     }

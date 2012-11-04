@@ -11,7 +11,7 @@
             First Name:
         </td>
         <td>
-            ${customer.firstName}
+            ${customer.firstName} 
         </td>
     </tr>
     <tr>
@@ -23,4 +23,6 @@
         </td>
     </tr>
 </table>
+
+ 
 

@@ -10,6 +10,7 @@ import org.springsource.examples.sawt.CustomerService;
 import org.springsource.examples.sawt.services.model.Customer;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,6 +22,7 @@ import java.util.Map;
 @Component
 @Transactional
 public class JdbcCustomerService implements CustomerService {
+
 
     private String customerByIdQuery;
     private String updateCustomerQuery;

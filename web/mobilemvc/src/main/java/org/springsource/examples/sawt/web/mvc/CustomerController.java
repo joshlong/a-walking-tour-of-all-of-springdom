@@ -36,22 +36,26 @@ public class CustomerController {
         
         model.addAttribute("customer", customerById);
         model.addAttribute("context",  ctxPath );
-        return "customers/display";
+        return "customers/display" ; 
     }
 
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public void setupAddition() {
-        // demonstrates that this is a front controller
+        
+    	// demonstrates that this is a front controller
         // the interesting 'setup' is being done by the model ('customer')
         log.info("About to show the add page, which will be 'add.jsp'");
+        
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.PUT)
     public String processAddition(@ModelAttribute Customer c, Model modelAndView) {
-        log.debug(String.format("adding %s, %s", c.getFirstName(), c.getLastName()));
+    	
         Customer customer = this.customerService.createCustomer(c.getFirstName(), c.getLastName());
+        
         modelAndView.addAttribute("id", customer.getId());
+        
         return "redirect:/display";
     }
 
