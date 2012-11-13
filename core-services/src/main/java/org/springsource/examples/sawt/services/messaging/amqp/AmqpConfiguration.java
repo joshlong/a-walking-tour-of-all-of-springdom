@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.inject.Inject;
 
+// todo make this cloud foundry friendly
 @Configuration
 @PropertySource("/services.properties")
 @EnableTransactionManagement

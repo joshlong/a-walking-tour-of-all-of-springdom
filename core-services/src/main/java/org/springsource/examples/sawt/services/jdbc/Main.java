@@ -4,12 +4,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springsource.examples.sawt.CustomerService;
+import org.springsource.examples.sawt.services.jpa.JpaConfiguration;
 import org.springsource.examples.sawt.services.model.Customer;
 
 public class Main {
     public static void main(String args[]) throws Throwable {
 
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(JdbcConfiguration.class.getPackage().getName());
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        applicationContext.getEnvironment().setActiveProfiles("default");
+        applicationContext.scan(JdbcConfiguration.class.getPackage().getName());
+        applicationContext.refresh();
+
 
         Log log = LogFactory.getLog(Main.class);
 

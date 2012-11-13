@@ -9,7 +9,8 @@
     </parent>
     <packaging>war</packaging>
     <artifactId>mobilemvc</artifactId>
-    <dependencies> 
+    <dependencies>
+        <dependency><groupId>org.cloudfoundry</groupId><artifactId>cloudfoundry-runtime</artifactId></dependency>
         <!-- 
         <dependency>
             <groupId>javax.servlet</groupId>

@@ -12,7 +12,7 @@
         <module>core-services-nosql-redis</module>
         <module>web</module>
         <!--<module>android</module> -->
-        
+
         <module>ioc</module>
     </modules>
     <properties>
@@ -29,7 +29,11 @@
     </properties>
     <dependencyManagement>
         <dependencies>
-
+            <dependency>
+                <groupId>org.cloudfoundry</groupId>
+                <artifactId>cloudfoundry-runtime</artifactId>
+                <version>0.8.2</version>
+            </dependency>
 
             <dependency>
                 <groupId>aopalliance</groupId>
@@ -111,7 +115,7 @@
                 <version>1.2</version>
             </dependency>
 
-          <!--  <dependency>
+            <!--  <dependency>
                 <groupId>javax.servlet.jsp.jstl</groupId>
                 <artifactId>jstl-api</artifactId>
                 <version>1.2</version>

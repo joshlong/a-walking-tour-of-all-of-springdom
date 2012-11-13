@@ -27,10 +27,11 @@
     <link rel="stylesheet" type="text/css"
           href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/soria/soria.css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"></script>
+
     <script type="text/javascript">
         dojo.require("dijit.layout.BorderContainer");
         dojo.require("dijit.layout.TabContainer");
-        dojo.require("dojox.xml.parser");  
+        dojo.require("dojox.xml.parser");
         dojo.require("dijit.layout.AccordionContainer");
         dojo.require("dijit.form.NumberTextBox");
         dojo.require("dijit.layout.ContentPane");
@@ -41,10 +42,9 @@
     <div dojoType="dijit.layout.ContentPane" region="top">
         <span style="font-size:larger;">Spring CRM</span> |
 
-
         <label for="cid"> Customer ID: </label>
 
-        <input id="cid" type="text" dojoType="dijit.form.NumberTextBox" name="customerId" value="69"
+        <input id="cid" type="text" dojoType="dijit.form.NumberTextBox" name="customerId" value="${customerId}"
                required="true" invalidMessage="Invalid customer ID#.">
 
         <a href="#" id="lookup">Look Up Customer Information </a>
@@ -83,23 +83,27 @@
         <tiles:insertAttribute name="footer"/>
     </div>
 </div>
- 
- <span style = "display:none" id = "context">${context}</span>
- 
+
+<span style="display: none" id="baseUrl">${applicationUrl}</span>
+
 
 <script language="javascript" type="text/javascript">
+    function lookupCustomer() {
+        var customerId = parseInt(dojo.byId('cid').value);
+        dojo.publish(customerLookupTopic, [customerId ]);
+    }
 
     var customerLookupTopic = '/customerLookup';
 
     dojo.ready(function (evt) {
-		
-		var ctx = dojox.xml.parser.textContent(dojo.byId('context'));
-		//alert(ctx)
+
+        var ctx = dojo.byId('baseUrl').innerHTML;
+        console.log('the context is ' + ctx);
         var lookupLink = dojo.byId('lookup');
         var customerId = dojo.byId('cid');
 
         dojo.subscribe(customerLookupTopic, function (cid) {
-            var url =(  "http://localhost:8080" + ctx +"/customer/" + cid)//.replace("//","/");
+            var url = (    ctx + "/customer/" + cid);//.replace("//","/");
             alert(url);
             dojo.xhrGet({
                 url:url,
@@ -107,9 +111,8 @@
                 handleAs:'json',
                 load:function (cr) {
                     //var cc = dojo.byId('customerContainer');
-                    alert(cr.firstName + ' ' + cr.lastName)
-                    var fn = dojo.byId('fn'),
-                            ln = dojo.byId('ln');
+                    alert('the name of the user is ' + cr.firstName + ' ' + cr.lastName);
+                    var fn = dojo.byId('fn'), ln = dojo.byId('ln');
 
                     fn.innerHTML = cr.firstName;
                     ln.innerHTML = cr.lastName;
@@ -123,14 +126,15 @@
 
         });
         dojo.connect(customerId, 'change', function (evt) {
-            var customerId = parseInt(dojo.byId('cid').value);
-            dojo.publish(customerLookupTopic, [ customerId  ]);
+            lookupCustomer();
         });
 
+
         dojo.connect(lookupLink, 'click', function (evt) {
-            var customerId = parseInt(dojo.byId('cid').value);
-            dojo.publish(customerLookupTopic, [customerId ]);
+            lookupCustomer();
         });
+
+
     })
 </script>
 

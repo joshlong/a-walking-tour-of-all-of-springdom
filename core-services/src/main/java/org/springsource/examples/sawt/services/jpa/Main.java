@@ -9,8 +9,10 @@ import org.springsource.examples.sawt.services.model.Customer;
 public class Main {
     public static void main(String args[]) throws Throwable {
 
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(JpaConfiguration.class.getPackage().getName());
-
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        applicationContext.getEnvironment().setActiveProfiles("default");
+        applicationContext.scan(JpaConfiguration.class.getPackage().getName());
+        applicationContext.refresh();
 
         Log log = LogFactory.getLog(Main.class);
 

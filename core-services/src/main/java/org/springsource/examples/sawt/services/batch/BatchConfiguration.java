@@ -21,12 +21,14 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springsource.examples.sawt.services.CloudFoundryDataSourceConfiguration;
+import org.springsource.examples.sawt.services.DataSourceConfiguration;
+import org.springsource.examples.sawt.services.LocalDataSourceConfiguration;
 import org.springsource.examples.sawt.services.model.Customer;
 
 import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
+import javax.inject.Inject;
 import java.sql.Driver;
 
 /**
@@ -36,8 +38,12 @@ import java.sql.Driver;
  */
 @Configuration
 @PropertySource("/services.properties")
+@Import({LocalDataSourceConfiguration.class, CloudFoundryDataSourceConfiguration.class})
 @ImportResource("/org/springsource/examples/sawt/services/batch/context.xml")
 public class BatchConfiguration {
+
+    @Inject
+    private DataSourceConfiguration dataSourceConfiguration;
 
     @Autowired
     private Environment environment;
@@ -62,16 +68,6 @@ public class BatchConfiguration {
         this.url = environment.getProperty("dataSource.batchUrl");
     }
 
-    @Bean
-    public DataSource dataSource() {
-
-        SimpleDriverDataSource simpleDriverDataSource = new SimpleDriverDataSource();
-        simpleDriverDataSource.setPassword(password);
-        simpleDriverDataSource.setUrl(url);
-        simpleDriverDataSource.setUsername(user);
-        simpleDriverDataSource.setDriverClass(driverClassName);
-        return simpleDriverDataSource;
-    }
 
     @Bean   // sets up infrastructure and scope
     public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor() throws Exception {
@@ -82,8 +78,8 @@ public class BatchConfiguration {
 
 
     @Bean
-    public PlatformTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource());
+    public PlatformTransactionManager transactionManager() throws Exception {
+        return new DataSourceTransactionManager(this.dataSourceConfiguration.dataSource());
     }
 
     @Bean
@@ -94,18 +90,18 @@ public class BatchConfiguration {
     @Bean(name = "jobRepository")
     public JobRepository jobRepository() throws Exception {
         JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
-        jobRepositoryFactoryBean.setDataSource(this.dataSource());
+        jobRepositoryFactoryBean.setDataSource(this.dataSourceConfiguration.dataSource());
         jobRepositoryFactoryBean.setTransactionManager(this.transactionManager());
         jobRepositoryFactoryBean.afterPropertiesSet();
         return (JobRepository) jobRepositoryFactoryBean.getObject();
     }
 
     @Bean(name = "writer") // thread safe and stateless, no need to make it step-scoped.
-    public JdbcBatchItemWriter<Customer> writer() {
+    public JdbcBatchItemWriter<Customer> writer() throws Exception {
         JdbcBatchItemWriter<Customer> jdbcBatchItemWriter = new JdbcBatchItemWriter<Customer>();
         jdbcBatchItemWriter.setAssertUpdates(true);
-        jdbcBatchItemWriter.setDataSource(this.dataSource());
-        jdbcBatchItemWriter.setSql( " INSERT INTO customer( first_name, last_name) VALUES ( :firstName , :lastName ) ");
+        jdbcBatchItemWriter.setDataSource(this.dataSourceConfiguration.dataSource());
+        jdbcBatchItemWriter.setSql(" INSERT INTO customer( first_name, last_name) VALUES ( :firstName , :lastName ) ");
         jdbcBatchItemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Customer>());
         return jdbcBatchItemWriter;
     }
@@ -119,7 +115,7 @@ public class BatchConfiguration {
 
     @Bean(name = "reader")
     @Scope("step")
-    public FlatFileItemReader<Customer> reader( @Value("#{jobParameters['input.file']}") Resource resource) throws Exception {
+    public FlatFileItemReader<Customer> reader(@Value("#{jobParameters['input.file']}") Resource resource) throws Exception {
 
         log.debug(String.format("building FlatFileItemReader to read in the file %s", resource.getFile().getAbsolutePath()));
 

@@ -10,6 +10,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  */
 public class Main {
     public static void main(String[] args) throws Throwable {
-         new AnnotationConfigApplicationContext(IntegrationConfiguration.class);
+
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        applicationContext.getEnvironment().setActiveProfiles("default");
+        applicationContext.scan(IntegrationConfiguration.class.getPackage().getName());
+        applicationContext.refresh();
+
     }
 }
