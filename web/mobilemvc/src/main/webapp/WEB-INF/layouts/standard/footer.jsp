@@ -3,4 +3,4 @@
 
 <a id="springsource" href="http://www.springsource.com">SpringSource</a>
 
-<p>Version 1.0.0 - &copy; Copyright 2010 SpringSource, a division of VMware</p>
+<p>Version 1.0.0 - &copy; Copyright 2012 SpringSource, a division of VMware</p>

@@ -32,6 +32,7 @@ public class CustomerController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String customer(@RequestParam(value = "id", required = false) Long id, Model model ) {
         if (null != id) {
+        	model.addAttribute("customer", this.customerService.getCustomerById( id ));
             model.addAttribute("customerId", id);
         }
         return "customers/display";
