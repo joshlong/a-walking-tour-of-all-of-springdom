@@ -1,5 +1,6 @@
 package org.springsource.sawt.ioc.manybeans.aop;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springsource.sawt.ioc.manybeans.Cat;
 import org.springsource.sawt.ioc.manybeans.Dog;
@@ -7,7 +8,7 @@ import org.springsource.sawt.ioc.manybeans.Dog;
 public class Main {
     public static void main(String[] args) throws Throwable {
 
-        AnnotationConfigApplicationContext annotationConfigApplicationContext
+         ApplicationContext annotationConfigApplicationContext
                 = new AnnotationConfigApplicationContext(AnimalFarmConfig.class);
 
         Dog dog = annotationConfigApplicationContext.getBean(Dog.class);

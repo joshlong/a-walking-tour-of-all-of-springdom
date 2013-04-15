@@ -3,6 +3,7 @@ package org.springsource.sawt.ioc.strangebeans.spel;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -23,6 +24,8 @@ public class Config {
     public void setIoTmpDir(String tmpDir) {
         this.ioTmpDir = new File(tmpDir);
     }
+
+    
 
     private File ioTmpDir;
 

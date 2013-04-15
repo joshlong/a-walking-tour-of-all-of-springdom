@@ -2,7 +2,7 @@ package org.springsource.sawt.ioc.manybeans;
 
 public class Cat {
 
-    @Loggable
+    @Timed
     public void meow() {
         System.out.println("meow...");
     }

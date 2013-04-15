@@ -6,7 +6,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springsource.sawt.ioc.manybeans.Cat;
 import org.springsource.sawt.ioc.manybeans.Dog;
 
-@Configuration
+@Configuration 
 @EnableAspectJAutoProxy
 public class AnimalFarmConfig {
     @Bean

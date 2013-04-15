@@ -12,17 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 
 /**
- * {@link HandlerInterceptorAdapter handler interceptor adapter} that enriches the
- * HTTP request with the application's fully qualified URL.
+ * 
+ * {@link HandlerInterceptorAdapter handler interceptor adapter} that enriches the HTTP request with the application's fully qualified URL.
  * <p/>
- * This is useful for client side artifacts like
- * <code>javascript</code> and <CODE>css</CODE> resources.
+ * 
+ * This is useful for client side artifacts like <code>javascript</code> and <CODE>css</CODE> resources.
  * <p/>
- * This class can be used in environments that don't have the
- * {@link org.cloudfoundry.runtime.env.CloudEnvironment cloud environment}
+ * 
+ * This class can be used in environments that don't have the {@link org.cloudfoundry.runtime.env.CloudEnvironment cloud environment}
  * object on the CLASSPATH.
  *
  * @author Josh Long
+ * 
  */
 public class CloudFoundryAwareFullyQualifiedApplicationUrlResolver extends HandlerInterceptorAdapter {
 

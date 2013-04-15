@@ -21,8 +21,10 @@ import org.springsource.sawt.ioc.manybeans.aop.MethodTimeLoggingAspect;
  * <LI> {@link org.springsource.sawt.ioc.manybeans.aop.MethodTimeLoggingAspect}</LI>
  * </OL>
  */
-public class SoxComplianceSuite implements BeanFactoryPostProcessor {
 
+ //  <bean class = "...SoxComplianceSuite"> </bean>
+public class SoxComplianceSuite implements BeanFactoryPostProcessor {
+  
     private Log log = LogFactory.getLog(getClass());
 
     // often a very useful question to ask: has this bean been registered before?
@@ -38,12 +40,22 @@ public class SoxComplianceSuite implements BeanFactoryPostProcessor {
 
         Assert.isInstanceOf(BeanDefinitionRegistry.class, beanFactory);
         BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
-
+        
+        
+        /**
+         * <bean class = "...AnnotationAwareAspectJAutoProxyCreator"> </bean>
+         */
         if (!definitionExists(AnnotationAwareAspectJAutoProxyCreator.class, beanFactory))
             BeanDefinitionReaderUtils.registerWithGeneratedName(
                     new RootBeanDefinition(AnnotationAwareAspectJAutoProxyCreator.class), registry);
 
+        /**
+         * <bean class = "...MethodTimeLoggingAspect"> </bean>
+         */
         if (!definitionExists(MethodTimeLoggingAspect.class, beanFactory))
             BeanDefinitionReaderUtils.registerWithGeneratedName(new RootBeanDefinition(MethodTimeLoggingAspect.class), registry);
+
+
+
     }
 }

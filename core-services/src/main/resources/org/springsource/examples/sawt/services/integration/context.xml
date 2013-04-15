@@ -2,6 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+
+       xmlns:alipay   ="http://....alipay.com/schema/"
+
        xmlns:int="http://www.springframework.org/schema/integration"
        xmlns:file="http://www.springframework.org/schema/integration/file"
        xmlns:stream="http://www.springframework.org/schema/integration/stream"
@@ -12,6 +15,7 @@
     http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file-2.1.xsd
     http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream-2.1.xsd
     ">
+
 
     <import resource="../batch/context.xml"/>
 
@@ -33,5 +37,8 @@
     <int:service-activator input-channel="jobsToLaunch" ref="jobMessageHandler" output-channel="jobExecutions"/>
 
     <stream:stdout-channel-adapter id="jobsPrinted" append-newline="true" channel="jobExecutions"/>
+
+
+
 
 </beans>

@@ -5,13 +5,17 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springsource.sawt.ioc.manybeans.Loggable;
+import org.springframework.util.ReflectionUtils;
+import org.springsource.sawt.ioc.manybeans.Timed;
+
+import java.lang.reflect.Method;
 
 /**
  * Simple BPP that automatically adds logging functionality to all objects that implement
- * {@link org.springsource.sawt.ioc.manybeans.Loggable}
+ * {@link org.springsource.sawt.ioc.manybeans.Timed}
  */
 public class MethodTimeLoggingBeanPostProcessor implements BeanPostProcessor {
+
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -20,15 +24,11 @@ public class MethodTimeLoggingBeanPostProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        return loggableObject(bean);
-    }
 
-    @SuppressWarnings("unchecked")
-    private <T> T loggableObject(T o) {
         ProxyFactory factory = new ProxyFactory();
         factory.addAdvice(new TimeLoggingMethodInterceptor());
-        factory.setTarget(o);
-        return (T) factory.getProxy();
+        factory.setTarget(bean);
+        return (Object) factory.getProxy();
     }
 
 
@@ -40,7 +40,7 @@ public class MethodTimeLoggingBeanPostProcessor implements BeanPostProcessor {
         public Object invoke(MethodInvocation invocation) throws Throwable {
 
             Object result = null;
-            if (invocation.getMethod().getAnnotation(Loggable.class) != null) {
+            if (invocation.getMethod().getAnnotation(Timed.class) != null) {
                 long start = System.currentTimeMillis();
                 result = invocation.proceed();
                 long stop = System.currentTimeMillis();

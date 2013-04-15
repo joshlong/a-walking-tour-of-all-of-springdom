@@ -7,15 +7,16 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public class MethodTimeLoggingAspect {
 
-    @Around("@annotation(org.springsource.sawt.ioc.manybeans.Loggable)")
-    public Object logMethodTimes(ProceedingJoinPoint invocation) throws Throwable {
-        long start = System.currentTimeMillis();
+	@Around("@annotation(org.springsource.sawt.ioc.manybeans.Timed)")
+	public Object time(ProceedingJoinPoint invocation) throws Throwable {
+		long start = System.currentTimeMillis();
+		System.out.println("----------------------------------------");
+		System.out.println(invocation.getSignature().getName() + "()");
+		Object result = invocation.proceed(); // call the method
+		long stop = System.currentTimeMillis();
+		System.out.println("time: " + (stop - start));
+		return result;
 
-        Object result = invocation.proceed(); // call the method
+	}
 
-        long stop = System.currentTimeMillis();
-        System.out.println(invocation.getSignature().getName() + ": " + (stop - start) + "ms");
-        return result;
-    }
 }
-

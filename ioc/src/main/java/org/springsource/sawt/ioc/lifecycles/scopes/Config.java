@@ -22,6 +22,10 @@ public class Config {
         scopeConfigurer.setScopes(scopeMap);
         return scopeConfigurer;
     }
+    @Bean
+    public SimpleThreadScope scope() {
+        return new SimpleThreadScope();
+    }
 
     @Bean
     @org.springframework.context.annotation.Scope("thread")
@@ -30,10 +34,6 @@ public class Config {
         return announcer;
     }
 
-    @Bean
-    public SimpleThreadScope scope() {
-        return new SimpleThreadScope();
-    }
 
 
     @Bean

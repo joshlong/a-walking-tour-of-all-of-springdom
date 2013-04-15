@@ -20,6 +20,7 @@ public class JpaCustomerService implements CustomerService {
         return this.entityManager.find(Customer.class, id);
     }
 
+
     public Customer createCustomer(String fn, String ln) {
         Customer newCustomer = new Customer();
         newCustomer.setFirstName(fn);

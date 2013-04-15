@@ -2,6 +2,8 @@ package org.springsource.sawt.ioc.lifecycles.annotations;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -13,21 +15,19 @@ import javax.annotation.PreDestroy;
 @Component
 public class Astronaut {
 
-    private Log log = LogFactory.getLog(getClass());
+	private Log log = LogFactory.getLog(getClass());
 
-    @PostConstruct
-    public void liftOff() throws Throwable {
-        for (int i = 5; i > 0; i--) {
-            log.debug(i + "...");
-            Thread.sleep(1000);
-        }
-        log.debug("we have liftoff!");
-    }
+	@PostConstruct
+	public void liftOff() throws Throwable {
+		for (int i = 5; i > 0; i--) {
+			log.debug(i + "...");
+			Thread.sleep(1000);
+		}
+		log.debug("we have liftoff!");
+	}
 
-    @PreDestroy
-    public void land() throws Throwable {
-        log.debug("this is one small step for man... one giant leap for mankind");
-    }
+	@PreDestroy
+	public void land() throws Throwable {
+		log.debug("this is one small step for man... one giant leap for mankind");
+	}
 }
-
-

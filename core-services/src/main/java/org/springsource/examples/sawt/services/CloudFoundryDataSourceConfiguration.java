@@ -26,7 +26,8 @@ public class CloudFoundryDataSourceConfiguration implements DataSourceConfigurat
         RdbmsServiceInfo rdbmsServiceInfo = databases.iterator().next();
         assert rdbmsServiceInfo != null : "the database instance must be provisioned. Use 'vmc create-service' and 'vmc bind-service'";
         RdbmsServiceCreator rdbmsServiceCreator = new RdbmsServiceCreator();
-        return rdbmsServiceCreator.createService(rdbmsServiceInfo);
+        DataSource ds = rdbmsServiceCreator.createService(rdbmsServiceInfo);
+        return ds;
     }
 }
 
