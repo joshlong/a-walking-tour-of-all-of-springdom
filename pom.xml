@@ -21,7 +21,7 @@
         <com.rabbitmq.version>2.5.0</com.rabbitmq.version>
         <spring.amqp.version>1.0.0.RELEASE</spring.amqp.version>
         <activemq.version>5.5.0</activemq.version>
-        <spring-batch-infrastructure.version>2.2.0.BUILD-SNAPSHOT</spring-batch-infrastructure.version>
+        <spring-batch-infrastructure.version>2.2.0.RC1</spring-batch-infrastructure.version>
         <spring.ws.version>2.0.1.RELEASE</spring.ws.version>
         <org.springframework.version>3.2.2.RELEASE</org.springframework.version>
         <org.springframework.security-version>3.0.3.RELEASE</org.springframework.security-version>
