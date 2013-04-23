@@ -9,30 +9,26 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springsource.examples.sawt.services.CloudFoundryDataSourceConfiguration;
-import org.springsource.examples.sawt.services.DataSourceConfiguration;
 import org.springsource.examples.sawt.services.LocalDataSourceConfiguration;
 
-import javax.inject.Inject;
+import javax.sql.DataSource;
 
 
 @PropertySource("classpath:/services.properties")
 @EnableTransactionManagement
 @Configuration
 @Import({LocalDataSourceConfiguration.class, CloudFoundryDataSourceConfiguration.class})
-
 public class JdbcConfiguration {
 
-    @Inject
-    private DataSourceConfiguration dataSourceConfiguration;
 
     @Bean
-    public JdbcTemplate jdbcTemplate() throws Exception {
-        return new JdbcTemplate(this.dataSourceConfiguration.dataSource());
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) throws Exception {
+        return new JdbcTemplate(dataSource);
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager() throws Exception {
-        return new DataSourceTransactionManager(this.dataSourceConfiguration.dataSource());
+    public PlatformTransactionManager transactionManager(DataSource dataSource) throws Exception {
+        return new DataSourceTransactionManager(dataSource);
     }
 
 

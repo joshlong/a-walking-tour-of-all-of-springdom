@@ -2,119 +2,75 @@ package org.springsource.examples.sawt.services.batch;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
-import org.springframework.batch.core.configuration.support.MapJobRegistry;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
-import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springsource.examples.sawt.services.CloudFoundryDataSourceConfiguration;
-import org.springsource.examples.sawt.services.DataSourceConfiguration;
-import org.springsource.examples.sawt.services.LocalDataSourceConfiguration;
 import org.springsource.examples.sawt.services.model.Customer;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import javax.sql.DataSource;
 import java.sql.Driver;
 
-/**
- * configuration for our batch solution to read data and load it into the CRM.
- *
- * @author Josh Long
- */
+
 @Configuration
-@PropertySource("/services.properties")
-@Import({LocalDataSourceConfiguration.class, CloudFoundryDataSourceConfiguration.class})
-@ImportResource("/org/springsource/examples/sawt/services/batch/context.xml")
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
+@EnableBatchProcessing(modular = true)
+@ComponentScan
+@PropertySource("classpath:/services.properties")
 public class BatchConfiguration {
-
-    @Inject
-    private DataSourceConfiguration dataSourceConfiguration;
-
-    @Autowired
-    private Environment environment;
 
     private Log log = LogFactory.getLog(getClass());
 
-    private String insertCustomersSql;
-    private String url, user, password;
-    private Class<? extends Driver> driverClassName;
-
     @Bean
-    public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
-
-    @PostConstruct
-    public void init() {
-        this.insertCustomersSql = environment.getProperty("jdbc.sql.customers.insert");
-        this.password = environment.getProperty("dataSource.password");
-        this.user = environment.getProperty("dataSource.user");
-        this.driverClassName = environment.getPropertyAsClass("dataSource.driverClass", Driver.class);
-        this.url = environment.getProperty("dataSource.batchUrl");
-    }
-
-
-    @Bean   // sets up infrastructure and scope
-    public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor() throws Exception {
-        JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
-        jobRegistryBeanPostProcessor.setJobRegistry(this.mapJobRegistry());
-        return jobRegistryBeanPostProcessor;
-    }
-
-
-    @Bean
-    public PlatformTransactionManager transactionManager() throws Exception {
-        return new DataSourceTransactionManager(this.dataSourceConfiguration.dataSource());
+    public TaskScheduler taskScheduler() {
+        return new ConcurrentTaskScheduler();
     }
 
     @Bean
-    public MapJobRegistry mapJobRegistry() throws Exception {
-        return new MapJobRegistry();
-    }
-
-    @Bean(name = "jobRepository")
-    public JobRepository jobRepository() throws Exception {
-        JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
-        jobRepositoryFactoryBean.setDataSource(this.dataSourceConfiguration.dataSource());
-        jobRepositoryFactoryBean.setTransactionManager(this.transactionManager());
-        jobRepositoryFactoryBean.afterPropertiesSet();
-        return (JobRepository) jobRepositoryFactoryBean.getObject();
-    }
-
-    @Bean(name = "writer") // thread safe and stateless, no need to make it step-scoped.
-    public JdbcBatchItemWriter<Customer> writer() throws Exception {
-        JdbcBatchItemWriter<Customer> jdbcBatchItemWriter = new JdbcBatchItemWriter<Customer>();
-        jdbcBatchItemWriter.setAssertUpdates(true);
-        jdbcBatchItemWriter.setDataSource(this.dataSourceConfiguration.dataSource());
-        jdbcBatchItemWriter.setSql(" INSERT INTO customer( first_name, last_name) VALUES ( :firstName , :lastName ) ");
-        jdbcBatchItemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Customer>());
-        return jdbcBatchItemWriter;
+    public PlatformTransactionManager transactionManager(DataSource ds) {
+        return new DataSourceTransactionManager(ds);
     }
 
     @Bean
-    public SimpleJobLauncher jobLauncher() throws Exception {
-        SimpleJobLauncher simpleJobLauncher = new SimpleJobLauncher();
-        simpleJobLauncher.setJobRepository(this.jobRepository());
-        return simpleJobLauncher;
+    public DataSource dataSource(Environment environment) {
+        String pw = environment.getProperty("dataSource.password"),
+                user = environment.getProperty("dataSource.user"),
+                url = environment.getProperty("dataSource.url");
+        Class<Driver> classOfDs = environment.getPropertyAsClass("dataSource.driverClass", Driver.class);
+
+        SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+        dataSource.setPassword(pw);
+        dataSource.setUrl(url);
+        dataSource.setUsername(user);
+        dataSource.setDriverClass(classOfDs);
+        return dataSource;
     }
 
-    @Bean(name = "reader")
-    @Scope("step")
+
+    @Bean(name = readCsvFileIntoTableStepReader)
+    @StepScope
     public FlatFileItemReader<Customer> reader(@Value("#{jobParameters['input.file']}") Resource resource) throws Exception {
 
         log.debug(String.format("building FlatFileItemReader to read in the file %s", resource.getFile().getAbsolutePath()));
@@ -136,8 +92,7 @@ public class BatchConfiguration {
         return csvFileReader;
     }
 
-
-    @Bean
+    @Bean(name = readCsvFileIntoTableStepProcessor)
     public ItemProcessor<Customer, Customer> processor() {
         return new ItemProcessor<Customer, Customer>() {
             @Override
@@ -147,6 +102,48 @@ public class BatchConfiguration {
             }
         };
     }
+
+    @Bean(name = readCsvFileIntoTableStepWriter)
+    public JdbcBatchItemWriter<Customer> writer(DataSource dataSource) throws Exception {
+        JdbcBatchItemWriter<Customer> jdbcBatchItemWriter = new JdbcBatchItemWriter<Customer>();
+        jdbcBatchItemWriter.setAssertUpdates(true);
+        jdbcBatchItemWriter.setDataSource(dataSource);
+        jdbcBatchItemWriter.setSql(" INSERT INTO customer( first_name, last_name) VALUES ( :firstName , :lastName ) ");
+        jdbcBatchItemWriter.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Customer>());
+        return jdbcBatchItemWriter;
+    }
+
+    @Bean
+    public Job customerLoaderJob(JobBuilderFactory jobs, @Qualifier(readCsvFileIntoTableStep) Step s1) {
+        return jobs.get(customerLoaderJob)
+                .flow(s1)
+                .end()
+                .build();
+    }
+
+    @Bean(name = readCsvFileIntoTableStep)
+    public Step readCsvFileIntoTableStep(
+            StepBuilderFactory stepBuilderFactory,
+            PlatformTransactionManager platformTransactionManager,
+            @Qualifier(readCsvFileIntoTableStepReader) ItemReader<Customer> ir,
+            @Qualifier(readCsvFileIntoTableStepProcessor) ItemProcessor<Customer, Customer> itemProcessor,
+            @Qualifier(readCsvFileIntoTableStepWriter) ItemWriter<Customer> iw) {
+
+        StepBuilder builder = stepBuilderFactory.get(readCsvFileIntoTableStep);
+
+        return builder.<Customer, Customer>chunk(3)
+                .reader(ir)
+                .processor(itemProcessor)
+                .writer(iw)
+                .transactionManager(platformTransactionManager)
+                .build();
+    }
+
+    private static final String readCsvFileIntoTableStep = "readCsvFileIntoTableStep";
+    private static final String readCsvFileIntoTableStepReader = readCsvFileIntoTableStep + "Reader";
+    private static final String readCsvFileIntoTableStepWriter = readCsvFileIntoTableStep + "Writer";
+    private static final String readCsvFileIntoTableStepProcessor = readCsvFileIntoTableStep + "Processor";
+    private static final String customerLoaderJob = "customerLoaderJob";
 
 
 }

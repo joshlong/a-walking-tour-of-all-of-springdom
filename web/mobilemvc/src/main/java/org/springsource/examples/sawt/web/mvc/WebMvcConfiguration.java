@@ -1,6 +1,7 @@
 package org.springsource.examples.sawt.web.mvc;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
@@ -10,13 +11,12 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles2.TilesView;
 import org.springsource.examples.sawt.services.jpa.JpaConfiguration;
-import org.springsource.examples.sawt.web.util.CloudFoundryAwareFullyQualifiedApplicationUrlResolver;
 
-// http://localhost:8080/mobilemvc/display?id=23
 @Configuration
 @EnableWebMvc
 @Import(JpaConfiguration.class)
-public class WebConfig extends WebMvcConfigurerAdapter {
+@ComponentScan(basePackageClasses = WebMvcConfiguration.class)
+public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public ViewResolver viewResolver() {
@@ -38,21 +38,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-     configurer.enable();
+        configurer.enable();
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        System.out.println( "configuring resource handlers");
-
-        for (String r : "js,css".split(","))
+        for (String r : "js,css".split(",")) {
             registry.addResourceHandler("/" + r + "/**").addResourceLocations("/" + r + "/");
+        }
     }
-
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new CloudFoundryAwareFullyQualifiedApplicationUrlResolver());
         registry.addInterceptor(new DeviceResolverHandlerInterceptor());
     }
 

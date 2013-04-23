@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springsource.examples.sawt.services.batch.BatchConfiguration;
 
-import javax.inject.Inject;
-
 /**
  * Simple integration configuration that also works with configuration previously
  * defined in the batch solution.
@@ -20,12 +18,8 @@ import javax.inject.Inject;
 @Import(BatchConfiguration.class)
 @ImportResource("/org/springsource/examples/sawt/services/integration/context.xml")
 public class IntegrationConfiguration {
-
-    @Inject
-    private JobLauncher jobLauncher;
-
     @Bean
-    public JobLaunchingMessageHandler jobMessageHandler() throws Exception {
+    public JobLaunchingMessageHandler jobMessageHandler(JobLauncher jobLauncher) throws Exception {
         return new JobLaunchingMessageHandler(jobLauncher);
     }
 

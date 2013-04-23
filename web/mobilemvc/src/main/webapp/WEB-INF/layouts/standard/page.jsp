@@ -20,7 +20,7 @@
     </style>
     <script type="text/javascript">
         djConfig = {
-            parseOnLoad:true
+            parseOnLoad: true
         };
     </script>
 
@@ -84,10 +84,19 @@
     </div>
 </div>
 
-<span style="display: none" id="baseUrl">${applicationUrl}</span>
-
 
 <script language="javascript" type="text/javascript">
+    var applicationBaseUrl = (function () {
+        var defaultPorts = {"http:": 80, "https:": 443};
+        return ( window.location.protocol + "//" + window.location.hostname
+                + (((window.location.port)
+                && (window.location.port != defaultPorts[window.location.protocol]))
+                ? (":" + window.location.port) : "")
+                ) + '${pageContext.request.contextPath}';
+    })();
+
+    console.log('application base URL: ' + applicationBaseUrl);
+
     function lookupCustomer() {
         var customerId = parseInt(dojo.byId('cid').value);
         dojo.publish(customerLookupTopic, [customerId ]);
@@ -97,29 +106,25 @@
 
     dojo.ready(function (evt) {
 
-        var ctx = dojo.byId('baseUrl').innerHTML;
-        console.log('the context is ' + ctx);
+
         var lookupLink = dojo.byId('lookup');
         var customerId = dojo.byId('cid');
 
         dojo.subscribe(customerLookupTopic, function (cid) {
-            var url = (    ctx + "/customer/" + cid);//.replace("//","/");
-            alert(url);
+            var url = ( applicationBaseUrl + "/customer/" + cid );
+            console.log('the url is ' + url);
             dojo.xhrGet({
-                url:url,
-                headers:{ Accept:'application/json' },
-                handleAs:'json',
-                load:function (cr) {
+                url: url,
+                headers: { Accept: 'application/json' },
+                handleAs: 'json',
+                load: function (cr) {
                     //var cc = dojo.byId('customerContainer');
-                    alert('the name of the user is ' + cr.firstName + ' ' + cr.lastName);
+                    console.log('the name of the user is ' + cr.firstName + ' ' + cr.lastName);
                     var fn = dojo.byId('fn'), ln = dojo.byId('ln');
-
                     fn.innerHTML = cr.firstName;
                     ln.innerHTML = cr.lastName;
-
-
                 },
-                error:function (e) {
+                error: function (e) {
                     alert("that doesn't appear to be a valid customer ID#! Please try again!");
                 }
             });
