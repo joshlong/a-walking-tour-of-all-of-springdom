@@ -12,8 +12,8 @@
             <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
         </init-param>
         <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>org.springsource.examples.sawt.web.mvc.WebMvcConfiguration</param-value>
+            <param-name>contextInitializerClasses</param-name>
+            <param-value>org.springsource.examples.sawt.web.mvc.WebMvcApplicationContextInitializer</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

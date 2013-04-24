@@ -1,21 +1,14 @@
 package org.springsource.examples.sawt.services.messaging.jms;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
-import org.springframework.jms.connection.CachingConnectionFactory;
-import org.springframework.jms.connection.JmsTransactionManager;
+import org.springframework.jms.connection.*;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.support.converter.MarshallingMessageConverter;
-import org.springframework.jms.support.converter.MessageConverter;
-import org.springframework.jms.support.converter.MessageType;
+import org.springframework.jms.support.converter.*;
 import org.springframework.oxm.castor.CastorMarshaller;
-import org.springframework.oxm.support.AbstractMarshaller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
 
 /**
@@ -26,39 +19,37 @@ import javax.jms.ConnectionFactory;
 @EnableTransactionManagement
 public class JmsConfiguration {
 
-    @Inject
-    private Environment environment;
 
     @Bean
-    public ConnectionFactory connectionFactory() throws Exception {
+    public ConnectionFactory connectionFactory(Environment environment) throws Exception {
         ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
         activeMQConnectionFactory.setBrokerURL(environment.getProperty("jms.broker.url"));
         return new CachingConnectionFactory(activeMQConnectionFactory);
     }
 
     @Bean
-    public JmsTransactionManager jmsTransactionManager() throws Exception {
-        return new JmsTransactionManager(this.connectionFactory());
+    public JmsTransactionManager jmsTransactionManager(ConnectionFactory connectionFactory) throws Exception {
+        return new JmsTransactionManager(connectionFactory);
     }
 
-    @Bean    // optional, this provides both Marshaller and Unmarshaller interfaces
-    public AbstractMarshaller oxmMarshaller() {
+    @Bean // optional, this provides both Marshaller and Unmarshaller interfaces
+    public CastorMarshaller oxmMarshaller() {
         return new CastorMarshaller();
     }
 
-    @Bean   //  optional
-    public MessageConverter messageConverter() {
+    @Bean //  optional
+    public MessageConverter messageConverter(CastorMarshaller abstractMarshaller ) {
         MarshallingMessageConverter marshallingMessageConverter = new MarshallingMessageConverter();
-        marshallingMessageConverter.setMarshaller(this.oxmMarshaller());
+        marshallingMessageConverter.setMarshaller( abstractMarshaller );
         marshallingMessageConverter.setTargetType(MessageType.TEXT);
-        marshallingMessageConverter.setUnmarshaller(this.oxmMarshaller());
+        marshallingMessageConverter.setUnmarshaller( abstractMarshaller );
         return marshallingMessageConverter;
     }
 
     @Bean
-    public JmsTemplate jmsTemplate() throws Exception {
-        JmsTemplate jmsTemplate = new JmsTemplate(this.connectionFactory());
-        jmsTemplate.setMessageConverter(this.messageConverter());    // optional
+    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) throws Exception {
+        JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
+        jmsTemplate.setMessageConverter(messageConverter);
         return jmsTemplate;
     }
 
