@@ -38,11 +38,11 @@ public class JmsConfiguration {
     }
 
     @Bean //  optional
-    public MessageConverter messageConverter(CastorMarshaller abstractMarshaller ) {
+    public MessageConverter messageConverter(CastorMarshaller abstractMarshaller) {
         MarshallingMessageConverter marshallingMessageConverter = new MarshallingMessageConverter();
-        marshallingMessageConverter.setMarshaller( abstractMarshaller );
+        marshallingMessageConverter.setMarshaller(abstractMarshaller);
         marshallingMessageConverter.setTargetType(MessageType.TEXT);
-        marshallingMessageConverter.setUnmarshaller( abstractMarshaller );
+        marshallingMessageConverter.setUnmarshaller(abstractMarshaller);
         return marshallingMessageConverter;
     }
 

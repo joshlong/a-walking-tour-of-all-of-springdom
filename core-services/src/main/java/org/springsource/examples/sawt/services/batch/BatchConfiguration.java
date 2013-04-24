@@ -29,6 +29,11 @@ import java.sql.Driver;
 @PropertySource("classpath:/services.properties")
 public class BatchConfiguration {
 
+    private static final String readCsvFileIntoTableStep = "readCsvFileIntoTableStep";
+    private static final String readCsvFileIntoTableStepReader = readCsvFileIntoTableStep + "Reader";
+    private static final String readCsvFileIntoTableStepWriter = readCsvFileIntoTableStep + "Writer";
+    private static final String readCsvFileIntoTableStepProcessor = readCsvFileIntoTableStep + "Processor";
+    private static final String customerLoaderJob = "customerLoaderJob";
     private Log log = LogFactory.getLog(getClass());
 
     @Bean
@@ -46,6 +51,7 @@ public class BatchConfiguration {
         String pw = environment.getProperty("dataSource.password"),
                 user = environment.getProperty("dataSource.user"),
                 url = environment.getProperty("dataSource.url");
+
         Class<Driver> classOfDs = environment.getPropertyAsClass("dataSource.driverClass", Driver.class);
 
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
@@ -56,7 +62,13 @@ public class BatchConfiguration {
         return dataSource;
     }
 
-
+    /**
+     * maps CSV data into rows of fields, which are then
+     * mapped to Customer.class instances based on conventions:
+     *
+     * <CODE>col 1 => firstName => customer.setFirstName(String)</CODE>
+     *
+     */
     @Bean(name = readCsvFileIntoTableStepReader)
     @StepScope
     public FlatFileItemReader<Customer> reader(@Value("#{jobParameters['input.file']}") Resource resource) throws Exception {
@@ -85,7 +97,7 @@ public class BatchConfiguration {
         return new ItemProcessor<Customer, Customer>() {
             @Override
             public Customer process(Customer item) throws Exception {
-                log.info(String.format("processing the customer %s", item.toString()));
+                log.debug(String.format("processing the customer %s", item.toString()));
                 return item;
             }
         };
@@ -126,12 +138,4 @@ public class BatchConfiguration {
                 .transactionManager(platformTransactionManager)
                 .build();
     }
-
-    private static final String readCsvFileIntoTableStep = "readCsvFileIntoTableStep";
-    private static final String readCsvFileIntoTableStepReader = readCsvFileIntoTableStep + "Reader";
-    private static final String readCsvFileIntoTableStepWriter = readCsvFileIntoTableStep + "Writer";
-    private static final String readCsvFileIntoTableStepProcessor = readCsvFileIntoTableStep + "Processor";
-    private static final String customerLoaderJob = "customerLoaderJob";
-
-
 }

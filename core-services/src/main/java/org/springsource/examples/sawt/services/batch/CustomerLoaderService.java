@@ -10,8 +10,16 @@ import java.io.File;
 import java.util.Date;
 
 
+/**
+ * Service facade on top of the Spring Batch {@link Job job}.
+ * <p/>
+ * Hides the setup with {@link JobLauncher job launcher} and setting up the peculiar parameters.
+ *
+ * @author Josh Long
+ */
 @Service
 public class CustomerLoaderService {
+
     private Job job;
     private JobLauncher jobLauncher;
 
@@ -40,6 +48,7 @@ public class CustomerLoaderService {
                 String.format("Couldn't complete the batch job. The exit " +
                         "code is ('%s') and exit description is ('%s') ",
                         exitStatus.getExitCode(), exitStatus.getExitDescription()));
+
 
     }
 
