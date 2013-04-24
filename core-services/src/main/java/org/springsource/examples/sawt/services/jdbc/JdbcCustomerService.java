@@ -1,8 +1,7 @@
 package org.springsource.examples.sawt.services.jdbc;
 
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,19 +9,13 @@ import org.springsource.examples.sawt.CustomerService;
 import org.springsource.examples.sawt.services.model.Customer;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.sql.*;
+import java.util.*;
 
 @Component
 @Transactional
 public class JdbcCustomerService implements CustomerService {
-
 
     private String customerByIdQuery;
     private String updateCustomerQuery;
@@ -32,6 +25,16 @@ public class JdbcCustomerService implements CustomerService {
 
     @Inject
     private JdbcTemplate jdbcTemplate;
+
+    private RowMapper<Customer> customerRowMapper = new RowMapper<Customer>() {
+
+        public Customer mapRow(ResultSet resultSet, int i) throws SQLException {
+            long id = resultSet.getInt("id");
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            return new Customer(id, firstName, lastName);
+        }
+    };
 
     @PostConstruct
     public void setup() {
@@ -63,14 +66,4 @@ public class JdbcCustomerService implements CustomerService {
         this.jdbcTemplate.update(updateCustomerQuery, fn, ln, id);
         return getCustomerById(id);
     }
-
-    private RowMapper<Customer> customerRowMapper = new RowMapper<Customer>() {
-
-        public Customer mapRow(ResultSet resultSet, int i) throws SQLException {
-            long id = resultSet.getInt("id");
-            String firstName = resultSet.getString("first_name");
-            String lastName = resultSet.getString("last_name");
-            return new Customer(id, firstName, lastName);
-        }
-    };
 }

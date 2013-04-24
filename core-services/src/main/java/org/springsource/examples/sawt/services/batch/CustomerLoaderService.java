@@ -48,8 +48,6 @@ public class CustomerLoaderService {
                 String.format("Couldn't complete the batch job. The exit " +
                         "code is ('%s') and exit description is ('%s') ",
                         exitStatus.getExitCode(), exitStatus.getExitDescription()));
-
-
     }
 
 }

@@ -12,25 +12,16 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class CoreCrmConfig {
 
-
-    @Value("${dataSource.driverClassName}")
-    private String driverName;
-
-    @Value("${dataSource.url}")
-    private String url;
-
-    @Value("${dataSource.user}")
-    private String user;
-
-    @Value("${dataSource.password}")
-    private String password;
-
     @Bean
-    public DataSource dataSource() {
+    public DataSource dataSource(
+            @Value("${dataSource.driverClassName}") String driverName,
+            @Value("${dataSource.url}") String url,
+            @Value("${dataSource.user}") String user,
+            @Value("${dataSource.password}") String password) {
         SimpleDriverDataSource simpleDriverDataSource = new SimpleDriverDataSource();
-        simpleDriverDataSource.setPassword(this.password);
-        simpleDriverDataSource.setUrl(this.url);
-        simpleDriverDataSource.setUsername(this.user);
+        simpleDriverDataSource.setPassword(password);
+        simpleDriverDataSource.setUrl(url);
+        simpleDriverDataSource.setUsername(user);
         simpleDriverDataSource.setDriverClass(org.h2.Driver.class);
         return simpleDriverDataSource;
     }
