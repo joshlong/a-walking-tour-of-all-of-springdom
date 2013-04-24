@@ -10,6 +10,8 @@ import javax.annotation.PostConstruct;
 
 public class Client {
 
+
+
     @Autowired
     @AndroidStore
     private BookShop androidByQualifierAnnotation;

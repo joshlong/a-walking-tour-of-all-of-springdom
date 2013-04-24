@@ -14,14 +14,11 @@ public class AmazonBookShop implements BookShop {
 
     @Override
     public long sell(String isbn) {
-
         return 0;
     }
 
     @Override
     public long buy(String isbn) {
-
         return 0;
     }
-
 }

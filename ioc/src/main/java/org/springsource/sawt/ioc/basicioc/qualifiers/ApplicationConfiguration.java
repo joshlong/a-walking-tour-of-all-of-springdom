@@ -6,7 +6,7 @@ import org.springsource.sawt.ioc.basicioc.qualifiers.annotation.AndroidStore;
 import org.springsource.sawt.ioc.basicioc.qualifiers.annotation.IOsStore;
 
 @Configuration
-public class Config {
+public class ApplicationConfiguration {
 
     @Bean
     public Client client() {

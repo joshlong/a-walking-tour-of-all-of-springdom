@@ -1,7 +1,5 @@
 package org.springsource.sawt.ioc.basicioc.xml;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import javax.sql.DataSource;
 
 /**
@@ -15,9 +13,5 @@ public class CustomerService {
         this.dataSource = ds;
      }
 
-
-    // ....
-    // ....
-    //
 
 }

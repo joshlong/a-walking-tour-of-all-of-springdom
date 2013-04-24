@@ -10,7 +10,7 @@
     <!--</definition>-->
     <!---->
     <definition name="customers/display" extends="page">
-        <put-attribute name="content" value="/WEB-INF/views/customers/display.jsp"/>
+        <put-attribute name="content" value="/src/main/webapp/WEB-INF/views/customers/display.jsp"/>
     </definition>
 
 </tiles-definitions>
