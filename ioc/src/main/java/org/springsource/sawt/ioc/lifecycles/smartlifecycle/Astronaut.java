@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Astronaut implements SmartLifecycle {
+
     private Log log = LogFactory.getLog(getClass());
 
     private volatile boolean running = false;
