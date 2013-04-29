@@ -6,6 +6,8 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 
 import javax.sql.DataSource;
 import java.sql.Driver;
@@ -25,7 +27,14 @@ public class LocalDataSourceConfiguration {
         dataSource.setUsername(environment.getProperty("dataSource.user"));
         dataSource.setDriverClassName(environment.getPropertyAsClass("dataSource.driverClass", Driver.class).getName());
         return dataSource;
+
     }
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new JedisConnectionFactory();
+    }
+
     @Bean
     public MongoDbFactory mongoDbFactory1(Environment environment) throws Exception {
         String dbName = environment.getProperty("mongo.db");
