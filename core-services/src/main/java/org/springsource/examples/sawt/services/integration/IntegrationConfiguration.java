@@ -13,12 +13,11 @@ import org.springsource.examples.sawt.services.batch.BatchConfiguration;
  */
 @Configuration
 @Import(BatchConfiguration.class)
-@ComponentScan (basePackageClasses = IntegrationConfiguration.class)
+@ComponentScan
 @ImportResource("/org/springsource/examples/sawt/services/integration/context.xml")
 public class IntegrationConfiguration {
     @Bean
     public JobLaunchingMessageHandler jobMessageHandler(JobLauncher jobLauncher) throws Exception {
         return new JobLaunchingMessageHandler(jobLauncher);
     }
-
 }

@@ -1,14 +1,13 @@
 package org.springsource.examples.sawt.services;
 
-import org.cloudfoundry.runtime.env.CloudEnvironment;
-import org.cloudfoundry.runtime.env.RdbmsServiceInfo;
+import org.cloudfoundry.runtime.env.*;
+import org.cloudfoundry.runtime.service.document.MongoServiceCreator;
 import org.cloudfoundry.runtime.service.relational.RdbmsServiceCreator;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
+import org.springframework.data.mongodb.MongoDbFactory;
 
 import javax.sql.DataSource;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Simple version of the configuration that supports Cloud Foundry runtime
@@ -17,14 +16,21 @@ import java.util.Collection;
  */
 @Configuration
 @Profile("cloud")
-public class CloudFoundryDataSourceConfiguration   {
+public class CloudFoundryDataSourceConfiguration {
+
+    private CloudEnvironment cloudEnvironment = new CloudEnvironment();
+
+    @Bean
+    public MongoDbFactory mongoDbFactory() throws Exception {
+        List<MongoServiceInfo> serviceInfoList = cloudEnvironment.getServiceInfos(MongoServiceInfo.class);
+        MongoServiceInfo mongoServiceInfo = serviceInfoList.iterator().next();
+        return new MongoServiceCreator().createService(mongoServiceInfo);
+    }
 
     @Bean
     public DataSource dataSource() throws Exception {
-        CloudEnvironment cloudEnvironment = new CloudEnvironment();
         Collection<RdbmsServiceInfo> databases = cloudEnvironment.getServiceInfos(RdbmsServiceInfo.class);
         RdbmsServiceInfo rdbmsServiceInfo = databases.iterator().next();
-        assert rdbmsServiceInfo != null : "the database instance must be provisioned. Use 'vmc create-service' and 'vmc bind-service'";
         RdbmsServiceCreator rdbmsServiceCreator = new RdbmsServiceCreator();
         return rdbmsServiceCreator.createService(rdbmsServiceInfo);
     }

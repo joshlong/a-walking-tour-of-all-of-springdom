@@ -1,8 +1,11 @@
 package org.springsource.examples.sawt.services;
 
+import com.mongodb.Mongo;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
 import javax.sql.DataSource;
 import java.sql.Driver;
@@ -22,5 +25,12 @@ public class LocalDataSourceConfiguration {
         dataSource.setUsername(environment.getProperty("dataSource.user"));
         dataSource.setDriverClassName(environment.getPropertyAsClass("dataSource.driverClass", Driver.class).getName());
         return dataSource;
+    }
+    @Bean
+    public MongoDbFactory mongoDbFactory1(Environment environment) throws Exception {
+        String dbName = environment.getProperty("mongo.db");
+        String host = environment.getProperty("mongo.host");
+        Mongo mongo = new Mongo(host);
+        return new SimpleMongoDbFactory(mongo, dbName);
     }
 }

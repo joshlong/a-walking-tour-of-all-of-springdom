@@ -6,7 +6,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.*;
-import org.springframework.data.mongodb.crossstore.*;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.orm.jpa.*;
 import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;

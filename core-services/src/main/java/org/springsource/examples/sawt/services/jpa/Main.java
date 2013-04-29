@@ -9,10 +9,7 @@ import org.springsource.examples.sawt.services.model.Customer;
 public class Main {
     public static void main(String args[]) throws Throwable {
 
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
-        applicationContext.getEnvironment().setActiveProfiles("default");
-        applicationContext.scan(JpaConfiguration.class.getPackage().getName());
-        applicationContext.refresh();
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(JpaConfiguration.class);
 
         Log log = LogFactory.getLog(Main.class);
 
@@ -20,12 +17,12 @@ public class Main {
 
         Customer customer = customerService.createCustomer("Jpa", "Lover");
 
-        Customer retrievedCustomer = customerService.getCustomerById(customer.getId());
+        Customer retrievedCustomer = customerService.getCustomerById(customer.getId().longValue());
 
         log.info(String.format("customer.id (%s) == retreivedCustomer.id (%s)?  %s",
                 customer.getId(), retrievedCustomer.getId(), customer.getId().equals(retrievedCustomer.getId())));
 
-        Customer updatedCustomer = customerService.updateCustomer(customer.getId(), "JPA", "Lover");
+        Customer updatedCustomer = customerService.updateCustomer(customer.getId().longValue(), "JPA", "Lover");
         log.info(String.format("updated customer's firstName: %s", updatedCustomer.getFirstName()));
 
 

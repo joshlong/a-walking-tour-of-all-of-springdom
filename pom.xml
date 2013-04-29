@@ -8,16 +8,16 @@
     <packaging>pom</packaging>
     <modules>
         <module>core-services</module>
+<!--
         <module>core-services-nosql-mongodb</module>
+-->
         <module>core-services-nosql-redis</module>
         <module>web</module>
-        <!--<module>android</module> -->
-
         <module>ioc</module>
     </modules>
     <properties>
         <java.version>1.6</java.version>
-        <spring.data.mongo.version>1.0.0.RELEASE</spring.data.mongo.version>
+        <spring.data.version>1.3.1.RELEASE</spring.data.version>
         <com.rabbitmq.version>2.5.0</com.rabbitmq.version>
         <spring.amqp.version>1.0.0.RELEASE</spring.amqp.version>
         <activemq.version>5.5.0</activemq.version>
@@ -25,17 +25,57 @@
         <spring.ws.version>2.0.1.RELEASE</spring.ws.version>
         <org.springframework.version>3.2.2.RELEASE</org.springframework.version>
         <org.springframework.security-version>3.0.3.RELEASE</org.springframework.security-version>
-        <spring.integration.version>2.1.1.RELEASE</spring.integration.version>
+        <spring.integration.version>2.2.1.RELEASE</spring.integration.version>
         <org.aspectj.version>1.6.11</org.aspectj.version>
     </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>1.7.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <artifactId>spring-integration-amqp</artifactId>
+                <version>${spring.integration.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <version>${spring.integration.version}</version>
+                <artifactId>spring-integration-jms</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <version>${spring.integration.version}</version>
+                <artifactId>spring-integration-core</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <version>${spring.integration.version}</version>
+                <artifactId>spring-integration-file</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <version>${spring.integration.version}</version>
+                <artifactId>spring-integration-stream</artifactId>
+            </dependency>
+            <dependency>
                 <groupId>org.cloudfoundry</groupId>
                 <artifactId>cloudfoundry-runtime</artifactId>
                 <version>0.8.2</version>
             </dependency>
-
             <dependency>
                 <groupId>aopalliance</groupId>
                 <artifactId>aopalliance</artifactId>
@@ -60,31 +100,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
-            <dependency>
-                <groupId>org.springframework.integration</groupId>
-                <artifactId>spring-integration-jms</artifactId>
-                <version>2.2.0.RELEASE</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.integration</groupId>
-                <artifactId>spring-integration-stream</artifactId>
-                <version>2.2.0.RELEASE</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.integration</groupId>
-                <artifactId>spring-integration-file</artifactId>
-                <version>2.2.0.RELEASE</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.integration</groupId>
-                <artifactId>spring-integration-core</artifactId>
-                <version>2.2.0.RELEASE</version>
-            </dependency>
-
-
             <dependency>
                 <groupId>xpp3</groupId>
                 <artifactId>xpp3</artifactId>
@@ -99,7 +114,7 @@
             <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-mongodb-cross-store</artifactId>
-                <version>${spring.data.mongo.version}</version>
+                <version>${spring.data.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.springframework</groupId>
@@ -140,19 +155,7 @@
                 <artifactId>jstl</artifactId>
                 <version>1.2</version>
             </dependency>
-
-            <!--  <dependency>
-                <groupId>javax.servlet.jsp.jstl</groupId>
-                <artifactId>jstl-api</artifactId>
-                <version>1.2</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.web</groupId>
-                <artifactId>jstl-impl</artifactId>
-                <version>1.2</version>
-            </dependency>-->
-
-            <!-- Apache Tiles -->
+            <!-- <dependency> <groupId>javax.servlet.jsp.jstl</groupId> <artifactId>jstl-api</artifactId> <version>1.2</version> </dependency> <dependency> <groupId>org.glassfish.web</groupId> <artifactId>jstl-impl</artifactId> <version>1.2</version> </dependency>--> <!-- Apache Tiles -->
             <dependency>
                 <groupId>org.apache.tiles</groupId>
                 <artifactId>tiles-jsp</artifactId>
@@ -163,14 +166,11 @@
                 <artifactId>tiles-el</artifactId>
                 <version>2.2.2</version>
             </dependency>
-
-
             <dependency>
                 <groupId>org.springframework.mobile</groupId>
                 <artifactId>spring-mobile-device</artifactId>
                 <version>1.0.0.RC1</version>
             </dependency>
-
             <dependency>
                 <groupId>org.simpleframework</groupId>
                 <artifactId>simple-xml</artifactId>
@@ -186,17 +186,35 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <dependency>
                 <groupId>redis.clients</groupId>
                 <artifactId>jedis</artifactId>
                 <version>2.0.0</version>
                 <scope>compile</scope>
             </dependency>
+
+            <!--Spring Data Commons 1.5 - Artifacts - JavaDocs - Documentation - Changelog
+Spring Data JPA 1.3 - Artifacts - JavaDocs - Documentation - Changelog
+Spring Data MongoDB 1.2 - Artifacts - JavaDocs - Documentation - Changelog
+Spring Data Neo4j 2.2 - Artifacts - JavaDocs - Documentation - Changelog
+Spring Data Redis 1.0.3 - Artifacts - JavaDocs - Documentation - Changelog
+Spring Data Gemfire 1.3 M1 - Artifacts - JavaDocs - Documentation - Changelog
+Spring Data Solr 1.0 RC1 - Artifacts - JavaDocs - Documentation - Changelog
+The major new features of the release are: -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>1.3.1.RELEASE</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-redis</artifactId>
-                <version>1.0.0.RELEASE</version>
+                <version>1.0.3.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>1.2.1.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.amqp</groupId>
@@ -208,7 +226,6 @@
                 <artifactId>hibernate-jpa-2.0-api</artifactId>
                 <version>1.0.1.Final</version>
             </dependency>
-
             <dependency>
                 <groupId>org.mortbay.jetty</groupId>
                 <version>3.0.20100224</version>
@@ -224,7 +241,6 @@
                 <artifactId>hibernate-entitymanager</artifactId>
                 <version>4.0.0.Final</version>
             </dependency>
-
             <dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>activemq-core</artifactId>
@@ -254,8 +270,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
-
             <dependency>
                 <groupId>javax.transaction</groupId>
                 <artifactId>jta</artifactId>
@@ -272,19 +286,16 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.integration</groupId>
                 <artifactId>spring-integration-stream</artifactId>
                 <version>${spring.integration.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.codehaus.castor</groupId>
                 <artifactId>castor</artifactId>
                 <version>1.2</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.integration</groupId>
                 <artifactId>spring-integration-file</artifactId>
@@ -295,31 +306,13 @@
                 <artifactId>spring-integration-core</artifactId>
                 <version>${spring.integration.version}</version>
             </dependency>
-            <!--       <dependency>
-                       <groupId>org.springframework.batch</groupId>
-                       <artifactId>spring-batch-integration</artifactId>
-                       <version>1.2.0.RELEASE</version>
-                   </dependency>-->
+            <!-- <dependency> <groupId>org.springframework.batch</groupId> <artifactId>spring-batch-integration</artifactId> <version>1.2.0.RELEASE</version> </dependency>-->
             <dependency>
                 <groupId>org.apache.xmlbeans</groupId>
                 <artifactId>xmlbeans</artifactId>
                 <version>2.4.0</version>
             </dependency>
-            <!--  <dependency>
-                  <groupId>org.springframework.batch</groupId>
-                  <artifactId>spring-batch-core</artifactId>
-                  <version>2.1.7.RELEASE</version>
-                  <exclusions>
-                      <exclusion>
-                          <groupId>org.springframework</groupId>
-                          <artifactId>spring-tx</artifactId>
-                      </exclusion>
-                      <exclusion>
-                          <groupId>org.springframework</groupId>
-                          <artifactId>spring-core</artifactId>
-                      </exclusion>
-                  </exclusions>
-              </dependency>-->
+            <!-- <dependency> <groupId>org.springframework.batch</groupId> <artifactId>spring-batch-core</artifactId> <version>2.1.7.RELEASE</version> <exclusions> <exclusion> <groupId>org.springframework</groupId> <artifactId>spring-tx</artifactId> </exclusion> <exclusion> <groupId>org.springframework</groupId> <artifactId>spring-core</artifactId> </exclusion> </exclusions> </dependency>-->
             <dependency>
                 <groupId>org.springframework.batch</groupId>
                 <artifactId>spring-batch-integration</artifactId>
@@ -370,7 +363,6 @@
                 <artifactId>jaxb-impl</artifactId>
                 <version>2.1.7</version>
             </dependency>
-
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>

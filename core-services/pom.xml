@@ -6,18 +6,32 @@
         <groupId>org.springsource.examples.sawt</groupId>
         <artifactId>core</artifactId>
         <version>1.0-SNAPSHOT</version>
+
     </parent>
     <artifactId>core-services</artifactId>
 
     <dependencies>
+
+        <!--mqtt dependencies -->
+        <dependency>
+            <groupId>org.eclipse.paho.client</groupId>
+            <artifactId>mqtt</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <!--mqtt dependencies -->
+
         <dependency>
             <groupId>org.cloudfoundry</groupId>
             <artifactId>cloudfoundry-runtime</artifactId>
-         </dependency>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
@@ -74,9 +88,9 @@
         </dependency>
 
         <dependency>
-        <groupId>org.springframework.integration</groupId>
-        <artifactId>spring-integration-jms</artifactId>
-    </dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-jms</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-stream</artifactId>
@@ -125,6 +139,10 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>postgresql</groupId>

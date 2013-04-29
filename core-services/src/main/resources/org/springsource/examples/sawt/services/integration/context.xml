@@ -2,22 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-
-       xmlns:alipay   ="http://....alipay.com/schema/"
-
        xmlns:int="http://www.springframework.org/schema/integration"
        xmlns:file="http://www.springframework.org/schema/integration/file"
        xmlns:stream="http://www.springframework.org/schema/integration/stream"
        xsi:schemaLocation="
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-    http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.1.xsd
-    http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file-2.1.xsd
-    http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream-2.1.xsd
+    http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+    http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+    http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
     ">
 
 
-    <import resource="../batch/context.xml"/>
 
     <context:component-scan base-package="org.springsource.examples.sawt.services.integration"/>
 
@@ -32,7 +28,7 @@
         <int:poller fixed-rate="1000"/>
     </file:inbound-channel-adapter>
 
-    <int:transformer ref="fileToJobRequestTransformer" input-channel="filesReceived" output-channel="jobsToLaunch"/>
+    <int:transformer ref="fileBatchJobRequestTransformer" input-channel="filesReceived" output-channel="jobsToLaunch"/>
 
     <int:service-activator input-channel="jobsToLaunch" ref="jobMessageHandler" output-channel="jobExecutions"/>
 

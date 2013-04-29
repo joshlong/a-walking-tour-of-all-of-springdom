@@ -20,7 +20,7 @@ public class RestCustomerController {
     @ResponseBody
     public Customer updateCustomer(@RequestBody Customer customer) {
         return this.customerService.updateCustomer(
-                customer.getId(),
+                customer.getId().longValue(),
                 customer.getFirstName(),
                 customer.getLastName());
     }
