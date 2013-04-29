@@ -1,36 +1,58 @@
 package org.springsource.examples.sawt.services.repositories.mongodb;
 
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.io.*;
 import org.springsource.examples.sawt.services.model.Customer;
 
-import java.util.ArrayList;
+import java.io.InputStream;
+import java.util.*;
 
 public class Main {
 
-    static public void main(String[] args) throws Throwable {
+    private final static Random random = new Random();
+
+    public static void main(String[] args) throws Throwable {
         AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(
                 MongoRepositoryConfiguration.class
         );
         CustomerRepository customerRepository = annotationConfigApplicationContext.getBean(CustomerRepository.class);
 
-        ArrayList<Customer> customers = new ArrayList<Customer>();
-        customers.add(new Customer("Josh", "Long"));
-        customers.add(new Customer("Josh", "Williams"));
-        customers.add(new Customer("Mark", "Fisher"));
-        customers.add(new Customer("Mark", "Pollack"));
-        customers.add(new Customer("Oliver", "Gierke"));
-        customers.add(new Customer("Dave", "Turanski"));
-        customers.add(new Customer("Chris", "Beams"));
-        customers.add(new Customer("Chris", "Brown"));
+        Customer[] customers = new Customer[]{
+                (new Customer("Josh", "Long")),
+                (new Customer("Josh", "Williams")),
+                (new Customer("Mark", "Fisher")),
+                (new Customer("Mark", "Pollack")),
+                (new Customer("Oliver", "Gierke")),
+                (new Customer("Dave", "Turanski")),
+                (new Customer("Chris", "Beams")),
+                (new Customer("Chris", "Brown"))};
 
         customerRepository.deleteAll();
 
-        for (Customer customer : customers) {
+        for (Customer customer : customers)
             customerRepository.save(customer);
-        }
 
-        System.out.println("all customers: " + customerRepository.findAll());
+        Iterable<Customer> customerList = customerRepository.findAll();
+
+        List<Customer> allCustomersFromDatabase = new ArrayList<Customer>();
+        for (Customer customer : customerList)
+            allCustomersFromDatabase.add(customer);
+
+        Customer randomCustomer = customers[random.nextInt(allCustomersFromDatabase.size())];
+
+        Resource resource = new ClassPathResource("/sample/photo.jpg");
+        InputStream inputStream = resource.getInputStream();
+        customerRepository.storeProfilePhoto(randomCustomer.getId(), inputStream);
+
+        InputStream readInputStream = customerRepository.readProfilePhoto(randomCustomer.getId());
+
+        System.out.println(
+                "Do the bytes stored in MongoDB match" +
+                " the byte[]s for the image we stored in Mongo? " +
+                    Arrays.equals(IOUtils.toByteArray(readInputStream), (IOUtils.toByteArray(resource.getInputStream()))));
 
     }
+
 }

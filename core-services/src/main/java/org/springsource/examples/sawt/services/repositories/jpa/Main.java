@@ -6,9 +6,11 @@ import org.springsource.examples.sawt.services.model.Customer;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
+
+    private final static Random random = new Random();
+
     public static void main(String[] args) throws Throwable {
 
         Log log = LogFactory.getLog(Main.class);
@@ -42,7 +44,7 @@ public class Main {
         System.out.println(customerRepository.toString());
 
 
-        Customer customer = savedCustomers.get(ThreadLocalRandom.current().nextInt(customers.size()));
+        Customer customer = savedCustomers.get( random.nextInt(customers.size()));
         System.out.println("customer: " + customer.toString());
 
         Customer fromDataBase = customerRepository.findOne( customer.getId() ) ;
