@@ -32,7 +32,6 @@ public class AmqpConfiguration {
     }
 
     @Bean
-    // optional, this provides both Marshaller and Unmarshaller interfaces
     public CastorMarshaller oxmMarshaller() {
         return new CastorMarshaller();
     }
@@ -76,7 +75,9 @@ public class AmqpConfiguration {
 
     @Bean
     public Binding marketDataBinding(Queue customerQueue, DirectExchange directExchange) {
-        return BindingBuilder.bind(customerQueue).to(directExchange)
+        return BindingBuilder
+                .bind(customerQueue)
+                .to(directExchange)
                 .with(this.customersQueueAndExchangeName);
     }
 }

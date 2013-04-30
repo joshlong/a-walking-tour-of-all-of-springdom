@@ -31,16 +31,14 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
 
     @Override
     public InputStream readProfilePhoto(BigInteger customerId) {
-        Customer customer = customerRepository.findOne( (customerId));
-        GridFSDBFile gridFSDBFile = this.gridFsTemplate.findOne(
-                queryForManagedUpload(customer)
-        );
+        Customer customer = customerRepository.findOne((customerId));
+        GridFSDBFile gridFSDBFile = this.gridFsTemplate.findOne(queryForManagedUpload(customer));
         return gridFSDBFile.getInputStream();
     }
 
     @Override
-    public void storeProfilePhoto(BigInteger  customerId, InputStream bytes) {
-        Customer customer = customerRepository.findOne( (customerId));
+    public void storeProfilePhoto(BigInteger customerId, InputStream bytes) {
+        Customer customer = customerRepository.findOne((customerId));
         try {
             this.gridFsTemplate.store(bytes, fileNameForManagedUpload(customer));
         } finally {

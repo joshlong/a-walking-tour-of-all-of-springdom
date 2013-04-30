@@ -10,6 +10,7 @@ import org.springsource.examples.sawt.services.model.Customer;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.*;
 
@@ -19,17 +20,14 @@ public class JdbcCustomerService implements CustomerService {
 
     private String customerByIdQuery;
     private String updateCustomerQuery;
-
     @Inject
     private Environment environment;
-
     @Inject
     private JdbcTemplate jdbcTemplate;
-
     private RowMapper<Customer> customerRowMapper = new RowMapper<Customer>() {
 
         public Customer mapRow(ResultSet resultSet, int i) throws SQLException {
-            long id = resultSet.getInt("id");
+            BigInteger id = BigInteger.valueOf(resultSet.getLong("id"));
             String firstName = resultSet.getString("first_name");
             String lastName = resultSet.getString("last_name");
             return new Customer(id, firstName, lastName);
@@ -54,15 +52,17 @@ public class JdbcCustomerService implements CustomerService {
         simpleJdbcInsert.setGeneratedKeyName("id");
 
         Number id = simpleJdbcInsert.executeAndReturnKey(args);  // the ID of the inserted record.
-        return getCustomerById(id.longValue());
+        Long longId = (Long) id;
+        BigInteger bigInteger = BigInteger.valueOf(longId);
+        return getCustomerById(bigInteger);
     }
 
     @Transactional(readOnly = true)
-    public Customer getCustomerById(long id) {
-        return jdbcTemplate.queryForObject(customerByIdQuery, customerRowMapper, id);
+    public Customer getCustomerById(BigInteger id) {
+        return jdbcTemplate.queryForObject(customerByIdQuery, customerRowMapper, id.longValue());
     }
 
-    public Customer updateCustomer(long id, String fn, String ln) {
+    public Customer updateCustomer(BigInteger id, String fn, String ln) {
         this.jdbcTemplate.update(updateCustomerQuery, fn, ln, id);
         return getCustomerById(id);
     }

@@ -8,19 +8,20 @@ import org.springsource.examples.sawt.CustomerService;
 import org.springsource.examples.sawt.services.model.Customer;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 
 @Service
 @Transactional
 public class JpaCustomerService implements CustomerService {
 
-    private final static String customerCache = "customers";
+    private final static String CUSTOMER_CACHE = "customers";
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Cacheable(customerCache)
+    @Cacheable(CUSTOMER_CACHE)
     @Transactional(readOnly = true)
-    public Customer getCustomerById(long id) {
+    public Customer getCustomerById(BigInteger id) {
         return this.entityManager.find(Customer.class, id);
     }
 
@@ -32,8 +33,8 @@ public class JpaCustomerService implements CustomerService {
         return newCustomer;
     }
 
-    @CacheEvict(customerCache)
-    public Customer updateCustomer(long id, String fn, String ln) {
+    @CacheEvict( value = CUSTOMER_CACHE,key = "#id")
+    public Customer updateCustomer(BigInteger id, String fn, String ln) {
         Customer customer = this.getCustomerById(id);
         customer.setFirstName(fn);
         customer.setLastName(ln);

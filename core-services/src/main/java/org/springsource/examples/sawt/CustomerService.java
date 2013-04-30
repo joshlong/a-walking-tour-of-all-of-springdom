@@ -2,10 +2,12 @@ package org.springsource.examples.sawt;
 
 import org.springsource.examples.sawt.services.model.Customer;
 
-public interface CustomerService {
-    Customer updateCustomer(long id, String fn, String ln);
+import java.math.BigInteger;
 
-    Customer getCustomerById(long id);
+public interface CustomerService {
+    Customer updateCustomer( BigInteger id, String fn, String ln);
+
+    Customer getCustomerById(BigInteger id);
 
     Customer createCustomer(String fn, String ln);
 }

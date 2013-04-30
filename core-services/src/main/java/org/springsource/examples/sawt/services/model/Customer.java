@@ -25,8 +25,8 @@ public class Customer implements java.io.Serializable {
         this.lastName = ln;
     }
 
-    public Customer(long id, String firstName, String lastName) {
-        this.id = BigInteger.valueOf(id);
+    public Customer(BigInteger id, String firstName, String lastName) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }

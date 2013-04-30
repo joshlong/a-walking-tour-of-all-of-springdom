@@ -7,20 +7,18 @@ import org.springframework.context.annotation.*;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springsource.examples.sawt.services.*;
+import org.springsource.examples.sawt.services.jpa.JpaConfiguration;
 
 @Configuration
-@Import({LocalDataSourceConfiguration.class, CloudFoundryDataSourceConfiguration.class})
+@Import(JpaConfiguration.class)
 @EnableCaching
 public class RedisCachingConfiguration {
 
-    // todo import the JpaConfiguration
-
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) throws Exception {
-        RedisTemplate<String, Object> ro = new RedisTemplate<String, Object>();
-        ro.setConnectionFactory(connectionFactory);
-        return ro;
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
+        redisTemplate.setConnectionFactory(connectionFactory);
+        return redisTemplate;
     }
 
     @Bean
