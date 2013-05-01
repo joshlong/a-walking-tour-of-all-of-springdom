@@ -11,8 +11,12 @@
 <!--
         <module>core-services-nosql-mongodb</module>
 -->
+<!--
         <module>core-services-nosql-redis</module>
+-->
+<!--
         <module>web</module>
+-->
         <module>ioc</module>
     </modules>
     <properties>
