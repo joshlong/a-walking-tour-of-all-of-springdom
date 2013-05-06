@@ -1,8 +1,9 @@
 package com.joshlong.spring.walkingtour.services.repositories;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
 import com.joshlong.spring.walkingtour.services.model.Customer;
 import com.joshlong.spring.walkingtour.services.repositories.jpa.CustomerRepositoryCustom;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.rest.repository.annotation.RestResource;
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -12,8 +13,10 @@ import java.util.Collection;
  *
  * @author Josh Long
  */
+@RestResource(path = "customers")
 public interface BaseCustomerRepository extends PagingAndSortingRepository<Customer, BigInteger>, CustomerRepositoryCustom {
+    @RestResource
     Collection<Customer> findByFirstName(String firstName);
-
+    @RestResource
     Collection<Customer> findByFirstNameAndLastName(String firstName, String lastName);
 }

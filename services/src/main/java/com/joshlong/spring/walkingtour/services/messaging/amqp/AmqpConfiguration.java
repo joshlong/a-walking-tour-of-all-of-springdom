@@ -1,23 +1,38 @@
 package com.joshlong.spring.walkingtour.services.messaging.amqp;
 
 
+import com.joshlong.spring.walkingtour.services.model.Customer;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.*;
 import org.springframework.amqp.rabbit.core.*;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.transaction.RabbitTransactionManager;
 import org.springframework.amqp.support.converter.*;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
-import org.springframework.oxm.castor.CastorMarshaller;
+import org.springframework.core.task.*;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.util.concurrent.Executors;
 
 @Configuration
 @PropertySource("/services.properties")
 @EnableTransactionManagement
 public class AmqpConfiguration {
 
-
     private String customersQueueAndExchangeName = "customers";
+
+    @Bean
+    public TaskScheduler taskScheduler() {
+        return new ConcurrentTaskScheduler(Executors.newScheduledThreadPool(10));
+    }
+
+    @Bean
+    public SimpleAsyncTaskExecutor taskExecutor() {
+        return new SimpleAsyncTaskExecutor();
+    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(MessageConverter messageConverter, ConnectionFactory connectionFactory) {
@@ -32,16 +47,8 @@ public class AmqpConfiguration {
     }
 
     @Bean
-    public CastorMarshaller oxmMarshaller() {
-        return new CastorMarshaller();
-    }
-
-    @Bean
-    public MessageConverter jsonMessageConverter(CastorMarshaller castorMarshaller) {
-        MarshallingMessageConverter marshallingMessageConverter = new MarshallingMessageConverter();
-        marshallingMessageConverter.setMarshaller(castorMarshaller);
-        marshallingMessageConverter.setUnmarshaller(castorMarshaller);
-        return marshallingMessageConverter;
+    public JsonMessageConverter jsonMessageConverter() {
+        return new JsonMessageConverter();
     }
 
     @Bean
@@ -68,7 +75,7 @@ public class AmqpConfiguration {
 
     @Bean
     public DirectExchange customerExchange(AmqpAdmin amqpAdmin) {
-        DirectExchange directExchange = new DirectExchange( customersQueueAndExchangeName);
+        DirectExchange directExchange = new DirectExchange(customersQueueAndExchangeName);
         amqpAdmin.declareExchange(directExchange);
         return directExchange;
     }
@@ -79,5 +86,23 @@ public class AmqpConfiguration {
                 .bind(customerQueue)
                 .to(directExchange)
                 .with(this.customersQueueAndExchangeName);
+    }
+
+    @Bean
+    public SimpleMessageListenerContainer simpleMessageListenerContainer(TaskExecutor taskExecutor, Queue customerQueue, final JsonMessageConverter jsonMessageConverter, ConnectionFactory connectionFactory) {
+        SimpleMessageListenerContainer smlc = new SimpleMessageListenerContainer();
+        smlc.setMessageListener(new MessageListener() {
+            @Override
+            public void onMessage(Message message) {
+                Customer customer = (Customer) jsonMessageConverter.fromMessage(message);
+                System.out.println("Received new customer " + customer.toString());
+            }
+        });
+        smlc.setTaskExecutor(taskExecutor);
+        smlc.setAutoStartup(false);
+        smlc.setQueues(customerQueue);
+        smlc.setConcurrentConsumers(10);
+        smlc.setConnectionFactory(connectionFactory);
+        return smlc;
     }
 }

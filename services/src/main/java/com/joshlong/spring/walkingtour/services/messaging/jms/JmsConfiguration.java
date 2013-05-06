@@ -1,15 +1,20 @@
 package com.joshlong.spring.walkingtour.services.messaging.jms;
 
+import com.joshlong.spring.walkingtour.services.model.Customer;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.core.task.*;
 import org.springframework.jms.connection.*;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.jms.support.converter.*;
-import org.springframework.oxm.castor.CastorMarshaller;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.jms.ConnectionFactory;
+import javax.jms.*;
+import java.util.concurrent.Executors;
 
 /**
  * configuration for a raw JMS based solution
@@ -32,18 +37,9 @@ public class JmsConfiguration {
         return new JmsTransactionManager(connectionFactory);
     }
 
-    @Bean // optional, this provides both Marshaller and Unmarshaller interfaces
-    public CastorMarshaller oxmMarshaller() {
-        return new CastorMarshaller();
-    }
-
     @Bean //  optional
-    public MessageConverter messageConverter(CastorMarshaller abstractMarshaller) {
-        MarshallingMessageConverter marshallingMessageConverter = new MarshallingMessageConverter();
-        marshallingMessageConverter.setMarshaller(abstractMarshaller);
-        marshallingMessageConverter.setTargetType(MessageType.TEXT);
-        marshallingMessageConverter.setUnmarshaller(abstractMarshaller);
-        return marshallingMessageConverter;
+    public MessageConverter messageConverter() {
+        return new MappingJacksonMessageConverter();
     }
 
     @Bean
@@ -51,6 +47,39 @@ public class JmsConfiguration {
         JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
         jmsTemplate.setMessageConverter(messageConverter);
         return jmsTemplate;
+    }
+
+    @Bean
+    public TaskScheduler taskScheduler() {
+        return new ConcurrentTaskScheduler(Executors.newScheduledThreadPool(10));
+    }
+
+    @Bean
+    public TaskExecutor taskExecutor() {
+        return new SimpleAsyncTaskExecutor();
+    }
+
+    @Bean
+    public DefaultMessageListenerContainer defaultMessageListenerContainer(final MessageConverter messageConverter, TaskExecutor taskExecutor, ConnectionFactory connectionFactory) {
+
+        DefaultMessageListenerContainer defaultMessageListenerContainer = new DefaultMessageListenerContainer();
+        defaultMessageListenerContainer.setMessageListener(new javax.jms.MessageListener() {
+            @Override
+            public void onMessage(javax.jms.Message message) {
+                try {
+                    Customer customer = (Customer) messageConverter.fromMessage(message);
+                    System.out.println("Received new customer " + customer.toString());
+                } catch (JMSException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        defaultMessageListenerContainer.setConcurrentConsumers(10);
+        defaultMessageListenerContainer.setConnectionFactory(connectionFactory);
+        defaultMessageListenerContainer.setDestinationName("customers");
+        defaultMessageListenerContainer.setAutoStartup(false);
+        defaultMessageListenerContainer.setTaskExecutor(taskExecutor);
+        return defaultMessageListenerContainer;
     }
 
 }

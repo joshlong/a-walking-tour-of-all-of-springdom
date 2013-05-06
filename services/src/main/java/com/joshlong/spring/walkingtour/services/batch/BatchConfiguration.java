@@ -65,9 +65,8 @@ public class BatchConfiguration {
     /**
      * maps CSV data into rows of fields, which are then
      * mapped to Customer.class instances based on conventions:
-     *
+     * <p/>
      * <CODE>col 1 => firstName => customer.setFirstName(String)</CODE>
-     *
      */
     @Bean(name = readCsvFileIntoTableStepReader)
     @StepScope
