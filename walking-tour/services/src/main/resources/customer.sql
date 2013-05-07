@@ -1,0 +1,9 @@
+insert into customer(first_name,last_name) values ( 'Mark', 'Pollack' );
+insert into customer(first_name,last_name) values ( 'Oliver', 'Gierke' );
+insert into customer(first_name,last_name) values ( 'Juergen', 'Hoeller' );
+insert into customer(first_name,last_name) values ( 'David', 'Syer' );
+insert into customer(first_name,last_name) values ( 'Mark', 'Fisher' );
+insert into customer(first_name,last_name) values ( 'Ben', 'Alex' );
+insert into customer(first_name,last_name) values ( 'Josh', 'Long' );
+insert into customer(first_name,last_name) values ( 'Arjen', 'Poutsma' );
+insert into customer(first_name,last_name) values ( 'Rod', 'Johnson' );

@@ -1,0 +1,14 @@
+.settings
+.classpath
+.project
+target
+.DS_Store
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+.idea
+*iml
+.gitignore~

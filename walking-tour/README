@@ -1,0 +1,7 @@
+TO DO:
+
+ - setup the polyglot persistence example to demonstrate Spring Data MongoDB
+ - test EVERYTHING
+ - make sure the core-services code uses Environment, and the @Enable* annotations, and @Cacheable
+ - replace JSPs in the mvc example with Thymeleaf
+
