@@ -1,0 +1,45 @@
+/**
+*
+* CSS for the administration page
+*/
+
+#copyright {
+    padding: 10px
+}
+
+#navigation {
+    text-align: right;
+    margin: 10px
+}
+
+.box {
+    margin: 10px;
+    border: 1px solid #ddd;
+    min-height:  200px;
+
+}
+
+#profilePhoto {
+    width: 300px;
+    min-height: 100px;
+    text-align: center;
+    border: 5px solid #0088cc;
+    background-color: #dddddd;
+}
+
+legend h2 {
+    margin-left: 10px;
+    color: #0088cc ;
+}
+
+.form-actions {
+    margin: 0;
+}
+
+form {
+    margin: 0;
+}
+
+.error {
+    padding-left: 10px;
+}

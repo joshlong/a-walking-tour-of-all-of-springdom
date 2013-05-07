@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+    <authentication-manager alias="authenticationManager" xmlns="http://www.springframework.org/schema/security">
+        <authentication-provider user-service-ref="userService"/>
+    </authentication-manager>
+
+
+    <sec:http pattern="/api/crm/search**" create-session="never" security="none"/>
+
+    <sec:http pattern="/api/**" create-session="never" entry-point-ref="oauthAuthenticationEntryPoint"
+              access-decision-manager-ref="accessDecisionManager">
+        <sec:anonymous enabled="true"/>
+        <sec:intercept-url pattern="/api/users/**/photo" method="GET" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <sec:intercept-url pattern="/api/users/usernames/**" method="GET" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <sec:intercept-url pattern="/api/users/**/photo" method="POST" access="ROLE_USER,SCOPE_READ"/>
+        <!-- you should be allowed to create a new user without being logged in, obviously -->
+        <sec:intercept-url pattern="/api/users" method="POST" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+
+        <sec:intercept-url pattern="/api/crm/**" access="ROLE_USER,SCOPE_READ"/>
+        <sec:intercept-url pattern="/api/**" access="ROLE_USER,SCOPE_READ"/>
+        <sec:custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER"/>
+        <sec:access-denied-handler ref="oauthAccessDeniedHandler"/>
+    </sec:http>
+
+    <sec:http auto-config="true">
+        <sec:intercept-url pattern="/crm/profile.html" access="ROLE_USER"/>
+        <sec:intercept-url pattern="/crm/customers.html" access="ROLE_USER"/>
+        <sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <sec:form-login login-page="/crm/signin.html" default-target-url="/crm/profile.html"
+                        authentication-failure-url="/crm/signin.html?error=true"/>
+        <sec:intercept-url pattern="/web/views/**" access="ROLE_USER"/>
+        <sec:anonymous/>
+
+
+    </sec:http>
+
+    <oauth:client-details-service id="clientDetailsService">
+        <oauth:client
+                client-id="html5-crm"
+                scope="read,write"
+                authorities="ROLE_USER"
+                authorized-grant-types="authorization_code,implicit"
+                resource-ids="crm"/>
+    </oauth:client-details-service>
+
+    <oauth:authorization-server client-details-service-ref="clientDetailsService"
+                                token-services-ref="tokenServices"
+                                user-approval-handler-ref="oauthTokenServicesUserApprovalHandler">
+        <oauth:authorization-code/>
+        <oauth:implicit/>
+        <oauth:refresh-token/>
+        <oauth:client-credentials/>
+        <oauth:password/>
+    </oauth:authorization-server>
+
+    <oauth:resource-server id="resourceServerFilter" resource-id="crm" token-services-ref="tokenServices"/>
+
+    <sec:global-method-security pre-post-annotations="enabled" proxy-target-class="true">
+        <sec:expression-handler ref="oauthExpressionHandler"/>
+    </sec:global-method-security>
+
+    <oauth:expression-handler id="oauthExpressionHandler"/>
+
+    <oauth:web-expression-handler id="oauthWebExpressionHandler"/>
+
+</beans>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="base_uri">http://mobilemvc31.cloudfoundry.com/</string>
+
+    <string name="load_customer_label">Edit Customer (By ID)</string>
+
+    <string name="new_label">New Customer</string>
+    <string name="save_label">Save</string>
+    <string name="app_name">Spring CRM</string>
+    <string name="edit_first_name_label">First Name</string>
+    <string name="edit_last_name_label">Last Name</string>
+    <string name="or">...Or...</string>
+    <string name="new_customer">New Customer</string>
+
+</resources>
