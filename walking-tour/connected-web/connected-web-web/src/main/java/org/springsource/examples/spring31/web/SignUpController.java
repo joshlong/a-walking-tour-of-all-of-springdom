@@ -27,8 +27,6 @@ public class SignUpController {
     @Inject
     private Facebook facebook;
     private Log log = LogFactory.getLog(getClass());
-    private JdbcTemplate jdbcTemplate;
-    private TransactionTemplate transactionTemplate;
 
     @RequestMapping(value = testUrl, method = RequestMethod.GET)
     public void test(HttpServletRequest httpServletRequest) throws Throwable {
@@ -89,16 +87,5 @@ public class SignUpController {
         }
 
 
-       // deleteUserAccounts();
-        return user;
-    }
-
-
-    @Inject
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.transactionTemplate = new TransactionTemplate(new DataSourceTransactionManager(dataSource));
-    }
-
-
-}
+         return user;
+    } }
