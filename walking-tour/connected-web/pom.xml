@@ -2,14 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.springsource.examples.crm</groupId>
-    <artifactId>core</artifactId>
-    <version>1.0.0</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>web</module>
-        <module>services</module>
-    </modules>
+    <groupId>com.joshlong.spring.walkingtour</groupId>
+       <artifactId>connected-web-core</artifactId>
+       <version>1.0-SNAPSHOT</version>
+       <packaging>pom</packaging>
+       <modules>
+           
+           <module>connected-web-web</module>
+		              <module>connected-web-services</module>
+       </modules>
+    
     <contributors>
         <contributor>
             <email>josh.long@springsource.com</email>
