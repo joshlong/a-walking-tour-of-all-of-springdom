@@ -17,8 +17,8 @@ public class RestCustomerController {
 
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.POST)
     @ResponseBody
-    public Customer updateCustomer(@RequestBody Customer c) {
-        return this.customerService.updateCustomer(c.getId(), c.getFirstName(), c.getLastName());
+    public Customer updateCustomer(@RequestBody Customer customer) {
+        return this.customerService.updateCustomer(customer.getId(), customer.getFirstName(), customer.getLastName());
     }
 
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
@@ -32,5 +32,7 @@ public class RestCustomerController {
     public Customer addCustomer(@RequestBody Customer customer) {
         return this.customerService.createCustomer(customer.getFirstName(), customer.getLastName());
     }
+
+
 
 }

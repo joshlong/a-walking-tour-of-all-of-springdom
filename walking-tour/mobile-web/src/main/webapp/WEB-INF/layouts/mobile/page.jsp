@@ -19,6 +19,12 @@
     <%--</script>--%>
 
 
+    <style type="text/css">
+        body {
+            font-size: larger;
+        }
+    </style>
+
 </head>
 <body>
 <%--<div id="header">--%>

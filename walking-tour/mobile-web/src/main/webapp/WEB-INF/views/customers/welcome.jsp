@@ -11,12 +11,12 @@
 
 <ol>
     <LI>
-        <a href="javascript:window.location='http://127.0.0.1:8080<%=request.getContextPath()%>/display?id='+prompt('which customerId, please?')">Click
+        <a href="javascript:window.location='http://127.0.0.1:8080${pageContext.request.contextPath}/display?id='+prompt('which customerId, please?')">Click
             on this link</a>
         to retrieve information on a customer
     </LI>
     <LI>
-        To add a new customer to the system, visit <a href="httP://127.0.0.1:8080<%=request.getContextPath()%>/add">the
+        To add a new customer to the system, visit <a href="httP://127.0.0.1:8080${pageContext.request.contextPath}/add">the
         'Add Customer' page</a>.
     </LI>
 
