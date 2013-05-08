@@ -3,17 +3,13 @@ package com.joshlong.spring.walkingtour.mobileweb;
 import com.joshlong.spring.walkingtour.services.CustomerService;
 import com.joshlong.spring.walkingtour.services.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 
 @Controller
-@RequestMapping(
-        consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
-)
+@RequestMapping
 public class RestCustomerController {
 
     @Autowired
