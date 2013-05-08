@@ -32,11 +32,6 @@
     </table>
 </c:if>
 
-<div>   <br/>
-    Type of Device:
-      ${typeOfDevice} <br/>
-
-</div>
 <script>
 
     var baseUrl = (function () {

@@ -9,8 +9,8 @@
     <modules>
         <module>services</module>
         <module>ioc</module>
-        <module>android</module>
         <module>mobile-web</module>
+        <module>mobile-android</module>
     </modules>
     <properties>
         <java.version>1.6</java.version>
