@@ -28,7 +28,15 @@ module.value('ui.config', {
 
 // idea try moving the module.run logic into this ajaxUtils object and then try separating this out into a separate object
 module.factory('ajaxUtils', function () {
-    var contentType = 'application/json; charset=utf-8' ,
+
+    var baseUrl = (function () {
+        var defaultPorts = {"http:": 80, "https:": 443};
+        var l = window.location, protocol = l.protocol, port = l.port ;        
+        return protocol + "//" + window.location.hostname + (((port) && (port != defaultPorts[ protocol])) ? (":" + port) : "");
+    })();
+    console.debug('baseUrl='+baseUrl);
+
+	var contentType = 'application/json; charset=utf-8' ,
         dataType = 'json',
         oauthResource = appName,
         errorCallback = function (e) {
@@ -41,7 +49,7 @@ module.factory('ajaxUtils', function () {
         client_id: clientId,// crmSession.getUserId() + '',
         isDefault: true,
         redirect_uri: window.location.href + '',
-        authorization: '/oauth/authorize',
+        authorization: baseUrl + '/oauth/authorize',
         scopes: scopes
     };
 
@@ -60,14 +68,6 @@ module.factory('ajaxUtils', function () {
         jso_ensureTokens(toEnsure);
     }
 
-
-    var baseUrl = (function () {
-        var defaultPorts = {"http:": 80, "https:": 443};
-        return window.location.protocol + "//" + window.location.hostname
-            + (((window.location.port)
-            && (window.location.port != defaultPorts[window.location.protocol]))
-            ? (":" + window.location.port) : "");
-    })();
 
     var sendDataFunction = function (ajaxFunction, argsProcessor, url, _method, data, cb) {
         var d = data || {};

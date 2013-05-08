@@ -23,8 +23,7 @@ public class SocialConfiguration {
         UserService.CrmUserDetails details = userService.loadUserByUsername(localUserId);
         String pw = org.apache.commons.lang.StringUtils.defaultIfBlank(details.getPassword(), "");
         Authentication toAuthenticate = new UsernamePasswordAuthenticationToken(details, pw, details.getAuthorities());
-        toAuthenticate.setAuthenticated(true);
-        SecurityContextHolder.getContext().setAuthentication(toAuthenticate);
+         SecurityContextHolder.getContext().setAuthentication(toAuthenticate);
         return toAuthenticate;
     }
 
