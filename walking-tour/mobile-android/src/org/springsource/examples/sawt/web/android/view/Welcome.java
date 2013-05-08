@@ -1,13 +1,14 @@
 package org.springsource.examples.sawt.web.android.view;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import org.springframework.util.Assert;
 import org.springsource.examples.sawt.web.android.*;
 import org.springsource.examples.sawt.web.android.model.Customer;
+import org.springsource.examples.sawt.web.android.service.*;
 
 public class Welcome extends Activity {
 
@@ -20,7 +21,8 @@ public class Welcome extends Activity {
             String customerIdStr = Utils.stringValueFor(Welcome.this.customerIdText);
             Assert.hasText(customerIdStr);
             Long id = Long.parseLong(customerIdStr);
-            Customer c = CrmApplication.crmApplicationInstance(Welcome.this).getCustomerService().getCustomerById(id);
+            CustomerService customerServiceClient = crmApplication().getCustomerService();
+            Customer c = customerServiceClient.getCustomerById(id);
             if (c == null) {
                 Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.customer_could_not_be_found), Toast.LENGTH_SHORT);
                 toast.show();
@@ -53,5 +55,9 @@ public class Welcome extends Activity {
         customerIdText = (EditText) findViewById(R.id.cid);
         editBtn = (Button) findViewById(R.id.customer_load_button);
         editBtn.setOnClickListener(editCustomerBtn);
+    }
+
+    protected CrmApplication crmApplication() {
+        return CrmApplication.crmApplicationInstance(this);
     }
 }
