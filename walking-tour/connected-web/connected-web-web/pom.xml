@@ -5,9 +5,10 @@
 
     <parent>
         <groupId>com.joshlong.spring.walkingtour</groupId>
-        <artifactId>connected-web-core</artifactId>
+        <artifactId>connected-web</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+    <packaging>war</packaging>
     <artifactId>connected-web-web</artifactId>
 
     <dependencies>
