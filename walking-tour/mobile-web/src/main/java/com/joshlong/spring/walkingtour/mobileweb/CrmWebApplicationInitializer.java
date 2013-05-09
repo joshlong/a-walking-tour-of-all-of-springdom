@@ -13,13 +13,12 @@ import javax.servlet.*;
 /**
  * @author Josh Long
  */
-public class CrmWebApplicationInitializer implements WebApplicationInitializer {
+public class CrmWebApplicationInitializer /* implements WebApplicationInitializer*/ {
     private Log log = LogFactory.getLog(getClass());
     private String patternAll = "/";
     private String springServletName = "spring";
 
-    @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
+     public void onStartup(ServletContext servletContext) throws ServletException {
 
         registerFilter(servletContext, "hiddenHttpMethodFilter", new HiddenHttpMethodFilter());
         registerFilter(servletContext, "multipartFilter", new MultipartFilter());

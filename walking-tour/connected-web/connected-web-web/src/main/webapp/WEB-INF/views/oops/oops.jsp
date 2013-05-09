@@ -14,6 +14,7 @@
         <spring:message code="oops.full-exception-is"/>
 
     </P>
+
     <BLOCKQUOTE><CODE style="font-size: smaller; ">
         ${exception}
     </CODE></BLOCKQUOTE>

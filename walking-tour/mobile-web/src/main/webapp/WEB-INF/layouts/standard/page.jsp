@@ -97,8 +97,14 @@
 
     dojo.ready(function (evt) {
 
-        var ctx = dojo.byId('baseUrl').innerHTML;
-        console.log('the context is ' + ctx);
+        var ctx =   (function () {
+            var defaultPorts = {"http:": 80, "https:": 443};
+            var loc = window.location, protocol = loc.protocol, port = loc.port;
+            return protocol + "//" + window.location.hostname + (((port) && (port != defaultPorts[protocol])) ? (":" + port) : "");
+        })(); 
+        ctx = ctx +'${pageContext.servletContext.contextPath}';
+
+       // window.alert('the context is '+ctx)
         var lookupLink = dojo.byId('lookup');
         var customerId = dojo.byId('cid');
 
