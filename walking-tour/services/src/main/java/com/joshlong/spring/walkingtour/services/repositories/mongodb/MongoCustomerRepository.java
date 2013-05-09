@@ -4,12 +4,7 @@ package com.joshlong.spring.walkingtour.services.repositories.mongodb;
 import java.io.InputStream;
 import java.math.BigInteger;
 
-/**
- * base interface to house methods that are to be implemented in a repository-specific way
- *
- * @author Josh Long
- */
-public interface CustomerRepositoryCustom {
+public interface MongoCustomerRepository {
     void storeProfilePhoto(BigInteger customerId, InputStream bytes);
 
     InputStream readProfilePhoto(BigInteger customerId);

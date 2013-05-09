@@ -13,7 +13,7 @@ import java.math.BigInteger;
 /**
  * @author Josh Log
  */
-public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
+public class CustomerRepositoryImpl implements MongoCustomerRepository {
 
 
     private GridFsTemplate gridFsTemplate;

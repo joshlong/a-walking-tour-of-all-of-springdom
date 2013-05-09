@@ -9,12 +9,6 @@ import org.springframework.data.rest.repository.annotation.RestResource;
 import java.math.BigInteger;
 import java.util.Collection;
 
-/**
- * functionality that we expect Spring Data to implement
- *
- * @author Josh Long
- */
-@RestResource(path = "customers", rel = "customers")
 public interface BaseCustomerRepository extends PagingAndSortingRepository<Customer, BigInteger>, CustomerRepositoryCustom {
 
     Collection<Customer> findByFirstName(String firstName);

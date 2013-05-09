@@ -14,9 +14,9 @@ public class Main {
     private final static Random random = new Random();
 
     public static void main(String[] args) throws Throwable {
-        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(
-                MongoRepositoryConfiguration.class
-        );
+        AnnotationConfigApplicationContext annotationConfigApplicationContext = 
+        		new AnnotationConfigApplicationContext( MongoRepositoryConfiguration.class );
+        
         CustomerRepository customerRepository = annotationConfigApplicationContext.getBean(CustomerRepository.class);
 
         Customer[] customers = new Customer[]{
@@ -26,8 +26,8 @@ public class Main {
                 (new Customer("Mark", "Pollack")),
                 (new Customer("Oliver", "Gierke")),
                 (new Customer("Dave", "Turanski")),
-                (new Customer("Chris", "Beams")),
-                (new Customer("Chris", "Brown"))};
+                (new Customer("Chris", "Beams"))
+        };
 
         customerRepository.deleteAll();
 
