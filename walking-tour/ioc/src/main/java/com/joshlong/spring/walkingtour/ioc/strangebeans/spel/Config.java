@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+
 import java.io.File;
 
 /**
@@ -13,8 +15,8 @@ import java.io.File;
 @Configuration
 public class Config {
 
-    @Value("#{ T(Math).random()  }")
-    private double aRandomValue ;
+    @Value("#{ someOtherBean.dataSource  }")
+    private DataSource aRandomValue ;
 
     @Value("#{systemProperties['user.home']}")
     private String userHome;

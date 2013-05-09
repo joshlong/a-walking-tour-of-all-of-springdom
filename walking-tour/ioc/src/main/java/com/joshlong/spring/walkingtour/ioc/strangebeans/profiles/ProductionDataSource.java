@@ -15,6 +15,7 @@ public class ProductionDataSource implements DataSourceProvider, InitializingBea
 
     @Override
     public DataSource dataSource() {
+    	System.out.println( "resolving " + getClass());
         Driver d = new Driver();
         return new SimpleDriverDataSource(d, "jdbc:h2:tcp://localhost/~/prod_crm");
     }

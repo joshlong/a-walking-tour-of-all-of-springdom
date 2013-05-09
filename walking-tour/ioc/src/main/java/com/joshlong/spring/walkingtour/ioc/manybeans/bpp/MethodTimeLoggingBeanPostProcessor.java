@@ -21,7 +21,6 @@ public class MethodTimeLoggingBeanPostProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-
         ProxyFactory factory = new ProxyFactory();
         factory.addAdvice(new TimeLoggingMethodInterceptor());
         factory.setTarget(bean);

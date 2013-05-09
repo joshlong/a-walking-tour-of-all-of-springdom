@@ -26,6 +26,6 @@ public class Astronaut {
 
 	@PreDestroy
 	public void land() throws Throwable {
-		log.debug("this is one small step for man... one giant leap for mankind");
+		System.out.println("this is one small step for man... one giant leap for mankind");
 	}
 }

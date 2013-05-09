@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 public class LocalDataSource implements DataSourceProvider, InitializingBean {
     @Override
     public DataSource dataSource() {
+    	System.out.println( "resolving " + getClass());
         Driver d = new Driver();
         return new SimpleDriverDataSource(d, "jdbc:h2:tcp://localhost/~/local_crm");
     }

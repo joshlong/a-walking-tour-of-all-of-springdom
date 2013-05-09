@@ -9,7 +9,11 @@ import com.joshlong.spring.walkingtour.services.model.Customer;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-
+/**
+ * 
+ * @author Joshua Long
+ *
+ */
 @Service
 @Transactional
 public class JpaCustomerService implements CustomerService {

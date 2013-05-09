@@ -20,10 +20,13 @@ public class JdbcCustomerService implements CustomerService {
 
     private String customerByIdQuery;
     private String updateCustomerQuery;
+    
     @Inject
     private Environment environment;
+    
     @Inject
     private JdbcTemplate jdbcTemplate;
+    
     private RowMapper<Customer> customerRowMapper = new RowMapper<Customer>() {
 
         public Customer mapRow(ResultSet resultSet, int i) throws SQLException {
