@@ -10,9 +10,6 @@ import javax.inject.Inject;
 import java.io.InputStream;
 import java.math.BigInteger;
 
-/**
- * @author Josh Log
- */
 public class CustomerRepositoryImpl implements MongoCustomerRepository {
 
 
