@@ -51,7 +51,8 @@ public class Main {
         System.out.println(
                 "Do the bytes stored in MongoDB match" +
                 " the byte[]s for the image we stored in Mongo? " +
-                    Arrays.equals(IOUtils.toByteArray(readInputStream), (IOUtils.toByteArray(resource.getInputStream()))));
+                    Arrays.equals(IOUtils.toByteArray(readInputStream),
+                    		(IOUtils.toByteArray(resource.getInputStream()))));
 
     }
 

@@ -14,11 +14,7 @@
     ">
 
 
-
-    <context:component-scan base-package="com.joshlong.spring.walkingtour.services.integration"/>
-
-    <context:property-placeholder location="/services.properties"/>
-
+ 
     <int:channel id="jobsToLaunch"/>
     <int:channel id="filesReceived"/>
     <int:channel id="jobExecutions"/>
@@ -32,9 +28,7 @@
 
     <int:service-activator input-channel="jobsToLaunch" ref="jobMessageHandler" output-channel="jobExecutions"/>
 
-    <stream:stdout-channel-adapter id="jobsPrinted" append-newline="true" channel="jobExecutions"/>
+    <stream:stdout-channel-adapter id="jobsPrinted" append-newline="true" channel="jobExecutions"/> 
 
-
-
-
+    
 </beans>

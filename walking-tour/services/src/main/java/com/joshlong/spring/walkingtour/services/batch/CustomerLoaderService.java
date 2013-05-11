@@ -9,14 +9,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.util.Date;
 
-
-/**
- * Service facade on top of the Spring Batch {@link Job job}.
- * <p/>
- * Hides the setup with {@link JobLauncher job launcher} and setting up the peculiar parameters.
- *
- * @author Josh Long
- */
+ 
 @Service
 public class CustomerLoaderService {
 

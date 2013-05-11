@@ -15,6 +15,7 @@ import java.math.BigInteger;
 public class CustomerController {
 
     private Log log = LogFactory.getLog(getClass());
+    
     @Autowired
     private CustomerService customerService;
 

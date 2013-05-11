@@ -15,10 +15,11 @@ public class Main {
 
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(RedisConfiguration.class);
         applicationContext.registerShutdownHook();
-
+        
+        RedisTemplate redisTemplate = applicationContext.getBean(RedisTemplate.class);
         CustomerService customerService = applicationContext.getBean(CustomerService.class);
         Topic topic = applicationContext.getBean(Topic.class);
-
+        
         Log log = LogFactory.getLog(Main.class);
 
 
@@ -29,12 +30,17 @@ public class Main {
         log.info(String.format("customer.id (%s) == retrievedCustomer.id (%s)?  %s",
                 customer.getId(), retrievedCustomer.getId(), customer.getId().equals(retrievedCustomer.getId())));
 
-        Customer updatedCustomer = customerService.updateCustomer(customer.getId(), "Redis", "Lover");
+        Customer updatedCustomer = customerService.updateCustomer(customer.getId(), "Redis", "Fan");
+        
+        
         log.info(String.format("updated customer's firstName: %s", updatedCustomer.getFirstName()));
-        RedisTemplate redisTemplate = applicationContext.getBean(RedisTemplate.class);
-        redisTemplate.convertAndSend(topic.getTopic(), " {'id':'" + updatedCustomer.getId() + "'}");
+
+
+        redisTemplate.convertAndSend( topic.getTopic(), updatedCustomer);
 
 
     }
+    
+    	 
 
 }

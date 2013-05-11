@@ -38,7 +38,7 @@
         var defaultPorts = {"http:": 80, "https:": 443};
         var loc = window.location, protocol = loc.protocol, port = loc.port;
         return protocol + "//" + window.location.hostname + (((port) && (port != defaultPorts[protocol])) ? (":" + port) : "");
-    })();
+    })()  + '/mobile-web/';
 
     function lookupCustomer(customerId) {
         var number = parseInt('' + customerId);

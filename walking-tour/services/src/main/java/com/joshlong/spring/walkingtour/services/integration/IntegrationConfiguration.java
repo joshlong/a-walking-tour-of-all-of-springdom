@@ -5,16 +5,10 @@ import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
 import org.springframework.context.annotation.*;
 import com.joshlong.spring.walkingtour.services.batch.BatchConfiguration;
 
-/**
- * Simple integration configuration that also works with configuration previously
- * defined in the batch solution.
- *
- * @author Josh Long
- */
 @Configuration
 @Import(BatchConfiguration.class)
 @ComponentScan
-@ImportResource("/org/springsource/examples/sawt/services/integration/context.xml")
+@ImportResource("/com/joshlong/spring/walkingtour/services/integration/context.xml")
 public class IntegrationConfiguration {
     @Bean
     public JobLaunchingMessageHandler jobMessageHandler(JobLauncher jobLauncher) throws Exception {

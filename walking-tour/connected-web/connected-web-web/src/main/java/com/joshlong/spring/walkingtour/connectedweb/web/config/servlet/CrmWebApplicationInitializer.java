@@ -1,5 +1,6 @@
 package com.joshlong.spring.walkingtour.connectedweb.web.config.servlet;
 
+import com.joshlong.spring.walkingtour.connectedweb.web.config.*;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.*;
@@ -7,7 +8,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.*;
 import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.DispatcherServlet;
-import com.joshlong.spring.walkingtour.connectedweb.web.config.*;
 
 import javax.servlet.*;
 

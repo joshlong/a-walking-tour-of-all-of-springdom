@@ -67,6 +67,7 @@ public class Main {
         Resource file = new ClassPathResource("/sample/" + fileName);
         long originalSize = file.contentLength();
         gridFsTemplate.store(file.getInputStream(), fileName);
+
         Query queryForFile = new Query(Criteria.where("filename").is(fileName));
         List<GridFSDBFile> result = gridFsTemplate.find(queryForFile);
         GridFSDBFile gridFSDBFile = result.iterator().next();

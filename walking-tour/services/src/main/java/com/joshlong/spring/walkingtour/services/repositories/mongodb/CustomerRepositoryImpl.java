@@ -11,44 +11,45 @@ import java.io.InputStream;
 import java.math.BigInteger;
 
 public class CustomerRepositoryImpl implements MongoCustomerRepository {
+	private GridFsTemplate gridFsTemplate;
+	private CustomerRepository customerRepository;
 
+	@Inject
+	public void setGridFsTemplate(GridFsTemplate gridFsTemplate) {
+		this.gridFsTemplate = gridFsTemplate;
+	}
 
-    private GridFsTemplate gridFsTemplate;
-    private CustomerRepository customerRepository;
+	@Inject
+	public void setCustomerRepository(CustomerRepository customerRepository) {
+		this.customerRepository = customerRepository;
+	}
 
-    @Inject
-    public void setGridFsTemplate(GridFsTemplate gridFsTemplate) {
-        this.gridFsTemplate = gridFsTemplate;
-    }
+	@Override
+	public InputStream readProfilePhoto(BigInteger customerId) {
+		Customer customer = customerRepository.findOne((customerId));
+		GridFSDBFile gridFSDBFile = this.gridFsTemplate
+				.findOne(queryForManagedUpload(customer));
+		return gridFSDBFile.getInputStream();
+	}
 
-    @Inject
-    public void setCustomerRepository(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
+	@Override
+	public void storeProfilePhoto(BigInteger customerId, InputStream bytes) {
+		Customer customer = customerRepository.findOne((customerId));
+		try {
+			this.gridFsTemplate
+					.store(bytes, fileNameForManagedUpload(customer));
+		} finally {
+			IOUtils.closeQuietly(bytes);
+		}
+	}
 
-    @Override
-    public InputStream readProfilePhoto(BigInteger customerId) {
-        Customer customer = customerRepository.findOne((customerId));
-        GridFSDBFile gridFSDBFile = this.gridFsTemplate.findOne(queryForManagedUpload(customer));
-        return gridFSDBFile.getInputStream();
-    }
+	private String fileNameForManagedUpload(Customer c) {
+		return c.getId().toString();
+	}
 
-    @Override
-    public void storeProfilePhoto(BigInteger customerId, InputStream bytes) {
-        Customer customer = customerRepository.findOne((customerId));
-        try {
-            this.gridFsTemplate.store(bytes, fileNameForManagedUpload(customer));
-        } finally {
-            IOUtils.closeQuietly(bytes);
-        }
-    }
-
-    private String fileNameForManagedUpload(Customer c) {
-        return c.getId().toString();
-    }
-
-    private Query queryForManagedUpload(Customer c) {
-        String fileName = fileNameForManagedUpload(c);
-        return (new Query().addCriteria(Criteria.where("filename").is(fileName)));
-    }
+	private Query queryForManagedUpload(Customer c) {
+		String fileName = fileNameForManagedUpload(c);
+		return (new Query()
+				.addCriteria(Criteria.where("filename").is(fileName)));
+	}
 }

@@ -9,47 +9,50 @@ import java.util.*;
 
 public class Main {
 
-    private final static Random random = new Random();
+	private final static Random random = new Random();
 
-    public static void main(String[] args) throws Throwable {
+	public static void main(String[] args) throws Throwable {
 
-        Log log = LogFactory.getLog(Main.class);
+		Log log = LogFactory.getLog(Main.class);
 
-        AnnotationConfigApplicationContext annotationConfigApplicationContext =
-                new AnnotationConfigApplicationContext(JpaRepositoryConfiguration.class);
+		AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(
+				JpaRepositoryConfiguration.class);
 
-        CustomerRepository customerRepository = annotationConfigApplicationContext.getBean(CustomerRepository.class);
+		JpaCustomerRepository customerRepository = annotationConfigApplicationContext
+				.getBean(JpaCustomerRepository.class);
 
-        customerRepository.deleteAll();
+		customerRepository.deleteAll();
 
-        ArrayList<Customer> customers = new ArrayList<Customer>();
-        customers.add(new Customer("Josh", "Long"));
-        customers.add(new Customer("Josh", "Williams"));
-        customers.add(new Customer("Mark", "Fisher"));
-        customers.add(new Customer("Mark", "Pollack"));
-        customers.add(new Customer("Oliver", "Gierke"));
-        customers.add(new Customer("Dave", "Turanski"));
-        customers.add(new Customer("Chris", "Beams"));
-        customers.add(new Customer("Chris", "Brown"));
+		ArrayList<Customer> customers = new ArrayList<Customer>();
+		customers.add(new Customer("Josh", "Long"));
+		customers.add(new Customer("Josh", "Williams"));
+		customers.add(new Customer("Mark", "Fisher"));
+		customers.add(new Customer("Mark", "Pollack"));
+		customers.add(new Customer("Oliver", "Gierke"));
+		customers.add(new Customer("Dave", "Turanski"));
+		customers.add(new Customer("Chris", "Beams"));
+ 		customers.add(new Customer("Chris", "Robbins"));
+		customers.add(new Customer("Chris", "Richardson"));
 
-        ArrayList<Customer> savedCustomers =new ArrayList<Customer>() ;
-        for (Customer customer : customers)
-            savedCustomers.add(customerRepository.save(customer));
+		ArrayList<Customer> savedCustomers = new ArrayList<Customer>();
+		for (Customer customer : customers)
+			savedCustomers.add(customerRepository.save(customer));
 
-        Object[] returnValueForFrequencyGraph = customerRepository.findMostFrequentName();
-        BigDecimal bd = (BigDecimal) returnValueForFrequencyGraph[0];
-        String name = (String) returnValueForFrequencyGraph[1];
-        System.out.println(String.format("the name %s occurs %s times", name, bd));
+		Object[] returnValueForFrequencyGraph = customerRepository.findMostFrequentName();
+		BigDecimal bd = (BigDecimal) returnValueForFrequencyGraph[0];
+		String name = (String) returnValueForFrequencyGraph[1];
+		System.out.println(String.format("the name %s occurs %s times", name, bd));
 
-        System.out.println(customerRepository.toString());
+		System.out.println(customerRepository.toString());
 
+		Customer customer = savedCustomers.get(random.nextInt(customers.size()));
+		System.out.println("customer: " + customer.toString());
 
-        Customer customer = savedCustomers.get( random.nextInt(customers.size()));
-        System.out.println("customer: " + customer.toString());
+		Customer fromDataBase = customerRepository.findOne(customer.getId());
 
-        Customer fromDataBase = customerRepository.findOne( customer.getId() ) ;
+		System.out.println(customer.getId().toString() + " = "
+				+ fromDataBase.toString() + "? "
+				+ (fromDataBase.equals(customer)));
 
-        System.out.println( customer.toString() + " = " +  fromDataBase.toString() +"? "+ ( fromDataBase.equals( customer)));
-
-    }
+	}
 }

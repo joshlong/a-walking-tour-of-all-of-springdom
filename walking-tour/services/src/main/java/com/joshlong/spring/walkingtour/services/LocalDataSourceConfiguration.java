@@ -27,7 +27,6 @@ public class LocalDataSourceConfiguration {
         dataSource.setUsername(environment.getProperty("dataSource.user"));
         dataSource.setDriverClassName(environment.getPropertyAsClass("dataSource.driverClass", Driver.class).getName());
         return dataSource;
-
     }
 
     @Bean
@@ -36,7 +35,7 @@ public class LocalDataSourceConfiguration {
     }
 
     @Bean
-    public MongoDbFactory mongoDbFactory1(Environment environment) throws Exception {
+    public MongoDbFactory mongoDbFactory(Environment environment) throws Exception {
         String dbName = environment.getProperty("mongo.db");
         String host = environment.getProperty("mongo.host");
         Mongo mongo = new Mongo(host);
