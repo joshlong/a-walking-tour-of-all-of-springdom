@@ -1,0 +1,9 @@
+insert into customer(id,first_name,last_name) values (  nextval('customer_id_seq'), 'Mark', 'Pollack' );
+insert into customer(id,first_name,last_name) values (  nextval('customer_id_seq'), 'Oliver', 'Gierke' );
+insert into customer(id,first_name,last_name) values (  nextval('customer_id_seq'), 'Juergen', 'Hoeller' );
+insert into customer(id,first_name,last_name) values (  nextval('customer_id_seq'), 'David', 'Syer' );
+insert into customer(id,first_name,last_name) values (  nextval('customer_id_seq'), 'Mark', 'Fisher' );
+insert into customer(id,first_name,last_name) values (  nextval('customer_id_seq'), 'Ben', 'Alex' );
+insert into customer(id,first_name,last_name) values (  nextval('customer_id_seq'), 'Josh', 'Long' );
+insert into customer(id,first_name,last_name) values (  nextval('customer_id_seq'), 'Arjen', 'Poutsma' );
+insert into customer(id,first_name,last_name) values (  nextval('customer_id_seq'), 'Rod', 'Johnson' );

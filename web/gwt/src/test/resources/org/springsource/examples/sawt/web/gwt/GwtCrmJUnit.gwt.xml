@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <!-- Inherit our applications main module.                      -->
+    <inherits name='org.springsource.examples.sawt.web.gwt.GwtCrm'/>
+
+    <!-- Specify the path to any remote services.                   -->
+    <servlet path="/GwtCrm/greet" class="org.springsource.examples.sawt.web.gwt.server.GwtCustomerServiceImpl"/>
+
+</module>

@@ -1,0 +1,16 @@
+---
+applications:
+  target/:
+    name: mobilemvc31
+    framework:
+      name: spring
+      info:
+        mem: 512M
+        description: Java SpringSource Spring Application
+        exec: 
+    url: ${name}.${target-base}
+    mem: 512M
+    instances: 1
+    services:
+      postgresql-e7148:
+        type: postgresql

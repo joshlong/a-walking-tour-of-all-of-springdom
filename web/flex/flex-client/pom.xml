@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+	
+ 	     <groupId>org.springsource.examples.sawt</groupId>
+ 
+	
+         <artifactId>flex</artifactId>
+
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <packaging>swf</packaging>
+    <artifactId>flex-client</artifactId>
+
+
+    <build>
+        <finalName>client</finalName>
+        <sourceDirectory>src/main/flex</sourceDirectory>
+        <testSourceDirectory>src/test/flex</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.flexmojos</groupId>
+                <artifactId>flexmojos-maven-plugin</artifactId>
+                <version>3.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <output>${basedir}/../flex-service/src/main/webapp/${project.build.finalName}.swf</output>
+                    <services>${basedir}/../flex-service/src/main/webapp/WEB-INF/flex/services-config.xml</services>
+                    <contextRoot>/</contextRoot>
+                    <locales>
+                        <locale>en_US</locale>
+                    </locales>
+                    <sourceFile>client.mxml</sourceFile>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.adobe.flex</groupId>
+                        <artifactId>compiler</artifactId>
+        <version>4.1.0.16076</version> 
+<!-- <version>4.5.0.0-SNAPSHOT</version> -->
+
+                        <type>pom</type>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>flex-framework</artifactId>
+            <version>4.1.0.16076</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+
+
+</project>
