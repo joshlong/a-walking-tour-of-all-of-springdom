@@ -1,18 +1,27 @@
 package com.joshlong.spring.walkingtour.android.service;
 
+import com.joshlong.spring.walkingtour.android.Customer;
 import org.springframework.http.*;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import com.joshlong.spring.walkingtour.android.model.Customer;
+
+import javax.inject.Inject;
 
 public class CustomerServiceClient implements CustomerService {
 
-    private String baseServiceUrl;
-    private RestTemplate restTemplate = new RestTemplate();
+    @Inject
+    RestTemplate restTemplate;
+
+    String baseServiceUrl;
 
     public CustomerServiceClient(String url) {
         setBaseServiceUrl(url);
-        restTemplate.getMessageConverters().add( new MappingJacksonHttpMessageConverter());
+        setRestTemplate(new RestTemplate());
+        restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
+    }
+
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     public void setBaseServiceUrl(String url) {
@@ -33,10 +42,10 @@ public class CustomerServiceClient implements CustomerService {
     }
 
     private <T> T extractResponse(final ResponseEntity<T> responseEntity) {
-        if (responseEntity != null && responseEntity.getStatusCode().equals(HttpStatus.OK) ) {
+        if (responseEntity != null && responseEntity.getStatusCode().equals(HttpStatus.OK)) {
             return responseEntity.getBody();
         }
-        return null ;
+        return null;
     }
 
     @Override

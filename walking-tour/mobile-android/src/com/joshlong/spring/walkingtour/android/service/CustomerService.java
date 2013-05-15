@@ -1,6 +1,6 @@
 package com.joshlong.spring.walkingtour.android.service;
 
-import com.joshlong.spring.walkingtour.android.model.Customer;
+import com.joshlong.spring.walkingtour.android.Customer;
 
 // a client side representation of the server side interface 
 public interface CustomerService {

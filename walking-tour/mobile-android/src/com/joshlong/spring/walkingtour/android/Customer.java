@@ -1,4 +1,4 @@
-package com.joshlong.spring.walkingtour.android.model;
+package com.joshlong.spring.walkingtour.android;
 
 
 /**
