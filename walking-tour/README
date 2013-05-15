@@ -1,5 +1,0 @@
-provides samples and illustrative examples for numerous facilities within Spring for everything but web applications. 
-
-'everything,' in this case, describes: Spring core, Spring Social, Spring Batch, Spring Integration, various parts of Spring Data, Spring's core 
-ORM support, Spring's AOP support, caching, task scheduling, etc.
-

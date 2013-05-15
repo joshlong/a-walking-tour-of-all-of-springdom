@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    this is a magic IP that routes to the host machine's <code>localhost</code>.
+    Be sure to change this using filtering later.
+    -->
+    <string name="base_uri">http://10.0.2.2:8080/mobile-web/</string>
+
+    <string name="load_customer_label">Edit Customer (By ID)</string>
+
+    <string name="new_label">New Customer</string>
+    <string name="save_label">Save</string>
+    <string name="app_name">Spring CRM</string>
+    <string name="edit_first_name_label">First Name</string>
+    <string name="edit_last_name_label">Last Name</string>
+    <string name="or">...Or...</string>
+    <string name="new_customer">New Customer</string>
+    <string name="customer_could_not_be_found">The customer record indicated could not be found!</string>
+
+</resources>

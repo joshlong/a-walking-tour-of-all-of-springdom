@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:file="http://www.springframework.org/schema/integration/file"
+       xmlns:stream="http://www.springframework.org/schema/integration/stream"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+    http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+    http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+    ">
+
+
+
+    <context:component-scan base-package="com.joshlong.spring.walkingtour.services.integration"/>
+
+    <context:property-placeholder location="/services.properties"/>
+
+    <int:channel id="jobsToLaunch"/>
+    <int:channel id="filesReceived"/>
+    <int:channel id="jobExecutions"/>
+
+    <file:inbound-channel-adapter auto-create-directory="true" channel="filesReceived"
+                                  directory="#{systemProperties['user.home']}/Desktop/in">
+        <int:poller fixed-rate="1000"/>
+    </file:inbound-channel-adapter>
+
+    <int:transformer ref="fileBatchJobRequestTransformer" input-channel="filesReceived" output-channel="jobsToLaunch"/>
+
+    <int:service-activator input-channel="jobsToLaunch" ref="jobMessageHandler" output-channel="jobExecutions"/>
+
+    <stream:stdout-channel-adapter id="jobsPrinted" append-newline="true" channel="jobExecutions"/>
+
+
+
+
+</beans>

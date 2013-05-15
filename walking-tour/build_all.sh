@@ -1,1 +1,0 @@
-mvn -Dandroid.sdk.path=/Users/jlong/bin/android-sdk-macosx/  -DskipTests=true clean install
