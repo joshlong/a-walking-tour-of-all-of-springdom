@@ -1,6 +1,7 @@
 package com.joshlong.spring.walkingtour.android.service;
 
 import android.util.Log;
+import com.joshlong.spring.walkingtour.android.async.*;
 import com.joshlong.spring.walkingtour.android.model.Customer;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -58,32 +59,40 @@ public class CustomerServiceClient implements CustomerService {
         return null;
     }
 
+    @RunOnIoThread
     @Override
-    public List<Customer> loadAllCustomers() {
+    public void loadAllCustomers(AsyncCallback<List<Customer>> asyncCallback) {
         String url = urlForPath("customers");
         Log.d(getClass().getName(), "url for the customers request: " + url);
-        return this.restTemplate.getForObject(url, CustomerList.class);
+        asyncCallback.methodInvocationCompleted(this.restTemplate.getForObject(url, CustomerList.class));
     }
 
     @Override
-    public Customer updateCustomer(long id, String fn, String ln) {
+    @RunOnIoThread
+    public void updateCustomer(long id, String fn, String ln, AsyncCallback<Customer> asyncCallback) {
         String urlForPath = urlForPath("customer/{customerId}");
         Customer customer = new Customer(id, fn, ln);
         ResponseEntity<Customer> customerResponseEntity =
                 restTemplate.postForEntity(urlForPath, customer, Customer.class, java.util.Collections.singletonMap("customerId", id));
-        return extractResponse(customerResponseEntity);
+        asyncCallback.methodInvocationCompleted(extractResponse(customerResponseEntity));
     }
 
+    @RunOnIoThread
     @Override
-    public Customer getCustomerById(long id) {
-        return extractResponse(restTemplate.getForEntity(
-                urlForPath("customer/{customerId}"), Customer.class, id));
+    public void getCustomerById(long id, AsyncCallback<Customer> customerAsyncCallback) {
+
+        customerAsyncCallback.methodInvocationCompleted(
+                extractResponse(restTemplate.getForEntity(
+                        urlForPath("customer/{customerId}"), Customer.class, id))
+        );
     }
 
+    @RunOnIoThread
     @Override
-    public Customer createCustomer(String fn, String ln) {
-        return extractResponse(this.restTemplate.postForEntity(
-                urlForPath("customers"), new Customer(fn, ln), Customer.class));
+    public void createCustomer(String fn, String ln, AsyncCallback<Customer> customerAsyncCallback) {
+        customerAsyncCallback.methodInvocationCompleted(
+                extractResponse(this.restTemplate.postForEntity(
+                        urlForPath("customers"), new Customer(fn, ln), Customer.class)));
     }
 
     // allows us to bake in the generic type, `Customer`, so that

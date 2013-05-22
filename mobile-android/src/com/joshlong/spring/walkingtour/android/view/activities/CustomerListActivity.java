@@ -2,11 +2,11 @@ package com.joshlong.spring.walkingtour.android.view.activities;
 
 import android.app.Activity;
 import android.content.*;
-import android.os.*;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 import com.joshlong.spring.walkingtour.android.R;
+import com.joshlong.spring.walkingtour.android.async.*;
 import com.joshlong.spring.walkingtour.android.model.Customer;
 import com.joshlong.spring.walkingtour.android.service.CustomerService;
 import com.joshlong.spring.walkingtour.android.utils.DaggerInjectionUtils;
@@ -24,18 +24,22 @@ import java.util.*;
 public class CustomerListActivity extends AbstractAsyncListActivity implements AsyncActivity {
 
     List<Customer> customers = Collections.synchronizedList(new ArrayList<Customer>());
-    @Inject
-    CustomerService customerService;
+
+    @Inject CustomerService customerService;
+
+    CustomerListActivity self = this;
 
     protected void loadCustomers() {
-        FetchCustomersAsyncTask fetchCustomersAsyncTask = new FetchCustomersAsyncTask();
-        AsyncTask<Void, Void, List<Customer>> results = fetchCustomersAsyncTask.execute();
         try {
-            List<Customer> customers = results.get();
-            this.customers.clear();
-            this.customers.addAll(customers);
-            CustomerListAdapter customerListAdapter = new CustomerListAdapter(this, customers);
-            setListAdapter(customerListAdapter);
+            AsyncCallback<List<Customer>> asyncUiCallback = new AsyncCallback<List<Customer>>() {
+                @Override
+                public void methodInvocationCompleted(List<Customer> resultsFromCall) {
+                    self.customers.clear();
+                    self.customers.addAll(resultsFromCall);
+                }
+            };
+            customerService.loadAllCustomers(asyncUiCallback);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -51,9 +55,10 @@ public class CustomerListActivity extends AbstractAsyncListActivity implements A
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerInjectionUtils.inject(this);
-
         int mainActivityResourceId = R.layout.customer_list_activity;
         setContentView(mainActivityResourceId);
+        CustomerListAdapter customerListAdapter = new CustomerListAdapter(self, customers);
+        setListAdapter(customerListAdapter);
     }
 
     @Override
@@ -88,108 +93,5 @@ public class CustomerListActivity extends AbstractAsyncListActivity implements A
 
     }
 
-    class FetchCustomersAsyncTask extends AsyncTask<Void, Void, List<Customer>> {
-
-        private String fetchingMessage =
-                getString(R.string.fetching);
-
-        @Override
-        protected void onPreExecute() {
-            showProgressDialog(fetchingMessage);
-        }
-
-        @Override
-        protected List<Customer> doInBackground(Void... params) {
-            try {
-                return customerService.loadAllCustomers();
-            } catch (Exception e) {
-                Log.e(getClass().getName(), e.getLocalizedMessage(), e);
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<Customer> customerList) {
-            dismissProgressDialog();
-        }
-    }
-
 
 }
-
-/**
- * @author Roy Clarkson
- */
-  /*  public class TwitterProfileListAdapter extends BaseAdapter {
-        private TwitterProfile twitterProfile;
-        private final LayoutInflater layoutInflater;
-
-        public TwitterProfileListAdapter(Context context, TwitterProfile twitterProfile) {
-            if (twitterProfile == null) {
-                throw new IllegalArgumentException("twitterProfile cannot be null");
-            }
-
-            this.twitterProfile = twitterProfile;
-            this.layoutInflater = LayoutInflater.from(context);
-        }
-
-        public int getCount() {
-            return 5;
-        }
-
-        public String[] getItem(int position) {
-            String[] item = new String[2];
-
-            switch (position) {
-                case 0:
-                    item[0] = "Id";
-                    item[1] = String.valueOf(twitterProfile.getId());
-                    break;
-                case 1:
-                    item[0] = "Screen Name";
-                    item[1] = twitterProfile.getScreenName();
-                    break;
-                case 2:
-                    item[0] = "Name";
-                    item[1] = twitterProfile.getName();
-                    break;
-                case 3:
-                    item[0] = "Description";
-                    item[1] = twitterProfile.getDescription();
-                    break;
-                case 4:
-                    item[0] = "Created Date";
-                    item[1] = twitterProfile.getCreatedDate() == null ? "" : twitterProfile.getCreatedDate().toString();
-                    break;
-                default:
-                    item[0] = "";
-                    item[1] = "";
-                    break;
-            }
-
-            return item;
-        }
-
-        public long getItemId(int position) {
-            return position;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            String[] item = getItem(position);
-
-            View view = convertView;
-
-            if (view == null) {
-                view = layoutInflater.inflate(android.R.layout.two_line_list_item, parent, false);
-            }
-
-            TextView t = (TextView) view.findViewById(android.R.id.text1);
-            t.setText(item[0]);
-
-            t = (TextView) view.findViewById(android.R.id.text2);
-            t.setText(item[1]);
-
-            return view;
-        }
-
-    } */

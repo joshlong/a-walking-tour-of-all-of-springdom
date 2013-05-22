@@ -2,17 +2,22 @@ package com.joshlong.spring.walkingtour.android.view.activities.support;
 
 import android.app.*;
 import android.os.Bundle;
+import com.joshlong.spring.walkingtour.android.R;
+import com.joshlong.spring.walkingtour.android.async.ActivityThreadLocalHolder;
 import com.joshlong.spring.walkingtour.android.utils.DaggerInjectionUtils;
+import com.squareup.otto.Bus;
+
+import javax.inject.Inject;
 
 /**
  * @author Roy Clarkson
  * @author Pierre-Yves Ricau
  */
 public abstract class AbstractAsyncListActivity extends ListActivity implements AsyncActivity  {
+    @Inject Bus bus;
 
-    protected final String TAG = getClass().getName();
-    private ProgressDialog progressDialog;
-    private boolean destroyed = false;
+    ProgressDialog progressDialog;
+    boolean destroyed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +31,22 @@ public abstract class AbstractAsyncListActivity extends ListActivity implements 
         this.destroyed = true;
     }
 
+
+    @Override protected void onResume() {
+        super.onResume();
+        ActivityThreadLocalHolder.registerCurrentActivity(this);
+        bus.register(this);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        ActivityThreadLocalHolder.registerCurrentActivity(null );
+        bus.unregister(this);
+    }
+
+
     public void showLoadingProgressDialog() {
-        this.showProgressDialog("Loading. Please wait...");
+        this.showProgressDialog(getString(R.string.fetching));
     }
 
     public void showProgressDialog(CharSequence message) {

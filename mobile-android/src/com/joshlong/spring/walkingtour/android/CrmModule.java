@@ -1,6 +1,7 @@
 package com.joshlong.spring.walkingtour.android;
 
 import android.content.Context;
+import com.joshlong.spring.walkingtour.android.async.RunOnIoThreadProxyCreator;
 import com.joshlong.spring.walkingtour.android.service.*;
 import com.joshlong.spring.walkingtour.android.view.activities.*;
 import com.squareup.otto.Bus;
@@ -41,6 +42,7 @@ public class CrmModule {
         return restTemplate;
     }
 
+
     @Singleton
     @Provides
         // CustomerService is the interface, CustomerServiceClient is the implementation
@@ -48,7 +50,10 @@ public class CrmModule {
         String baseUri = context.getString(R.string.base_uri);
         CustomerServiceClient customerServiceClient = new CustomerServiceClient(baseUri);
         customerServiceClient.setRestTemplate(restTemplate);
-        return customerServiceClient;
+
+        CustomerService customerServiceProxy = RunOnIoThreadProxyCreator.runOnIoThread(customerServiceClient, CustomerService.class);
+
+        return customerServiceProxy;
     }
 
 }

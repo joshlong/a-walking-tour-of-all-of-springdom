@@ -1,10 +1,11 @@
 package com.joshlong.spring.walkingtour.android.view.activities;
 
-import android.os.*;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.joshlong.spring.walkingtour.android.R;
+import com.joshlong.spring.walkingtour.android.async.*;
 import com.joshlong.spring.walkingtour.android.model.Customer;
 import com.joshlong.spring.walkingtour.android.service.CustomerService;
 import com.joshlong.spring.walkingtour.android.view.activities.support.AbstractActivity;
@@ -26,29 +27,21 @@ public class CustomerDetailActivity extends AbstractActivity {
     // references to components
     EditText firstNameEditText, lastNameEditText;
     Button saveButton;
-    // background worker async task
+    CustomerDetailActivity self = this;
 
-    void loadCustomer(final Long customerId) {
-        AsyncTask<Void, Void, Customer> fetchCustomerAsyncTask = new AsyncTask<Void, Void, Customer>() {
+    protected void loadCustomer(final Long customerId) {
+        customerService.getCustomerById(customerId, new AsyncCallback<Customer>() {
             @Override
-            protected Customer doInBackground(Void... params) {
-                try {
-                    return customerService.getCustomerById(customerId);
-                } catch (Exception e) {
-                    Log.e(getClass().getName(), e.getLocalizedMessage(), e);
-                    throw new RuntimeException(e);
-                }
-            }
+            public void methodInvocationCompleted(Customer customer) {
 
-            @Override
-            protected void onPostExecute(Customer c) {
-                CustomerDetailActivity.this.customer = c;
-                CustomerDetailActivity.this.customerId = customer.getId();
-                firstNameEditText.setText(c.getFirstName());
-                lastNameEditText.setText(c.getLastName());
+                self.customer = customer;
+                self.customerId = self.customer.getId();
+                self.firstNameEditText.setText(customer.getFirstName());
+                self.lastNameEditText.setText(customer.getLastName());
+                Log.d(getClass().getName(), "retrieved result: " + customer.toString());
             }
-        };
-        fetchCustomerAsyncTask.execute();
+        });
+
     }
 
     @Override
@@ -73,18 +66,16 @@ public class CustomerDetailActivity extends AbstractActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    AsyncTask<Customer, Void, Customer> saveCustomerAsyncTask = new AsyncTask<Customer, Void, Customer>() {
+                    customerService.updateCustomer(
+                            customerId,
+                            firstNameEditText.getText().toString(),
+                            lastNameEditText.getText().toString(), new AsyncCallback<Customer>() {
                         @Override
-                        protected Customer doInBackground(Customer... params) {
-                            Customer response = customerService.updateCustomer(
-                                    customerId,
-                                    firstNameEditText.getText().toString(),
-                                    lastNameEditText.getText().toString());
-                            return response;
+                        public void methodInvocationCompleted(Customer customer) {
+                            Toast.makeText(self, "your changes to record #" + customer.getId() + " have been saved", Toast.LENGTH_SHORT).show();
                         }
-                    };
-                    Customer result = saveCustomerAsyncTask.execute().get();
-                    Toast.makeText(CustomerDetailActivity.this, "your changes to record #" + result.getId() + " have been saved", Toast.LENGTH_SHORT).show();
+                    });
+
                 } catch (Throwable t) {
                     throw new RuntimeException(t);
                 }

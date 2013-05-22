@@ -1,16 +1,17 @@
 package com.joshlong.spring.walkingtour.android.service;
 
+import com.joshlong.spring.walkingtour.android.async.AsyncCallback;
 import com.joshlong.spring.walkingtour.android.model.Customer;
 
 import java.util.List;
 
 // a client side representation of the server side interface 
 public interface CustomerService {
-    Customer updateCustomer(long id, String fn, String ln);
+    void updateCustomer(long id, String fn, String ln , AsyncCallback<Customer> asyncCallback);
 
-    Customer getCustomerById(long id);
+    void getCustomerById(long id, AsyncCallback<Customer> asyncCallback);
 
-    Customer createCustomer(String fn, String ln);
+    void createCustomer(String fn, String ln, AsyncCallback<Customer> asyncCallback);
 
-    List<Customer> loadAllCustomers();
+    void loadAllCustomers( AsyncCallback<List<Customer>> asyncCallback);
 }
