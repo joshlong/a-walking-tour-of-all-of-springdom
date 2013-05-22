@@ -20,13 +20,11 @@ public class JdbcCustomerService implements CustomerService {
 
     private String customerByIdQuery;
     private String updateCustomerQuery;
-    
+    private String selectAllQuery;
     @Inject
     private Environment environment;
-    
     @Inject
     private JdbcTemplate jdbcTemplate;
-    
     private RowMapper<Customer> customerRowMapper = new RowMapper<Customer>() {
 
         public Customer mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -39,6 +37,7 @@ public class JdbcCustomerService implements CustomerService {
 
     @PostConstruct
     public void setup() {
+        this.selectAllQuery = environment.getProperty("jdbc.sql.customers.allCustomers");
         this.customerByIdQuery = environment.getProperty("jdbc.sql.customers.queryById");
         this.updateCustomerQuery = environment.getProperty("jdbc.sql.customers.update");
     }
@@ -49,7 +48,7 @@ public class JdbcCustomerService implements CustomerService {
         args.put("first_name", fn);
         args.put("last_name", ln);
 
-        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate);
         simpleJdbcInsert.setTableName("customer");
         simpleJdbcInsert.setColumnNames(new ArrayList<String>(args.keySet()));
         simpleJdbcInsert.setGeneratedKeyName("id");
@@ -62,7 +61,11 @@ public class JdbcCustomerService implements CustomerService {
 
     @Transactional(readOnly = true)
     public Customer getCustomerById(BigInteger id) {
-        return jdbcTemplate.queryForObject(customerByIdQuery, customerRowMapper, id.longValue());
+        return jdbcTemplate.queryForObject(this.customerByIdQuery, this.customerRowMapper, id.longValue());
+    }
+
+    public Collection<Customer> loadAllCustomers() {
+        return this.jdbcTemplate.query(this.selectAllQuery, this.customerRowMapper);
     }
 
     public Customer updateCustomer(BigInteger id, String fn, String ln) {

@@ -49,22 +49,6 @@ import java.util.Map;
 @Profile("default")
 public class LocalDataSourceConfiguration implements DataSourceConfiguration {
     private boolean resetDatabaseOnReset = false;
-/*
-
-
-    @Bean
-    public ConnectionFactory rabbitMqConnectionFactory(Environment environment) throws Exception {
-        String host = environment.getProperty("rabbit.host");
-        int port = Integer.parseInt(environment.getProperty("rabbit.port"));
-        CachingConnectionFactory cachingConnectionFactory;
-        if (port == 0) {
-            cachingConnectionFactory = new CachingConnectionFactory(host);
-        } else {
-            cachingConnectionFactory = new CachingConnectionFactory(host, port);
-        }
-        return cachingConnectionFactory;
-    }
-*/
 
     @Bean(destroyMethod = "close")
     public DataSource dataSource(Environment environment) throws Exception {

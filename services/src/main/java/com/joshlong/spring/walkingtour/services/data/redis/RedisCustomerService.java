@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
+import java.util.*;
 
 @Component
 public class RedisCustomerService implements CustomerService {
@@ -39,6 +40,18 @@ public class RedisCustomerService implements CustomerService {
     private void setCustomerValues(BigInteger lid, String fn, String ln) {
         this.redisTemplate.opsForValue().set(lastNameKey(lid), ln);
         this.redisTemplate.opsForValue().set(firstNameKey(lid), fn);
+    }
+
+    @Override
+    public Collection<Customer> loadAllCustomers() {
+        String keyPattern = "customer:fn:*";
+        Set<String> keys = redisTemplate.keys(keyPattern);
+        Set<Customer> customerSet = new HashSet<Customer>();
+        for (String firstNameKey : keys) {
+            long id = Long.parseLong(firstNameKey.split(":")[2]);
+            customerSet.add(this.getCustomerById(BigInteger.valueOf(id)));
+        }
+        return customerSet;
     }
 
     @Override

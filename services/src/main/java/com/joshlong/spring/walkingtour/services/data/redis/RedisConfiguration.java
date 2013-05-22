@@ -12,10 +12,13 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 @ComponentScan
 public class RedisConfiguration {
+    @Bean
+    public Topic topic() {
+        return new ChannelTopic("pubsub:customer");
+    }
 
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory, TaskExecutor taskExecutor) {
-        Topic channelTopic = new ChannelTopic("pubsub:customer");
+    public RedisMessageListenerContainer redisMessageListenerContainer(Topic topic, RedisConnectionFactory redisConnectionFactory, TaskExecutor taskExecutor) {
         RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
         redisMessageListenerContainer.setTaskExecutor(taskExecutor);
         redisMessageListenerContainer.setConnectionFactory(redisConnectionFactory);
@@ -25,7 +28,7 @@ public class RedisConfiguration {
                 System.out.println("Received notification " + new String(message.getBody()) + ".");
                 System.out.println(new String(pattern));
             }
-        }, channelTopic);
+        }, topic);
         return redisMessageListenerContainer;
     }
 

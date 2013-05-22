@@ -2,6 +2,8 @@ package com.joshlong.spring.walkingtour.android.service;
 
 import com.joshlong.spring.walkingtour.android.model.Customer;
 
+import java.util.List;
+
 // a client side representation of the server side interface 
 public interface CustomerService {
     Customer updateCustomer(long id, String fn, String ln);
@@ -9,4 +11,6 @@ public interface CustomerService {
     Customer getCustomerById(long id);
 
     Customer createCustomer(String fn, String ln);
+
+    List<Customer> loadAllCustomers();
 }

@@ -2,10 +2,13 @@ package com.joshlong.spring.walkingtour.services.data.redis;
 
 import com.joshlong.spring.walkingtour.services.CustomerService;
 import com.joshlong.spring.walkingtour.services.model.Customer;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.logging.*;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.*;
+import org.springframework.data.redis.listener.Topic;
+
+import java.util.Collection;
 
 /**
  * @author Josh Long
@@ -35,6 +38,10 @@ public class Main {
         redisTemplate.convertAndSend(topic.getTopic(), " {'id':'" + updatedCustomer.getId() + "'}");
 
 
+        Collection<Customer> allCustomers =  customerService.loadAllCustomers() ;
+        for(Customer c  : allCustomers) {
+            System.out.println(ToStringBuilder.reflectionToString(c));
+        }
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.*;
 
 @Controller
 public class CustomerController {
@@ -24,15 +25,21 @@ public class CustomerController {
         return new Customer();
     }
 
+    @RequestMapping(value = "/customers", method = RequestMethod.GET)
+    @ResponseBody
+    public CustomerList customers() {
+        return new CustomerList(this.customerService.loadAllCustomers());
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String customer(@RequestParam(value = "id", required = false) Long id, Device device , Model model) {
+    public String customer(@RequestParam(value = "id", required = false) Long id, Device device, Model model) {
         if (null != id) {
             model.addAttribute("customer", this.customerService.getCustomerById(BigInteger.valueOf(id)));
             model.addAttribute("customerId", id);
         }
 
-        String typeOfDevice = device.isNormal() ? "normal" : ( device.isTablet()? "tablet":"phone") ;
-        model.addAttribute("typeOfDevice"  , typeOfDevice) ;
+        String typeOfDevice = device.isNormal() ? "normal" : (device.isTablet() ? "tablet" : "phone");
+        model.addAttribute("typeOfDevice", typeOfDevice);
 
         return "customers/display";
 
@@ -48,6 +55,12 @@ public class CustomerController {
         Customer customer = this.customerService.createCustomer(c.getFirstName(), c.getLastName());
         model.addAttribute("id", customer.getId());
         return "redirect:/display";
+    }
+
+    public static class CustomerList extends ArrayList<Customer> {
+        public CustomerList(Collection<? extends Customer> c) {
+            super(c);
+        }
     }
 
 
