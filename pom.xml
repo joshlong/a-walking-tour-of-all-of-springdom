@@ -12,6 +12,8 @@
 		<module>mobile-web</module>
 		<module>mobile-android</module>
 		<module>connected-web</module>
+		<module>connected-android</module>
+		
 	</modules>
 	<properties>
 		<java.version>1.6</java.version>
