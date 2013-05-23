@@ -4,9 +4,20 @@ import android.os.AsyncTask;
 
 import java.lang.reflect.*;
 
-
 /**
- * builds up a proxy
+ * builds JDK proxies that runs each method annotated with
+ * {@link RunOnIoThread} in an {@link AsyncTask}.
+ * <p/>
+ *
+ * The client of this proxy can receive the return value in one of two ways:
+ *
+ * <OL>
+ * <LI> the return value of the method </LI>
+ * <LI> through an argument of type {@link AsyncCallback} which will collect the result. </LI>
+ * </OL>
+ *
+ * If there is an argument of type {@link AsyncCallback}, the returned value is returned <EM>within</EM>
+ * the UI thread, <EM>not</EM> in the same thread as the {@link AsyncTask}.
  *
  * @author Josh Long
  */
@@ -16,7 +27,7 @@ public class RunOnIoThreadProxyCreator {
         return runOnIoThread(o, o.getClass().getInterfaces());
     }
 
-    static Object safeInvoke(Object target, Method method, Object[] arguments) {
+    private static Object safeInvoke(Object target, Method method, Object[] arguments) {
         try {
             return method.invoke(target, arguments);
         } catch (Throwable thro) {
@@ -24,13 +35,8 @@ public class RunOnIoThreadProxyCreator {
         }
     }
 
-    /**
-     * this will get run on the native UI thread, by default. Since we'll always be running inside of some Activity
-     */
     @SuppressWarnings("unchecked")
-    public static <T> T runOnIoThread(
-            final T target,
-            final Class<?>... tClass) {
+    public static <T> T runOnIoThread(final T target, final Class<?>... tClass) {
 
         InvocationHandler invocationHandler = new InvocationHandler() {
 
@@ -41,7 +47,6 @@ public class RunOnIoThreadProxyCreator {
                 final Method methodToInvokeOnTargetObject = target.getClass().getMethod(method.getName(), method.getParameterTypes());
                 final boolean runInIoThread = method.getAnnotation(classOfAnnotation) != null || methodToInvokeOnTargetObject.getAnnotation(classOfAnnotation) != null;
 
-                // stash a reference to the Activity that we're currently in
                 if (runInIoThread) {
                     AsyncTask<Object, Object, Object> asyncTask = new AsyncTask<Object, Object, Object>() {
                         private Object result;
@@ -68,21 +73,11 @@ public class RunOnIoThreadProxyCreator {
 
                         }
 
-                        /**
-                         * deliver the result of the invocation to any AsyncCallback arguments in the method
-                         * invocation.
-                         *
-                         * @param o the result of the processing in {@link #doInBackground(Object...)} call.
-                         *
-                         */
                         @Override
                         protected void onPostExecute(Object o) {
-                            // either the method arguments contained an AsyncCallbacka argument, in which case, were good now.
-                            if ( this.savedAsyncCallback != null && result != null) { // this is the use case where we have
-                             this.savedAsyncCallback.methodInvocationCompleted(result);
-                            } // or the method arguments contained no AsyncCallbacks and probably even had a return value
-
-                            // otherwise, we do nothing here.
+                            if (this.savedAsyncCallback != null && result != null) { // this is the use case where we have
+                                this.savedAsyncCallback.methodInvocationCompleted(result);
+                            }
                         }
                     };
 
@@ -94,18 +89,8 @@ public class RunOnIoThreadProxyCreator {
                 return safeInvoke(target, methodToInvokeOnTargetObject, args);
             }
         };
-
-
         Object objectProxy = Proxy.newProxyInstance(target.getClass().getClassLoader(), tClass, invocationHandler);
         return (T) objectProxy;
     }
 
-    private static AsyncCallback<?> findCallbackFor(Object[] arguments) throws Throwable {
-        for (Object obj : arguments) {
-            if (obj instanceof AsyncCallback) {
-                return (AsyncCallback) obj;
-            }
-        }
-        return null;
-    }
 }
