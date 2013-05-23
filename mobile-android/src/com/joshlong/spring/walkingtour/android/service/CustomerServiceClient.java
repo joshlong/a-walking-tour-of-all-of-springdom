@@ -3,10 +3,12 @@ package com.joshlong.spring.walkingtour.android.service;
 import android.util.Log;
 import com.joshlong.spring.walkingtour.android.async.*;
 import com.joshlong.spring.walkingtour.android.model.Customer;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
 
@@ -65,6 +67,22 @@ public class CustomerServiceClient implements CustomerService {
         String url = urlForPath("customers");
         Log.d(getClass().getName(), "url for the customers request: " + url);
         asyncCallback.methodInvocationCompleted(this.restTemplate.getForObject(url, CustomerList.class));
+    }
+
+    @RunOnIoThread
+    @Override
+    public void search(String searchQuery, AsyncCallback<List<Customer>> asyncCallback) {
+        if (searchQuery.length() < 3) {
+            LogFactory.getLog(getClass()).debug(String.format("it's recommended that you don't permit searches with < 3 characters, like %s", searchQuery + ""));
+        }
+        String url = urlForPath("customers");
+        String uriWithVariables = UriComponentsBuilder.fromUriString(url)
+                .queryParam("q", searchQuery)
+                .build()
+                .toUriString();
+        Log.d(getClass().getName(), "the URI with variables is " + uriWithVariables);
+        List<Customer> customers = this.restTemplate.getForObject(uriWithVariables, CustomerList.class);
+        asyncCallback.methodInvocationCompleted(customers);
     }
 
     @Override
