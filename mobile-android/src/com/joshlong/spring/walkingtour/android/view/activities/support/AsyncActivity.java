@@ -1,5 +1,8 @@
 package com.joshlong.spring.walkingtour.android.view.activities.support;
 
+/**
+ * @author Roy Clarkson
+ */
 public interface AsyncActivity {
 
     public void showLoadingProgressDialog();

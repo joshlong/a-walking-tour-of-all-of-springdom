@@ -12,9 +12,9 @@ import com.joshlong.spring.walkingtour.connectedweb.web.config.*;
 import javax.servlet.*;
 
 /**
- * Simple replacement for <CODE>web.xml</CODE> that is constructed entirely in Java code.
+ * Simple replacement for <CODE>ogweb.xml</CODE> that is constructed entirely in Java code.
  * This class is picked up at runtime and then given a chance to run when the container starts up,
- * exactly as the <CODE>web.xml</CODE> would be consulted at startup.
+ * exactly as the <CODE>ogweb.xml</CODE> would be consulted at startup.
  *
  * @author Josh Long
  */
@@ -22,6 +22,7 @@ import javax.servlet.*;
 public class CrmWebApplicationInitializer implements WebApplicationInitializer {
 
     private final String patternAll = "/";
+
     private final String springServletName = "spring";
 
     @Override

@@ -9,7 +9,9 @@
        <modules>
            
            <module>connected-web-web</module>
-		              <module>connected-web-services</module>
+		   <module>connected-web-services</module>
+		   <module>connected-web-android</module>
+   		   <module>connected-web-spring-social</module>
        </modules>
     
     <contributors>

@@ -49,6 +49,12 @@
                 authorities="ROLE_USER"
                 authorized-grant-types="authorization_code,implicit"
                 resource-ids="crm"/>
+        <oauth:client
+            client-id="android-crm"
+            scope="read,write"
+            authorities="ROLE_USER"
+            authorized-grant-types="authorization_code,implicit,password"
+            resource-ids="crm"/>
     </oauth:client-details-service>
 
     <oauth:authorization-server client-details-service-ref="clientDetailsService"

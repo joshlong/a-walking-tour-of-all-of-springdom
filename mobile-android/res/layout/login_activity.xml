@@ -9,35 +9,35 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="First Name"
-        android:id="@+id/first_name_label"
+        android:text="User Name"
+        android:id="@+id/username_label"
         android:layout_gravity="center" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/first_name"
+        android:id="@+id/username"
         android:layout_gravity="left|center_vertical"
         android:focusableInTouchMode="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Last Name"
-        android:id="@+id/last_name_label"
+        android:text="Password"
+        android:id="@+id/password_label"
         android:layout_gravity="left|center_vertical" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/last_name"
+        android:id="@+id/password"
         android:focusableInTouchMode="true"
         android:autoText="false" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="Log In"
         android:id="@+id/save_button"
         android:layout_gravity="right" />
 

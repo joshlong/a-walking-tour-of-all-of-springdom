@@ -119,6 +119,4 @@ public class CustomerListActivity extends AbstractAsyncListActivity implements A
         intent.putExtra("customerId", customer.getId());    // if this is present, then the activity will act as an editor.
         startActivity(intent);
     }
-
-
 }
