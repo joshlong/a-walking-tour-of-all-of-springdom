@@ -3,7 +3,6 @@ package com.joshlong.spring.walkingtour.android.view.activities.support;
 
 import android.app.Activity;
 import android.os.Bundle;
-import com.joshlong.spring.walkingtour.android.async.ActivityThreadLocalHolder;
 import com.joshlong.spring.walkingtour.android.utils.DaggerInjectionUtils;
 import com.squareup.otto.Bus;
 
@@ -24,13 +23,11 @@ public class AbstractActivity extends Activity   {
 
     @Override protected void onResume() {
         super.onResume();
-        ActivityThreadLocalHolder.registerCurrentActivity(this);
         bus.register(this);
     }
 
     @Override protected void onPause() {
         super.onPause();
-        ActivityThreadLocalHolder.registerCurrentActivity(null );
         bus.unregister(this);
     }
 

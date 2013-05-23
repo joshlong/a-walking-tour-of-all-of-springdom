@@ -3,7 +3,6 @@ package com.joshlong.spring.walkingtour.android.view.activities.support;
 import android.app.*;
 import android.os.Bundle;
 import com.joshlong.spring.walkingtour.android.R;
-import com.joshlong.spring.walkingtour.android.async.ActivityThreadLocalHolder;
 import com.joshlong.spring.walkingtour.android.utils.DaggerInjectionUtils;
 import com.squareup.otto.Bus;
 
@@ -12,6 +11,7 @@ import javax.inject.Inject;
 /**
  * @author Roy Clarkson
  * @author Pierre-Yves Ricau
+ * @author Josh Long
  */
 public abstract class AbstractAsyncListActivity extends ListActivity implements AsyncActivity  {
     @Inject Bus bus;
@@ -34,14 +34,12 @@ public abstract class AbstractAsyncListActivity extends ListActivity implements 
 
     @Override protected void onResume() {
         super.onResume();
-        ActivityThreadLocalHolder.registerCurrentActivity(this);
-        bus.register(this);
+         bus.register(this);
     }
 
     @Override protected void onPause() {
         super.onPause();
-        ActivityThreadLocalHolder.registerCurrentActivity(null );
-        bus.unregister(this);
+         bus.unregister(this);
     }
 
 

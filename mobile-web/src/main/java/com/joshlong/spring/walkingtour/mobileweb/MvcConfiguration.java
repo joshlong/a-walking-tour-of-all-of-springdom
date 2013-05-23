@@ -1,11 +1,11 @@
 package com.joshlong.spring.walkingtour.mobileweb;
 
-import com.joshlong.spring.walkingtour.services.jpa.JpaConfiguration;
+import com.joshlong.spring.walkingtour.services.jdbc.JdbcConfiguration;
 import org.apache.commons.logging.*;
 import org.springframework.context.annotation.*;
 import org.springframework.mobile.device.*;
 import org.springframework.mobile.device.site.*;
-import org.springframework.web.method.support.*;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -16,7 +16,7 @@ import java.util.List;
 @Configuration
 @EnableWebMvc
 @ComponentScan
-@Import(JpaConfiguration.class)
+@Import(JdbcConfiguration.class)
 public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
     private Log log = LogFactory.getLog(getClass());

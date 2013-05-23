@@ -1,19 +1,21 @@
 package com.joshlong.spring.walkingtour.mobileweb;
 
-import com.joshlong.spring.walkingtour.services.CustomerService;
+import com.joshlong.spring.walkingtour.services.*;
 import com.joshlong.spring.walkingtour.services.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.*;
 
 @Controller
 @RequestMapping
 public class RestCustomerController {
 
     @Autowired
-    private CustomerService customerService;
+    private SearchCapableCustomerService customerService;
 
     @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.POST)
     @ResponseBody
@@ -33,6 +35,18 @@ public class RestCustomerController {
         return this.customerService.createCustomer(customer.getFirstName(), customer.getLastName());
     }
 
+    @RequestMapping(value = "/customers", method = RequestMethod.GET)
+    @ResponseBody
+    public CustomerList customers(@RequestParam(value = "query", required = false) String q) {
+        Collection<Customer> c = StringUtils.isEmpty(q) ? this.customerService.loadAllCustomers() : this.customerService.search(q);
+        return new CustomerList(c );
+    }
+
+    public static class CustomerList extends ArrayList<Customer> {
+        public CustomerList(Collection<? extends Customer> c) {
+            super(c);
+        }
+    }
 
 
 }

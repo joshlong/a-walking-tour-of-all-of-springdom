@@ -2,7 +2,7 @@ package com.joshlong.spring.walkingtour.android.async;
 
 
 /**
- * given whenever a {@link RunOnIoThread}-annotated method wants to receive the result of the processing
+ * given whenever a {@link RunOffUiThread}-annotated method wants to receive the result of the processing
  * asynchronously.
  *
  * @param <T>

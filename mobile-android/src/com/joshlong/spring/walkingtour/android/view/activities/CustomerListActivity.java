@@ -93,7 +93,6 @@ public class CustomerListActivity extends AbstractAsyncListActivity implements A
     @Override
     protected void onResume() {
         super.onResume();
-        customerService.loadAllCustomers(asyncUiCallback);
     }
 
     @Override

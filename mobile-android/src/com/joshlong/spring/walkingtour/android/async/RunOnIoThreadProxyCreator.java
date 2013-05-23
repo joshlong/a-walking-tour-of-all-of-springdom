@@ -6,7 +6,7 @@ import java.lang.reflect.*;
 
 /**
  * builds JDK proxies that runs each method annotated with
- * {@link RunOnIoThread} in an {@link AsyncTask}.
+ * {@link RunOffUiThread} in an {@link AsyncTask}.
  * <p/>
  *
  * The client of this proxy can receive the return value in one of two ways:
@@ -43,7 +43,7 @@ public class RunOnIoThreadProxyCreator {
             @Override
             public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
 
-                Class<RunOnIoThread> classOfAnnotation = RunOnIoThread.class;
+                Class<RunOffUiThread> classOfAnnotation = RunOffUiThread.class;
                 final Method methodToInvokeOnTargetObject = target.getClass().getMethod(method.getName(), method.getParameterTypes());
                 final boolean runInIoThread = method.getAnnotation(classOfAnnotation) != null || methodToInvokeOnTargetObject.getAnnotation(classOfAnnotation) != null;
 

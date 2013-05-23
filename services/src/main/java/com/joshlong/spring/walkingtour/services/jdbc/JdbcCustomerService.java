@@ -1,11 +1,11 @@
 package com.joshlong.spring.walkingtour.services.jdbc;
 
+import com.joshlong.spring.walkingtour.services.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import com.joshlong.spring.walkingtour.services.CustomerService;
 import com.joshlong.spring.walkingtour.services.model.Customer;
 
 import javax.annotation.PostConstruct;
@@ -16,11 +16,11 @@ import java.util.*;
 
 @Component
 @Transactional
-public class JdbcCustomerService implements CustomerService {
+public class JdbcCustomerService implements SearchCapableCustomerService {
 
     private String customerByIdQuery;
     private String updateCustomerQuery;
-    private String selectAllQuery;
+    private String selectAllQuery, searchQuery;
     @Inject
     private Environment environment;
     @Inject
@@ -40,6 +40,15 @@ public class JdbcCustomerService implements CustomerService {
         this.selectAllQuery = environment.getProperty("jdbc.sql.customers.allCustomers");
         this.customerByIdQuery = environment.getProperty("jdbc.sql.customers.queryById");
         this.updateCustomerQuery = environment.getProperty("jdbc.sql.customers.update");
+        this.searchQuery = "select  * from customer where lower(first_name || last_name) like lower( ? )";
+    }
+
+    @Override
+    public Collection<Customer> search(String query) {
+        final String percent = "%";
+        query = (query.endsWith(percent) ? query : query + percent);
+        query = (query.startsWith(percent) ? query : percent + query);
+        return jdbcTemplate.query(this.searchQuery, customerRowMapper, query);
     }
 
     public Customer createCustomer(String fn, String ln) {
@@ -69,7 +78,7 @@ public class JdbcCustomerService implements CustomerService {
     }
 
     public Customer updateCustomer(BigInteger id, String fn, String ln) {
-        this.jdbcTemplate.update(updateCustomerQuery, fn, ln, id);
+        this.jdbcTemplate.update(updateCustomerQuery, fn, ln, id.longValue());
         return getCustomerById(id);
     }
 }

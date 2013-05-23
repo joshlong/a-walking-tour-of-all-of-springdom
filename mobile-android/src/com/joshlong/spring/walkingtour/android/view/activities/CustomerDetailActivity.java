@@ -33,7 +33,6 @@ public class CustomerDetailActivity extends AbstractActivity {
         customerService.getCustomerById(customerId, new AsyncCallback<Customer>() {
             @Override
             public void methodInvocationCompleted(Customer customer) {
-
                 self.customer = customer;
                 self.customerId = self.customer.getId();
                 self.firstNameEditText.setText(customer.getFirstName());

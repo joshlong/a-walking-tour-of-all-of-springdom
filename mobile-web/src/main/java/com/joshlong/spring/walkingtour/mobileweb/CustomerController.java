@@ -25,11 +25,7 @@ public class CustomerController {
         return new Customer();
     }
 
-    @RequestMapping(value = "/customers", method = RequestMethod.GET)
-    @ResponseBody
-    public CustomerList customers() {
-        return new CustomerList(this.customerService.loadAllCustomers());
-    }
+
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String customer(@RequestParam(value = "id", required = false) Long id, Device device, Model model) {
@@ -57,11 +53,6 @@ public class CustomerController {
         return "redirect:/display";
     }
 
-    public static class CustomerList extends ArrayList<Customer> {
-        public CustomerList(Collection<? extends Customer> c) {
-            super(c);
-        }
-    }
 
 
 }

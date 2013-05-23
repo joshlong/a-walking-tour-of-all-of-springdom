@@ -13,8 +13,6 @@ public interface CustomerService {
 
     void createCustomer(String fn, String ln, AsyncCallback<Customer> asyncCallback);
 
-    void loadAllCustomers( AsyncCallback<List<Customer>> asyncCallback);
-
     void search(String newString, AsyncCallback<List<Customer>> asyncUiCallback);
 
 }

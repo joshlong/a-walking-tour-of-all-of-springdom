@@ -16,7 +16,7 @@ public class CustomerServiceClient implements CustomerService {
 
     private String baseServiceUrl;
     private RestTemplate restTemplate;
-
+    private final String slash = "/";
     public CustomerServiceClient(String url, RestTemplate restTemplate) {
         setBaseServiceUrl(url);
         setRestTemplate(restTemplate);
@@ -42,14 +42,14 @@ public class CustomerServiceClient implements CustomerService {
     }
 
     protected void setBaseServiceUrl(String url) {
-        if (!url.endsWith("/"))
-            url = url + "/";
+        if (!url.endsWith( slash))
+            url = url + slash ;
         this.baseServiceUrl = url;
     }
 
     private String urlForPath(final String p) {
         String inputPath = p;
-        if (inputPath.startsWith("/"))
+        if (inputPath.startsWith(slash))
             inputPath = inputPath.substring(1);
         return this.baseServiceUrl + inputPath;
     }
@@ -61,15 +61,7 @@ public class CustomerServiceClient implements CustomerService {
         return null;
     }
 
-    @RunOnIoThread
-    @Override
-    public void loadAllCustomers(AsyncCallback<List<Customer>> asyncCallback) {
-        String url = urlForPath("customers");
-        Log.d(getClass().getName(), "url for the customers request: " + url);
-        asyncCallback.methodInvocationCompleted(this.restTemplate.getForObject(url, CustomerList.class));
-    }
-
-    @RunOnIoThread
+    @RunOffUiThread
     @Override
     public void search(String searchQuery, AsyncCallback<List<Customer>> asyncCallback) {
         if (searchQuery.length() < 3) {
@@ -77,7 +69,7 @@ public class CustomerServiceClient implements CustomerService {
         }
         String url = urlForPath("customers");
         String uriWithVariables = UriComponentsBuilder.fromUriString(url)
-                .queryParam("q", searchQuery)
+                .queryParam("query", searchQuery)
                 .build()
                 .toUriString();
         Log.d(getClass().getName(), "the URI with variables is " + uriWithVariables);
@@ -86,7 +78,7 @@ public class CustomerServiceClient implements CustomerService {
     }
 
     @Override
-    @RunOnIoThread
+    @RunOffUiThread
     public void updateCustomer(long id, String fn, String ln, AsyncCallback<Customer> asyncCallback) {
         String urlForPath = urlForPath("customer/{customerId}");
         Customer customer = new Customer(id, fn, ln);
@@ -95,7 +87,7 @@ public class CustomerServiceClient implements CustomerService {
         asyncCallback.methodInvocationCompleted(extractResponse(customerResponseEntity));
     }
 
-    @RunOnIoThread
+    @RunOffUiThread
     @Override
     public void getCustomerById(long id, AsyncCallback<Customer> customerAsyncCallback) {
 
@@ -105,7 +97,7 @@ public class CustomerServiceClient implements CustomerService {
         );
     }
 
-    @RunOnIoThread
+    @RunOffUiThread
     @Override
     public void createCustomer(String fn, String ln, AsyncCallback<Customer> customerAsyncCallback) {
         customerAsyncCallback.methodInvocationCompleted(
