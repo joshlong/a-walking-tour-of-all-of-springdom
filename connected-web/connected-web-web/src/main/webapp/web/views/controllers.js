@@ -54,7 +54,7 @@ module.factory('ajaxUtils', function () {
     };
 
 
-    if (crmSession.isLoggedIn()) {
+    if (crmSession.isLoggedIn()   ) {
 
         // hack, but this clears out any existing tokens
         for (k in resources)

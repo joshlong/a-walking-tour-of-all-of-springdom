@@ -15,7 +15,6 @@
     <script type="text/javascript">
 
         var crmSession = {
-
             getUsername: function () {
                 var un = "${username}";
                 var pi;

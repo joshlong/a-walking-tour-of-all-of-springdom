@@ -1,4 +1,4 @@
-(function(exp, $) {
+(function (exp, $) {
 
     var
         config = {},
@@ -20,9 +20,9 @@
     /*
      * Returns a random string used for state
      */
-    var uuid = function() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    var uuid = function () {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
@@ -31,7 +31,7 @@
      * A log wrapper, that only logs if logging is turned on in the config
      * @param  {string} msg Log message
      */
-    var log = function(msg) {
+    var log = function (msg) {
         if (!options.debug) return;
         if (!console) return;
         if (!console.log) return;
@@ -48,9 +48,9 @@
     /**
      * Set the global options.
      */
-    var setOptions = function(opts) {
+    var setOptions = function (opts) {
         if (!opts) return;
-        for(var k in opts) {
+        for (var k in opts) {
             if (opts.hasOwnProperty(k)) {
                 options[k] = opts[k];
             }
@@ -63,26 +63,25 @@
      * Takes an URL as input and a params object.
      * Each property in the params is added to the url as query string parameters
      */
-    var encodeURL = function(url, params) {
+    var encodeURL = function (url, params) {
         var res = url;
         var k, i = 0;
         var firstSeparator = (url.indexOf("?") === -1) ? '?' : '&';
-        for(k in params) {
+        for (k in params) {
             res += (i++ === 0 ? firstSeparator : '&') + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
         }
         return res;
     }
 
 
-
     /*
      * Redirects the user to a specific URL
      */
-    api_redirect = function(url) {
+    api_redirect = function (url) {
         window.location = url;
     };
 
-    Api_default_storage = function() {
+    Api_default_storage = function () {
         log("Constructor");
     };
 
@@ -95,7 +94,7 @@
      * scopes
 
      */
-    Api_default_storage.prototype.saveState =  function (state, obj) {
+    Api_default_storage.prototype.saveState = function (state, obj) {
         localStorage.setItem("state-" + state, JSON.stringify(obj));
     }
 
@@ -104,7 +103,7 @@
      * getStage()  returns the state object, but also removes it.
      * @type {Object}
      */
-    Api_default_storage.prototype.getState = function(state) {
+    Api_default_storage.prototype.getState = function (state) {
         // log("getState (" + state+ ")");
         var obj = JSON.parse(localStorage.getItem("state-" + state));
         localStorage.removeItem("state-" + state)
@@ -116,10 +115,10 @@
      * Checks if a token, has includes a specific scope.
      * If token has no scope at all, false is returned.
      */
-    Api_default_storage.prototype.hasScope = function(token, scope) {
+    Api_default_storage.prototype.hasScope = function (token, scope) {
         var i;
         if (!token.scopes) return false;
-        for(i = 0; i < token.scopes.length; i++) {
+        for (i = 0; i < token.scopes.length; i++) {
             if (token.scopes[i] === scope) return true;
         }
         return false;
@@ -129,7 +128,7 @@
      * Takes an array of tokens, and removes the ones that
      * are expired, and the ones that do not meet a scopes requirement.
      */
-    Api_default_storage.prototype.filterTokens = function(tokens, scopes) {
+    Api_default_storage.prototype.filterTokens = function (tokens, scopes) {
         var i, j,
             result = [],
             now = epoch(),
@@ -137,14 +136,14 @@
 
         if (!scopes) scopes = [];
 
-        for(i = 0; i < tokens.length; i++) {
+        for (i = 0; i < tokens.length; i++) {
             usethis = true;
 
             // Filter out expired tokens. Tokens that is expired in 1 second from now.
-            if (tokens[i].expires && tokens[i].expires < (now+1)) usethis = false;
+            if (tokens[i].expires && tokens[i].expires < (now + 1)) usethis = false;
 
             // Filter out this token if not all scope requirements are met
-            for(j = 0; j < scopes.length; j++) {
+            for (j = 0; j < scopes.length; j++) {
                 if (!api_storage.hasScope(tokens[i], scopes[j])) usethis = false;
             }
 
@@ -162,12 +161,12 @@
      * providerID: the provider of the access token?
      * scopes: an array with the scopes (not string)
      */
-    Api_default_storage.prototype.saveTokens = function(provider, tokens) {
+    Api_default_storage.prototype.saveTokens = function (provider, tokens) {
         // log("Save Tokens (" + provider+ ")");
         localStorage.setItem("tokens-" + provider, JSON.stringify(tokens));
     };
 
-    Api_default_storage.prototype.getTokens = function(provider) {
+    Api_default_storage.prototype.getTokens = function (provider) {
         // log("Get Tokens (" + provider+ ")");
         var tokens = JSON.parse(localStorage.getItem("tokens-" + provider));
         if (!tokens) tokens = [];
@@ -175,14 +174,14 @@
         log("Token received", tokens)
         return tokens;
     };
-    Api_default_storage.prototype.wipeTokens = function(provider) {
+    Api_default_storage.prototype.wipeTokens = function (provider) {
         localStorage.removeItem("tokens-" + provider);
     };
     /*
      * Save a single token for a provider.
      * This also cleans up expired tokens for the same provider.
      */
-    Api_default_storage.prototype.saveToken = function(provider, token) {
+    Api_default_storage.prototype.saveToken = function (provider, token) {
         var tokens = this.getTokens(provider);
         tokens = api_storage.filterTokens(tokens);
         tokens.push(token);
@@ -193,7 +192,7 @@
      * Get a token if exists for a provider with a set of scopes.
      * The scopes parameter is OPTIONAL.
      */
-    Api_default_storage.prototype.getToken = function(provider, scopes) {
+    Api_default_storage.prototype.getToken = function (provider, scopes) {
         var tokens = this.getTokens(provider);
         tokens = api_storage.filterTokens(tokens, scopes);
         if (tokens.length < 1) return null;
@@ -203,7 +202,6 @@
     api_storage = new Api_default_storage();
 
 
-
     /*
      * ------ SECTION: Utilities
      */
@@ -211,9 +209,9 @@
     /*
      * Returns a random string used for state
      */
-    var uuid = function() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    var uuid = function () {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
@@ -222,10 +220,10 @@
      * Takes an URL as input and a params object.
      * Each property in the params is added to the url as query string parameters
      */
-    var encodeURL = function(url, params) {
+    var encodeURL = function (url, params) {
         var res = url;
         var k, i = 0;
-        for(k in params) {
+        for (k in params) {
             res += (i++ === 0 ? '?' : '&') + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
         }
         return res;
@@ -235,17 +233,18 @@
      * Returns epoch, seconds since 1970.
      * Used for calculation of expire times.
      */
-    var epoch = function() {
-        return Math.round(new Date().getTime()/1000.0);
+    var epoch = function () {
+        return Math.round(new Date().getTime() / 1000.0);
     }
-
 
 
     var parseQueryString = function (qs) {
         var e,
             a = /\+/g,  // Regex for replacing addition symbol with a space
             r = /([^&;=]+)=?([^&;]*)/g,
-            d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+            d = function (s) {
+                return decodeURIComponent(s.replace(a, " "));
+            },
             q = qs,
             urlParams = {};
 
@@ -259,10 +258,6 @@
      */
 
 
-
-
-
-
     /**
      * Check if the hash contains an access token.
      * And if it do, extract the state, compare with
@@ -272,7 +267,7 @@
      * childbrowser when the jso context is not receiving the response,
      * instead the response is received on a child browser.
      */
-    exp.jso_checkfortoken = function(providerID, url, callback) {
+    exp.jso_checkfortoken = function (providerID, url, callback) {
         var
             atoken,
             h = window.location.hash,
@@ -285,7 +280,7 @@
         // If a url is provided
         if (url) {
             // log('Hah, I got the url and it ' + url);
-            if(url.indexOf('#') === -1) return;
+            if (url.indexOf('#') === -1) return;
             h = url.substring(url.indexOf('#'));
             // log('Hah, I got the hash and it is ' +  h);
         }
@@ -301,7 +296,9 @@
         if (atoken.state) {
             state = api_storage.getState(atoken.state);
         } else {
-            if (!providerID) {throw "Could not get [state] and no default providerid is provided.";}
+            if (!providerID) {
+                throw "Could not get [state] and no default providerid is provided.";
+            }
             state = {providerID: providerID};
         }
 
@@ -353,7 +350,6 @@
         }
 
 
-
         api_storage.saveToken(state.providerID, atoken);
 
         if (state.restoreHash) {
@@ -383,7 +379,7 @@
     /*
      * A config object contains:
      */
-    var jso_authrequest = function(providerid, scopes, callback) {
+    var jso_authrequest = function (providerid, scopes, callback) {
 
         var
             state,
@@ -432,17 +428,18 @@
         }
 
 
-        log("Saving state [" + state+ "]");
+        log("Saving state [" + state + "]");
         log(JSON.parse(JSON.stringify(request)));
 
         api_storage.saveState(state, request);
         api_redirect(authurl);
+        console.debug('the authUrl is jso.js is ' + authurl);
 
     };
 
     exp.jso_ensureTokens = function (ensure) {
         var providerid, scopes, token;
-        for(providerid in ensure) {
+        for (providerid in ensure) {
             scopes = undefined;
             if (ensure[providerid]) scopes = ensure[providerid];
             token = api_storage.getToken(providerid, scopes);
@@ -459,14 +456,14 @@
         return true;
     }
 
-    exp.jso_findDefaultEntry = function(c) {
+    exp.jso_findDefaultEntry = function (c) {
         var
             k,
             i = 0;
 
         if (!c) return;
         log("c", c);
-        for(k in c) {
+        for (k in c) {
             i++;
             if (c[k].isDefault && c[k].isDefault === true) {
                 return k;
@@ -475,7 +472,7 @@
         if (i === 1) return k;
     };
 
-    exp.jso_configure = function(c, opts) {
+    exp.jso_configure = function (c, opts) {
         config = c;
         setOptions(opts);
         try {
@@ -484,16 +481,16 @@
             log("jso_configure() about to check for token for this entry", def);
             exp.jso_checkfortoken(def);
 
-        } catch(e) {
+        } catch (e) {
             log("Error when retrieving token from hash: " + e);
             window.location.hash = "";
         }
 
     }
 
-    exp.jso_dump = function() {
+    exp.jso_dump = function () {
         var key;
-        for(key in config) {
+        for (key in config) {
 
             log("=====> Processing provider [" + key + "]");
             log("=] Config");
@@ -504,27 +501,27 @@
         }
     }
 
-    exp.jso_wipe = function() {
+    exp.jso_wipe = function () {
         var key;
         log("jso_wipe()");
-        for(key in config) {
+        for (key in config) {
             log("Wiping tokens for " + key);
             api_storage.wipeTokens(key);
         }
     }
 
-    exp.jso_getToken = function(providerid, scopes) {
+    exp.jso_getToken = function (providerid, scopes) {
         var token = api_storage.getToken(providerid, scopes);
         if (!token) return null;
         if (!token["access_token"]) return null;
         return token["access_token"];
     }
 
-    exp.jso_registerRedirectHandler = function(callback) {
+    exp.jso_registerRedirectHandler = function (callback) {
         api_redirect = callback;
     };
 
-    exp.jso_registerStorageHandler = function(object) {
+    exp.jso_registerStorageHandler = function (object) {
         api_storage = object;
     };
 
@@ -535,7 +532,7 @@
      */
     if (typeof $ === 'undefined') return;
 
-    $.oajax = function(settings) {
+    $.oajax = function (settings) {
         var
             allowia,
             scopes,
@@ -555,7 +552,7 @@
 
         var errorOverridden = settings.error || null;
 
-        var performAjax = function() {
+        var performAjax = function () {
             // log("Perform ajax!");
 
             if (!token) throw "Could not perform AJAX call because no valid tokens was found.";
@@ -571,7 +568,7 @@
             $.ajax(settings);
         };
 
-        settings.error = function(jqXHR, textStatus, errorThrown) {
+        settings.error = function (jqXHR, textStatus, errorThrown) {
             log('error(jqXHR, textStatus, errorThrown)');
             log(jqXHR);
             log(textStatus);
@@ -579,7 +576,7 @@
 
             if (jqXHR.status === 401) {
 
-                log("Token expired. About to delete this token for provider ID "+ providerid);
+                log("Token expired. About to delete this token for provider ID " + providerid);
                 log(token);
                 api_storage.wipeTokens(providerid);
 
@@ -593,7 +590,7 @@
         if (!token) {
             if (allowia) {
                 log("Perform authrequest");
-                jso_authrequest(providerid, scopes, function() {
+                jso_authrequest(providerid, scopes, function () {
                     token = api_storage.getToken(providerid, scopes);
                     performAjax();
                 });
