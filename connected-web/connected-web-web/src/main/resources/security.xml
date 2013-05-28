@@ -54,7 +54,7 @@
             scope="read,write"
             authorities="ROLE_USER"
             secret="123456"
-            authorized-grant-types="authorization_code,implicit,password"
+            authorized-grant-types="authorization_code,implicit,password,"
             resource-ids="crm"/>
     </oauth:client-details-service>
 

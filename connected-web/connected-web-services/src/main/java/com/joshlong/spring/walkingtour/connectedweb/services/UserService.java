@@ -66,7 +66,6 @@ public class UserService implements UserDetailsService {
         this.gridFsTemplate = gridFsTemplate;
     }
 
-
     @PreAuthorize(USER_ID_IS_PRINCIPAL_ID)
     public com.joshlong.spring.walkingtour.connectedweb.services.User updateUser(long userId, String un, String pw, String fn, String ln, boolean importedFromServiceProvider) {
         com.joshlong.spring.walkingtour.connectedweb.services.User user = getUserById(userId);
@@ -123,7 +122,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-   public Authentication establishSpringSecurityLogin(String localUserId) {
+    public Authentication establishSpringSecurityLogin(String localUserId) {
         UserService.CrmUserDetails details = loadUserByUsername(localUserId);
         String pw = org.apache.commons.lang.StringUtils.defaultIfBlank(details.getPassword(), "");
         Authentication toAuthenticate = new UsernamePasswordAuthenticationToken(details, pw, details.getAuthorities());
@@ -194,24 +193,50 @@ public class UserService implements UserDetailsService {
 
     @Override
     public CrmUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.joshlong.spring.walkingtour.connectedweb.services.User user = loginByUsername(username);
-        if (null == user) return null;
+        User user = loginByUsername(username);
+
         return new CrmUserDetails(user);
+    }
+
+    private String deriveFileExtension(final String fileName) {
+        String lowerCaseFileName = fileName.toLowerCase();
+        for (String k : multiMapOfExtensionsToVariants.keySet()) {
+            Collection<String> variants = multiMapOfExtensionsToVariants.get(k);
+            for (String var : variants) {
+                if (lowerCaseFileName.endsWith(var)) return k;
+            }
+        }
+        return null;
+    }
+
+    private String fileNameForUserIdProfilePhoto(long userId) {
+        return String.format("user%sprofilePhoto", Long.toString(userId));
+    }
+
+    private boolean ensureRemovalOfFile(File file) {
+        return null != file && (!file.exists() || file.delete());
+    }
+
+    private <T> T firstOrNull(Collection<T> t) {
+        return t.size() > 0 ? t.iterator().next() : null;
     }
 
     /**
      * Implementation of Spring Security's {@link org.springframework.security.core.userdetails.UserDetails UserDetails} contract
      */
     public static class CrmUserDetails implements UserDetails {
-        private Collection<GrantedAuthority> grantedAuthorities;
+
+        private Collection<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+
         private com.joshlong.spring.walkingtour.connectedweb.services.User user;
 
         public CrmUserDetails(com.joshlong.spring.walkingtour.connectedweb.services.User user) {
             assert user != null : "the provided user reference can't be null";
             this.user = user;
-            this.grantedAuthorities = new ArrayList<GrantedAuthority>();
-            for (String ga : Arrays.asList(ROLE_USER, SCOPE_READ, SCOPE_WRITE))
+
+            for (String ga : Arrays.asList(ROLE_USER, SCOPE_READ, SCOPE_WRITE)) {
                 this.grantedAuthorities.add(new SimpleGrantedAuthority(ga));
+            }
         }
 
         @Override
@@ -221,12 +246,12 @@ public class UserService implements UserDetailsService {
 
         @Override
         public String getPassword() {
-            return this.user.getPassword();
+            return user.getPassword();
         }
 
         @Override
         public String getUsername() {
-            return this.user.getUsername();
+            return user.getUsername();
         }
 
         @Override
@@ -252,28 +277,5 @@ public class UserService implements UserDetailsService {
         public com.joshlong.spring.walkingtour.connectedweb.services.User getUser() {
             return this.user;
         }
-    }
-
-    private String deriveFileExtension(final String fileName) {
-        String lowerCaseFileName = fileName.toLowerCase();
-        for (String k : multiMapOfExtensionsToVariants.keySet()) {
-            Collection<String> variants = multiMapOfExtensionsToVariants.get(k);
-            for (String var : variants) {
-                if (lowerCaseFileName.endsWith(var)) return k;
-            }
-        }
-        return null;
-    }
-
-    private String fileNameForUserIdProfilePhoto(long userId) {
-        return String.format("user%sprofilePhoto", Long.toString(userId));
-    }
-
-    private boolean ensureRemovalOfFile(File file) {
-        return null != file && (!file.exists() || file.delete());
-    }
-
-    private <T> T firstOrNull(Collection<T> t) {
-        return t.size() > 0 ? t.iterator().next() : null;
     }
 }

@@ -48,7 +48,12 @@ public class JdbcCustomerService implements SearchCapableCustomerService {
         final String percent = "%";
         query = (query.endsWith(percent) ? query : query + percent);
         query = (query.startsWith(percent) ? query : percent + query);
+
+
+
         return jdbcTemplate.query(this.searchQuery, customerRowMapper, query);
+
+
     }
 
     public Customer createCustomer(String fn, String ln) {

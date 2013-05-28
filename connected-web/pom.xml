@@ -23,7 +23,8 @@
         </contributor>
     </contributors>
     <properties> <!--1.0.2.RELEASE-->
-        <spring-social.version>1.1.0.M2</spring-social.version>
+        <!--<spring-social.version>1.1.0.M2</spring-social.version>-->
+        <spring-social.version>1.1.0.BUILD-SNAPSHOT</spring-social.version>
          <springframework-version>3.2.0.RELEASE</springframework-version>
         <!--<springframework-version>3.1.1.RELEASE</springframework-version>-->
         <cloudfoundry.version>0.8.2</cloudfoundry.version>

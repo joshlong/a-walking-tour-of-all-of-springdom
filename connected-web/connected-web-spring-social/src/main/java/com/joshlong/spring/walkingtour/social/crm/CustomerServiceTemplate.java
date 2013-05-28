@@ -1,0 +1,117 @@
+package com.joshlong.spring.walkingtour.social.crm;
+
+
+import org.apache.commons.logging.*;
+import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
+import org.springframework.social.support.ClientHttpRequestFactorySelector;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.*;
+
+// todo
+public class CustomerServiceTemplate extends AbstractOAuth2ApiBinding implements CustomerServiceOperations {
+
+    private static Log log = LogFactory.getLog(Main.class.getName());
+    // todo either the request params become constants or the urls become variables, but they should be the same thing !
+    private final String USER_COLLECTION_URL = "/api/users";
+    private final String USER_COLLECTION_USERNAMES_URL = USER_COLLECTION_URL + "/usernames";
+    private final String USER_COLLECTION_ENTRY_URL = USER_COLLECTION_URL + "/{userId}";
+    private final String USER_COLLECTION_ENTRY_PHOTO_URL = USER_COLLECTION_ENTRY_URL + "/photo"; // todo use this when handling setConnectionValues above.
+    private final String requestParamLastName = "lastName",
+            requestParamFirstName = "firstName",
+            requestParamUserId = "userId",
+            requestParamCustomerId = "customerId";
+    private final String CUSTOMER_COLLECTION_URL = "/api/crm/{userId}/customers";
+    private final String CUSTOMER_COLLECTION_ENTRY_URL = CUSTOMER_COLLECTION_URL + "/{customerId}";
+    private final String CUSTOMER_SEARCH = "/api/crm/search";
+    private final String slash = "/";
+    private String baseServiceUrl;  // todo
+
+    public CustomerServiceTemplate(String baseServiceUrl, String accessToken) {
+        super(accessToken);
+        setBaseServiceUrl(baseServiceUrl);
+        setRequestFactory(ClientHttpRequestFactorySelector.bufferRequests(getRestTemplate().getRequestFactory()));
+    }
+
+    // todo does this one work? or do i need to break apart the fields of the customer record into individual form fields or something?
+    // todo look into the RestTemplate#post methods and, more importantly, look at how to dot his elsewhere
+    // todo look also at the update version of this method #updateCustomer as it faces the same problem.
+    @Override
+    public Customer createCustomer(Long userId, String firstName, String lastName, Date signupDate) {
+        // http://stackoverflow.com/questions/8297215/spring-resttemplate-get-with-parameters
+
+        String url = UriComponentsBuilder.fromHttpUrl(urlForPath(CUSTOMER_COLLECTION_URL))
+                .queryParam(requestParamFirstName, firstName)
+                .queryParam(requestParamLastName, lastName)
+                .queryParam(requestParamUserId, userId)
+                .build()
+                .toUriString();
+
+        Map<String, Long> vars = Collections.singletonMap(requestParamUserId, userId);
+        return null;
+        // return extractResponse(customerResponseEntity);
+    }
+
+    /**
+     * searches customer information for the given, authenticated user.
+     *
+     * @param searchQuery a string to be used in searching a user's customer data.
+     */
+    @Override
+    public Collection<Customer> searchCustomers(String searchQuery) {
+        String url = urlForPath(CUSTOMER_SEARCH);
+        String uriWithVariables = UriComponentsBuilder.fromUriString(url)
+                .queryParam("q", searchQuery)
+                .build()
+                .toUriString();
+        return getRestTemplate().getForObject(uriWithVariables, CustomerList.class);
+    }
+
+    @Override
+    public List<Customer> getAllUserCustomers(Long userid) {
+        String url = urlForPath(CUSTOMER_COLLECTION_URL);
+        return getRestTemplate().getForObject(url, CustomerList.class, Collections.singletonMap(requestParamUserId, userid));
+    }
+
+    @Override
+    public void deleteCustomer(Long customerId) {
+        String url = urlForPath(CUSTOMER_COLLECTION_ENTRY_URL);
+        Map<String, Long> customerIdMap = Collections.singletonMap(requestParamCustomerId, customerId);
+        getRestTemplate().delete(url, customerIdMap);
+    }
+
+    @Override
+    public void updateCustomer(Long id, String fn, String ln, Date birthday) {
+        String url = urlForPath(CUSTOMER_COLLECTION_ENTRY_URL);
+        getRestTemplate().put(url, Collections.singletonMap(requestParamCustomerId, id));
+    }
+
+    private String urlForPath(final String p) {
+        String inputPath = p;
+        if (inputPath.startsWith(slash))
+            inputPath = inputPath.substring(1);
+        String wholeUrl = this.baseServiceUrl + inputPath;
+        log.debug("the whole URL is " + wholeUrl);
+        return wholeUrl;
+    }
+
+    // a class actually retains generics information.
+    //
+    private void setBaseServiceUrl(String url) {
+        if (!url.endsWith(slash))
+            url = url + slash;
+        this.baseServiceUrl = url;
+    }
+
+    @Override
+    public CrmUserProfile currentUser() {
+
+        String url = urlForPath(USER_COLLECTION_ENTRY_URL);
+        return getRestTemplate().getForObject(url, CrmUserProfile.class);
+    }
+
+    // hack so that we can retain the generic type information for jackson at runtime.
+    //
+    private static class CustomerList extends ArrayList<Customer> {
+    }
+}

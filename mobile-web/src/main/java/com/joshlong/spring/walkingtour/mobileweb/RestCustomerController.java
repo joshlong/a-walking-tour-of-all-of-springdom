@@ -11,7 +11,6 @@ import java.math.BigInteger;
 import java.util.*;
 
 @Controller
-@RequestMapping
 public class RestCustomerController {
 
     @Autowired

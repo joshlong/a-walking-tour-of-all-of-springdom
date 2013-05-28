@@ -35,7 +35,7 @@
 
                     <div class="form-actions"
                          style="background-color: white;  border: 0; margin-bottom :0;margin-top:0;padding-bottom: 0;padding-top: 0;">
-                        <p>You hereby authorize "${client.clientId}" to act on your behalf.
+                        <p>You hereby authorize <strong>${client.clientId}</strong> to act on your behalf.
                         </p>
                     </div>
                     <form id="confirmationForm" name="confirmationForm"
@@ -53,7 +53,7 @@
 
                                     <input name="user_oauth_approval" value="true" type="hidden"/>
                                 </div>
-                                Authorize ${client.clientId} to act on my behalf. Your password will not be shared with
+                                Authorize <strong>${client.clientId}</strong>  to act on my behalf. Your password will not be shared with
                                 the client.
                             </div>
                         </fieldset>
@@ -74,7 +74,7 @@
                                     <input name="user_oauth_approval" value="false" type="hidden"/>
                                 </div>
 
-                                You do <strong>not</strong> authorize ${client.clientId} to access your account
+                                You do <strong>not</strong> authorize  <strong>${client.clientId}</strong>  to access your account
                                 information and act on your behalf.
 
                             </div>
