@@ -1,6 +1,7 @@
 package com.joshlong.spring.walkingtour.social.crm;
 
 
+import com.joshlong.spring.walkingtour.social.crm.omgthehorror.Main;
 import org.apache.commons.logging.*;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;

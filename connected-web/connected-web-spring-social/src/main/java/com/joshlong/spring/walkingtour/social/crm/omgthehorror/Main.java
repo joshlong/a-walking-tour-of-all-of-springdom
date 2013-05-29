@@ -1,5 +1,7 @@
-package com.joshlong.spring.walkingtour.social.crm;
+package com.joshlong.spring.walkingtour.social.crm.omgthehorror;
 
+import com.joshlong.spring.walkingtour.social.crm.*;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.*;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.*;
@@ -13,6 +15,7 @@ import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
 
 import javax.sql.DataSource;
+import javax.swing.*;
 import java.io.*;
 import java.util.*;
 
@@ -21,11 +24,10 @@ import java.util.*;
  */
 public class Main {
 
-
     private static Map<String, Object> configurationProperties() {
         final String propertyNameRoot = "sscrm";
         Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put(propertyNameRoot + ".base-url", "http://127.0.0.1:8080/");
+        properties.put(propertyNameRoot + ".base-url", "http://localhost:8080");
         properties.put(propertyNameRoot + ".client-id", "android-crm");
         properties.put(propertyNameRoot + ".client-secret", "123456");
         properties.put(propertyNameRoot + ".authorize-url", "/oauth/authorize");
@@ -50,20 +52,30 @@ public class Main {
         String scopes = "read,write";
         String redirectUri = mapPropertySource.getProperty("sscrm.base-url") + "/crm/profile.html";
 
-      //  Connection<CustomerServiceOperations> customerServiceOperationsConnection = CrmOAuthDance.oauthWithUsernameAndPassword(crmConnectionFactory, redirectUri, scopes, state, "starbuxman", "livelessons");
-
-        //  CustomerServiceOperations customerServiceOperations  = customerServiceOperationsConnection.getApi();
 
 
         String authorizationUrl = CrmOAuthDance.start(crmConnectionFactory, state, scopes, redirectUri);
         Utils.log("please visit the authorization URL ('%s') in a browser and then note the code it gives you at the end.", authorizationUrl);
+       // String chromeUrlCommand =String.format("/usr/bin/open -a \"/Applications/Google Chrome.app\"  '%s'" , authorizationUrl);
+
+        Runtime.getRuntime().exec( new String []{ "/usr/bin/open", "-a","/Applications/Google Chrome.app", authorizationUrl}) ;
 
 
-        String code = readLine();
+        String code = safe(JOptionPane.showInputDialog(null , "What's the 'code'?")) ;
+
         String redirectUrl = mapPropertySource.getProperty("sscrm.base-url") + "/crm/profile.html";
         CrmOAuthDance.thenObtainConnectionFromCode(crmConnectionFactory, code, redirectUrl);
 
 
+    }
+
+    public static String str(InputStream inputStream )
+     throws Throwable
+    {
+     return IOUtils.toString( inputStream);
+    }
+    static String safe(String i) {
+        return i != null && !i.trim().equals("") ? i.trim() : null;
     }
 
     static String readLine() {
@@ -72,7 +84,6 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**
@@ -103,7 +114,7 @@ public class Main {
                     http = "http://";
             assert baseUrl != null && baseUrl.length() > 0 : "the baseUrl can't be null!";
 
-            if (!baseUrl.endsWith(slash)) baseUrl = baseUrl + slash;
+        //    if (!baseUrl.endsWith(slash)) baseUrl = baseUrl + slash;
 
             if (!authorizeUrl.toLowerCase().startsWith(http)) authorizeUrl = baseUrl + authorizeUrl;
 

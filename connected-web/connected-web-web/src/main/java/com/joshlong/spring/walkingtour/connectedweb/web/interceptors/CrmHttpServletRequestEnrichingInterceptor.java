@@ -48,13 +48,13 @@ public class CrmHttpServletRequestEnrichingInterceptor implements WebRequestInte
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Map<String, Object> kvs = new HashMap<String, Object>();
-        kvs.put( this.fullUrlAttribute, buildFullUrlAttribute(swr));
+        kvs.put(this.fullUrlAttribute, buildFullUrlAttribute(swr));
 
         // let's see if the 'username' attribute is available
         HttpServletRequest httpServletRequest = swr.getNativeRequest(HttpServletRequest.class);
         String usernameValue = httpServletRequest.getParameter(this.usernameAttribute);
 
-        if (null !=  this.usernameAttribute)
+        if (null != this.usernameAttribute)
             kvs.put(this.usernameAttribute, usernameValue);
 
         // not authenticated? principal is an AnonymousPrincipal
@@ -66,7 +66,6 @@ public class CrmHttpServletRequestEnrichingInterceptor implements WebRequestInte
 
         return kvs;
     }
-
 
     private long buildUserIdAttribute(UserService.CrmUserDetails userDetails) {
         return userDetails.getUser().getId();

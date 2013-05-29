@@ -12,6 +12,9 @@
     <artifactId>connected-web-spring-social</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>commons-io</groupId><artifactId>commons-io</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.fasterxml</groupId>

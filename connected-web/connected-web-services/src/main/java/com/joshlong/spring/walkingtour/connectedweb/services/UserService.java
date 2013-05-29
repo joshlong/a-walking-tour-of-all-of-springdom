@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+import org.springframework.util.*;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -227,13 +227,11 @@ public class UserService implements UserDetailsService {
     public static class CrmUserDetails implements UserDetails {
 
         private Collection<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-
         private com.joshlong.spring.walkingtour.connectedweb.services.User user;
 
         public CrmUserDetails(com.joshlong.spring.walkingtour.connectedweb.services.User user) {
-            assert user != null : "the provided user reference can't be null";
+            Assert.notNull(user, "the provided user reference can't be null");
             this.user = user;
-
             for (String ga : Arrays.asList(ROLE_USER, SCOPE_READ, SCOPE_WRITE)) {
                 this.grantedAuthorities.add(new SimpleGrantedAuthority(ga));
             }

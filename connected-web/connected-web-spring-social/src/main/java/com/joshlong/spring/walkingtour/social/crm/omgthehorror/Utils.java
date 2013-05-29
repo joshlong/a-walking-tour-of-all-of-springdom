@@ -1,4 +1,4 @@
-package com.joshlong.spring.walkingtour.social.crm;
+package com.joshlong.spring.walkingtour.social.crm.omgthehorror;
 
 
 import java.io.*;
