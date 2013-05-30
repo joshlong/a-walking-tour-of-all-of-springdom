@@ -31,13 +31,12 @@ public class CrmOAuthDance {
         if (StringUtils.hasText(returnToUrl)) parameters.setRedirectUri(url (returnToUrl));
         if (StringUtils.hasText(scope)) parameters.setScope(scope);
         if (StringUtils.hasText(state)) parameters.setState(state);
-        return oAuth2Operations.buildAuthenticateUrl(GrantType.AUTHORIZATION_CODE, parameters);
+        return oAuth2Operations.buildAuthenticateUrl(GrantType.IMPLICIT_GRANT, parameters);
     }
 
-    public static Connection<CustomerServiceOperations> thenObtainConnectionFromCode(CrmConnectionFactory connectionFactory, String code, String returnToUrl) {
-        OAuth2Operations oAuth2Operations = configureOAuth2Operations(connectionFactory.getOAuthOperations(), USER_PARAMS);
-        AccessGrant accessGrant = oAuth2Operations.exchangeForAccess(code, url(returnToUrl), null);
-        return connectionFactory.createConnection(accessGrant);
+    public static Connection<CustomerServiceOperations> thenObtainConnectionFromCode(CrmConnectionFactory connectionFactory, String accessToken ) {
+//        OAuth2Operations oAuth2Operations = configureOAuth2Operations(connectionFactory.getOAuthOperations(), USER_PARAMS);
+        return connectionFactory.createConnection( new AccessGrant(accessToken));
     }
 
 

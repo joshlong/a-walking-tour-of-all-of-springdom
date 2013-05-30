@@ -6,7 +6,7 @@ import java.util.Date;
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlRootElement
-@Entity(name = "Customer")
+ @Entity(name = "Customer")
 public class Customer {
 
     @Id

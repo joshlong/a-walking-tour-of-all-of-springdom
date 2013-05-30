@@ -1,20 +1,32 @@
 package com.joshlong.spring.walkingtour.social.crm;
 
-import java.io.Serializable;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-public class CrmUserProfile implements Serializable {
+import java.io.Serializable;
+import java.util.*;
+
+@JsonIgnoreProperties( ignoreUnknown = true )
+public class User implements Serializable {
     private String firstName, lastName, username;
     private long id;
+     private Set<Customer> customers = new HashSet<Customer>();
 
-    public CrmUserProfile(String f, String l, String user) {
+    public User() {
+    }
+
+    public User(String f, String l, String user) {
         this.firstName = f;
         this.lastName = l;
         this.username = user;
     }
 
-    public CrmUserProfile(long id, String f, String l, String user) {
+    public User(long id, String f, String l, String user) {
         this(f, l, user);
         this.id = id;
+    }
+
+    public Set<Customer> getCustomers() {
+        return this.customers;
     }
 
     public long getId() {

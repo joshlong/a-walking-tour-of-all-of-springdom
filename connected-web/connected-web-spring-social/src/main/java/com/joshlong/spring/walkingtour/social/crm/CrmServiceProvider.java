@@ -24,6 +24,6 @@ public class CrmServiceProvider extends AbstractOAuth2ServiceProvider<CustomerSe
 
     @Override
     public CustomerServiceOperations getApi(String accessToken) {
-        return new CustomerServiceTemplate(accessToken, baseUrl);
+        return new CustomerServiceTemplate( baseUrl, accessToken);
     }
 }

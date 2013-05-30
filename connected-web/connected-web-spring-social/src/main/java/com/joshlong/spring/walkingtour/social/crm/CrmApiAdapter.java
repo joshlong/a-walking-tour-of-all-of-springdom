@@ -3,6 +3,15 @@ package com.joshlong.spring.walkingtour.social.crm;
 import org.apache.commons.logging.*;
 import org.springframework.social.connect.*;
 
+/**
+ *
+ * Used by the Spring Social API.
+ * </p>
+ * Handles the integration between API contract requirements in Spring Social and our API itself.
+ * An {@link ApiAdapter} answers questions like: <EM>is the client connected?</EM> and <EM>what is the authenticated user's profile information?</EM>
+ *
+ * @author Josh Long
+ */
 public class CrmApiAdapter implements ApiAdapter<CustomerServiceOperations> {
     private Log log = LogFactory.getLog(getClass());
 
@@ -13,23 +22,22 @@ public class CrmApiAdapter implements ApiAdapter<CustomerServiceOperations> {
 
     @Override
     public void setConnectionValues(CustomerServiceOperations customerServiceOperations, ConnectionValues values) {
-        CrmUserProfile profile = customerServiceOperations.currentUser();
-        log.info("profile= " + profile.toString());                          // TODO most of these values are incorrect!
+        User profile = customerServiceOperations.currentUser();
         values.setProviderUserId(Long.toString(profile.getId()));
         values.setDisplayName(profile.getUsername());
-        values.setProfileUrl("http://facebook.com/profile.php?id=" + profile.getId()); // todo show the user's profile URL (if any)
-        values.setImageUrl("http://graph.facebook.com/" + profile.getId() + "/picture"); // todo show the user's current profile iamge
+        if (customerServiceOperations instanceof CustomerServiceTemplate)
+            values.setProfileUrl(((CustomerServiceTemplate) customerServiceOperations).urlForPath("/crm/profile.html"));
     }
 
     @Override
-    public UserProfile fetchUserProfile(CustomerServiceOperations customerServiceOperations) {
-        CrmUserProfile crmUserProfile = customerServiceOperations.currentUser();
-        String name = crmUserProfile.getFirstName() + ' ' + crmUserProfile.getLastName();
+    public  UserProfile fetchUserProfile(CustomerServiceOperations customerServiceOperations) {
+        User user = customerServiceOperations.currentUser();
+        String name = user.getFirstName() + ' ' + user.getLastName();
         return new UserProfileBuilder()
                 .setName(name)
-                .setUsername(crmUserProfile.getUsername())
-                .setFirstName(crmUserProfile.getFirstName())
-                .setLastName(crmUserProfile.getLastName())
+                .setUsername(user.getUsername())
+                .setFirstName(user.getFirstName())
+                .setLastName(user.getLastName())
                 .build();
     }
 

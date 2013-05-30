@@ -55,7 +55,8 @@ public class CustomerService {
     public Collection<Customer> search(String name) {
         assert StringUtils.hasText(name) && name.length() > 2 : "search by a name"; // must have at least two characters in query
         String sqlName = ("%" + name + "%").toLowerCase();
-        String sql = "select c.* from customers c where (LOWER( c.firstName ) LIKE :fn OR LOWER( c.lastName ) LIKE :ln)";
+        String customerTable =  Customer.class.getSimpleName().toLowerCase();
+        String sql = String.format("select c.* from %s c where (LOWER( c.firstName ) LIKE :fn OR LOWER( c.lastName ) LIKE :ln)", customerTable);
         return entityManager.createNativeQuery(sql, Customer.class)
                 .setParameter("fn", sqlName)
                 .setParameter("ln", sqlName)

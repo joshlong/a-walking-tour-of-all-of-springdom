@@ -5,8 +5,10 @@ import com.joshlong.spring.walkingtour.social.crm.omgthehorror.Main;
 import org.apache.commons.logging.*;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
+import org.springframework.util.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.*;
 
 // todo
@@ -16,6 +18,7 @@ public class CustomerServiceTemplate extends AbstractOAuth2ApiBinding implements
     // todo either the request params become constants or the urls become variables, but they should be the same thing !
     private final String USER_COLLECTION_URL = "/api/users";
     private final String USER_COLLECTION_USERNAMES_URL = USER_COLLECTION_URL + "/usernames";
+    private final String USER_CURRENT_USER_URL = USER_COLLECTION_URL + "/self";
     private final String USER_COLLECTION_ENTRY_URL = USER_COLLECTION_URL + "/{userId}";
     private final String USER_COLLECTION_ENTRY_PHOTO_URL = USER_COLLECTION_ENTRY_URL + "/photo"; // todo use this when handling setConnectionValues above.
     private final String requestParamLastName = "lastName",
@@ -39,18 +42,23 @@ public class CustomerServiceTemplate extends AbstractOAuth2ApiBinding implements
     // todo look also at the update version of this method #updateCustomer as it faces the same problem.
     @Override
     public Customer createCustomer(Long userId, String firstName, String lastName, Date signupDate) {
-        // http://stackoverflow.com/questions/8297215/spring-resttemplate-get-with-parameters
-
-        String url = UriComponentsBuilder.fromHttpUrl(urlForPath(CUSTOMER_COLLECTION_URL))
+        String createCustomerUrl = urlForPath( "/api/crm/{userId}/customers");
+        URI uri = UriComponentsBuilder.fromHttpUrl(createCustomerUrl)
                 .queryParam(requestParamFirstName, firstName)
                 .queryParam(requestParamLastName, lastName)
-                .queryParam(requestParamUserId, userId)
-                .build()
-                .toUriString();
+                .buildAndExpand(Collections.singletonMap("userId", userId))
+                .toUri();
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+        headers.add(requestParamFirstName, firstName);
+        headers.add(requestParamLastName, lastName);
+        URI resultingCustomerUri = getRestTemplate().postForLocation(uri, headers);
+        return this.getRestTemplate().getForEntity(resultingCustomerUri, Customer.class).getBody();
+    }
 
-        Map<String, Long> vars = Collections.singletonMap(requestParamUserId, userId);
-        return null;
-        // return extractResponse(customerResponseEntity);
+    @Override
+    public User getUserById(Long id) {
+        String url = null  ;
+      return getRestTemplate().getForObject(url, User.class, id) ;
     }
 
     /**
@@ -87,7 +95,8 @@ public class CustomerServiceTemplate extends AbstractOAuth2ApiBinding implements
         getRestTemplate().put(url, Collections.singletonMap(requestParamCustomerId, id));
     }
 
-    private String urlForPath(final String p) {
+    // need this in other clases
+    String urlForPath(final String p) {
         String inputPath = p;
         if (inputPath.startsWith(slash))
             inputPath = inputPath.substring(1);
@@ -105,10 +114,9 @@ public class CustomerServiceTemplate extends AbstractOAuth2ApiBinding implements
     }
 
     @Override
-    public CrmUserProfile currentUser() {
-
-        String url = urlForPath(USER_COLLECTION_ENTRY_URL);
-        return getRestTemplate().getForObject(url, CrmUserProfile.class);
+    public User currentUser() {
+        String url = urlForPath(USER_CURRENT_USER_URL);
+        return getRestTemplate().getForObject(url, User.class);
     }
 
     // hack so that we can retain the generic type information for jackson at runtime.

@@ -7,9 +7,11 @@ import java.util.*;
  */
 public interface CustomerServiceOperations {
 
-    CrmUserProfile currentUser();
+    User currentUser();
 
-    Customer createCustomer(Long userId, String firstName, String lastName, Date signupDate);
+    User getUserById  (  Long id ) ;
+
+    Customer createCustomer(   Long userId, String firstName, String lastName, Date signupDate);
 
     Collection<Customer> searchCustomers(String name);
 

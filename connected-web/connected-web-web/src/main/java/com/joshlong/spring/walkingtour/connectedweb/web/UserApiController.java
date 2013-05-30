@@ -2,11 +2,9 @@ package com.joshlong.spring.walkingtour.connectedweb.web;
 
 import com.joshlong.spring.walkingtour.connectedweb.services.*;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,12 +24,11 @@ public class UserApiController {
     /**
      * Root URL template for all modifications to a {@link com.joshlong.spring.walkingtour.connectedweb.services.User}
      */
-    public static final String CURRENT_USER_URL = "/api/user";
     public static final String USER_COLLECTION_URL = "/api/users";
+    public static final String CURRENT_USER_URL = USER_COLLECTION_URL + "/self";
     public static final String USER_COLLECTION_USERNAMES_URL = USER_COLLECTION_URL + "/usernames";
     public static final String USER_COLLECTION_ENTRY_URL = USER_COLLECTION_URL + "/{userId}";
     public static final String USER_COLLECTION_ENTRY_PHOTO_URL = USER_COLLECTION_ENTRY_URL + "/photo";
-
     //  static public final String PRINCIPAL_IS_REQUESTED_USER = "#userId == principal.id";
     private Logger log = Logger.getLogger(getClass());
     private UserService userService;
@@ -48,17 +45,11 @@ public class UserApiController {
     }
 
     @RequestMapping(value = CURRENT_USER_URL, method = RequestMethod.GET)
-    public User currentUser() {
-
-        SecurityContext securityContext =
-                SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
-
-        log.info("attempting to lookup the CURRENT user. TODO this isn't finished yet!");
-        log.debug("reflective toString on current authentication: " +
-                ToStringBuilder.reflectionToString(authentication));
-
-        return null;
+    @ResponseBody
+    public User currentUser(Authentication auth) {
+        UserService.CrmUserDetails crmUserDetails = (UserService.CrmUserDetails) auth.getPrincipal();
+        long userId = crmUserDetails.getUser().getId();
+        return this.userService.getUserById(userId);
     }
 
     @RequestMapping(value = USER_COLLECTION_ENTRY_URL, method = RequestMethod.PUT)

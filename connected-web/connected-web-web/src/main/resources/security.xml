@@ -52,7 +52,7 @@
         <oauth:client
             client-id="android-crm"
             scope="read,write"
-            redirect-uri="http://localhost:8080/crm/profile.html"
+
             authorities="ROLE_USER"
             secret="123456"
             authorized-grant-types="authorization_code,implicit,password,"

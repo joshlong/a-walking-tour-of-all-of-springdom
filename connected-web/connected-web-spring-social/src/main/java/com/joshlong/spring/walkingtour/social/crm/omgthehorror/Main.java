@@ -5,7 +5,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.*;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.*;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +12,7 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.connect.*;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
+import org.springframework.social.oauth2.AccessGrant;
 
 import javax.sql.DataSource;
 import javax.swing.*;
@@ -48,33 +48,44 @@ public class Main {
 
         CrmConnectionFactory crmConnectionFactory = applicationContext.getBean(CrmConnectionFactory.class);
 
-        String state = null;// Long.toBinaryString(System.currentTimeMillis() * ((long) (Math.random() * 100)));
+        String state = null; // any arbitrary string
         String scopes = "read,write";
         String redirectUri = mapPropertySource.getProperty("sscrm.base-url") + "/crm/profile.html";
 
-
-
         String authorizationUrl = CrmOAuthDance.start(crmConnectionFactory, state, scopes, redirectUri);
-        Utils.log("please visit the authorization URL ('%s') in a browser and then note the code it gives you at the end.", authorizationUrl);
-       // String chromeUrlCommand =String.format("/usr/bin/open -a \"/Applications/Google Chrome.app\"  '%s'" , authorizationUrl);
 
-        Runtime.getRuntime().exec( new String []{ "/usr/bin/open", "-a","/Applications/Google Chrome.app", authorizationUrl}) ;
+        Runtime.getRuntime().exec(new String[]{"/usr/bin/open", "-a", "/Applications/Google Chrome.app", authorizationUrl});
+        String accessToken =
+             // "57f52ff8-2d95-48fe-882a-183c48d821ce" ;
+                safe(JOptionPane.showInputDialog(null, "What's the 'access_token'?"));
+        Connection<CustomerServiceOperations> connection = crmConnectionFactory.createConnection(new AccessGrant(accessToken));
+
+        UserProfile userProfile = connection.fetchUserProfile();
+        System.out.println("obtained connection: " +   userProfile.getUsername() + "."  );
+
+        CustomerServiceOperations customerServiceOperations = connection.getApi();
+        Collection<Customer> customerCollection = customerServiceOperations.searchCustomers("andy");
+        for (Customer c : customerCollection) {
+            System.out.println( c.toString() );
+        }
+
+        User self =customerServiceOperations.currentUser();
 
 
-        String code = safe(JOptionPane.showInputDialog(null , "What's the 'code'?")) ;
+        Customer customer = customerServiceOperations.createCustomer( self.getId(), "josh","long" , new java.util.Date());
 
-        String redirectUrl = mapPropertySource.getProperty("sscrm.base-url") + "/crm/profile.html";
-        CrmOAuthDance.thenObtainConnectionFromCode(crmConnectionFactory, code, redirectUrl);
+        System.out.println(customer.toString());
 
 
     }
 
-    public static String str(InputStream inputStream )
-     throws Throwable
-    {
-     return IOUtils.toString( inputStream);
+    static String str(InputStream inputStream)
+            throws Throwable {
+        return IOUtils.toString(inputStream);
     }
-    static String safe(String i) {
+
+    static String safe(String i)
+            throws Throwable {
         return i != null && !i.trim().equals("") ? i.trim() : null;
     }
 
@@ -106,20 +117,15 @@ public class Main {
             return simpleDriverDataSource;
         }
 
-        CrmServiceProvider crmServiceProvider(String clientId, String clientSecret, String baseUrl, String authorizeUrl, String accessTokenUrl) {
+        // this is the recipe to construct an instance of the CrmServiceProvider API that we can use outside of
+        // Spring's Java configuration (and assuming no Environment abstraction) as we won't have that on Android.
+        private CrmServiceProvider crmServiceProvider(String clientId, String clientSecret, String baseUrl, String authorizeUrl, String accessTokenUrl) {
             log.debug(String.format("baseUrl=%s, clientSecret=%s, consumerSecret=%s, authorizeUrl=%s, accessTokenUrl=%s",
                     baseUrl, clientId, clientSecret, authorizeUrl, accessTokenUrl));
-            final String
-                    slash = "/",
-                    http = "http://";
+            final String http = "http://";
             assert baseUrl != null && baseUrl.length() > 0 : "the baseUrl can't be null!";
-
-        //    if (!baseUrl.endsWith(slash)) baseUrl = baseUrl + slash;
-
             if (!authorizeUrl.toLowerCase().startsWith(http)) authorizeUrl = baseUrl + authorizeUrl;
-
             if (!accessTokenUrl.toLowerCase().startsWith(http)) accessTokenUrl = baseUrl + accessTokenUrl;
-
             return new CrmServiceProvider(baseUrl, clientId, clientSecret, authorizeUrl, accessTokenUrl);
         }
 
@@ -138,15 +144,12 @@ public class Main {
             return this.crmServiceProvider(clientId, clientSecret, baseUrl, authorizeUrl, accessTokenUrl);
         }
 
+        // this will get replaced with a SQL Lite compatible implementation on Android
         @Bean
         public JdbcUsersConnectionRepository jdbcUsersConnectionRepository(DataSource dataSource, ConnectionFactoryLocator locator) {
             return new JdbcUsersConnectionRepository(dataSource, locator, Encryptors.noOpText());
         }
 
-        @Bean
-        public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-            return new JdbcTemplate(dataSource);
-        }
 
         @Bean
         public CrmApiAdapter crmApiAdapter() {
@@ -154,8 +157,7 @@ public class Main {
         }
 
         @Bean
-        public CrmConnectionFactory crmConnectionFactory(CrmServiceProvider crmServiceProvider,
-                                                         CrmApiAdapter crmApiAdapter) {
+        public CrmConnectionFactory crmConnectionFactory(CrmServiceProvider crmServiceProvider,   CrmApiAdapter crmApiAdapter) {
             return new CrmConnectionFactory(crmServiceProvider, crmApiAdapter);
         }
 
