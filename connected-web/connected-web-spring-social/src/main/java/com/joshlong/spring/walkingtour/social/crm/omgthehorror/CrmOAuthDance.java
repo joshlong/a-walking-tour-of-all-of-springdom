@@ -1,7 +1,6 @@
 package com.joshlong.spring.walkingtour.social.crm.omgthehorror;
 
-import com.joshlong.spring.walkingtour.social.crm.*;
-import org.springframework.social.connect.Connection;
+import com.joshlong.spring.walkingtour.social.crm.CrmConnectionFactory;
 import org.springframework.social.oauth2.*;
 import org.springframework.util.StringUtils;
 
@@ -18,7 +17,7 @@ public class CrmOAuthDance {
         return oAuth2Operations;
     }
 
-    static String url (String u ) {
+    private static String url (String u ) {
         return u  ;
     }
     public static String start(
@@ -34,10 +33,6 @@ public class CrmOAuthDance {
         return oAuth2Operations.buildAuthenticateUrl(GrantType.IMPLICIT_GRANT, parameters);
     }
 
-    public static Connection<CustomerServiceOperations> thenObtainConnectionFromCode(CrmConnectionFactory connectionFactory, String accessToken ) {
-//        OAuth2Operations oAuth2Operations = configureOAuth2Operations(connectionFactory.getOAuthOperations(), USER_PARAMS);
-        return connectionFactory.createConnection( new AccessGrant(accessToken));
-    }
 
 
 }

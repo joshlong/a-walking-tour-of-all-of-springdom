@@ -17,6 +17,7 @@ public class CustomerServiceClient implements CustomerService {
     private String baseServiceUrl;
     private RestTemplate restTemplate;
     private final String slash = "/";
+
     public CustomerServiceClient(String url, RestTemplate restTemplate) {
         setBaseServiceUrl(url);
         setRestTemplate(restTemplate);
