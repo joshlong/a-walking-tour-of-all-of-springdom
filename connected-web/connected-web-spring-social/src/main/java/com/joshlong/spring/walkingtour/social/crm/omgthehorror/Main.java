@@ -12,7 +12,8 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.connect.*;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
-import org.springframework.social.oauth2.AccessGrant;
+import org.springframework.social.oauth2.*;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import javax.swing.*;
@@ -20,9 +21,33 @@ import java.io.*;
 import java.util.*;
 
 /**
+ * this is a working Spring Social-based client that handles the OAuth dance and consumes our web service.
+ *
  * @author Josh Long
  */
 public class Main {
+    static private boolean USER_PARAMS = false;
+
+    private static OAuth2Operations configureOAuth2Operations(OAuth2Operations oAuth2Operations, boolean useParametersForClientAuthentication) {
+        if (oAuth2Operations instanceof OAuth2Template)
+            ((OAuth2Template) oAuth2Operations).setUseParametersForClientAuthentication(useParametersForClientAuthentication);
+        return oAuth2Operations;
+    }
+
+    private static String url(String u) { return u; }
+
+    public static String start(
+            CrmConnectionFactory connectionFactory,
+            String state,
+            String scope,
+            String returnToUrl) throws Throwable {
+        OAuth2Operations oAuth2Operations = configureOAuth2Operations(connectionFactory.getOAuthOperations(), USER_PARAMS);
+        OAuth2Parameters parameters = new OAuth2Parameters();
+        if (StringUtils.hasText(returnToUrl)) parameters.setRedirectUri(url(returnToUrl));
+        if (StringUtils.hasText(scope)) parameters.setScope(scope);
+        if (StringUtils.hasText(state)) parameters.setState(state);
+        return oAuth2Operations.buildAuthenticateUrl(GrantType.IMPLICIT_GRANT, parameters);
+    }
 
     private static Map<String, Object> configurationProperties() {
         final String propertyNameRoot = "sscrm";
@@ -52,27 +77,27 @@ public class Main {
         String scopes = "read,write";
         String redirectUri = mapPropertySource.getProperty("sscrm.base-url") + "/crm/profile.html";
 
-        String authorizationUrl = CrmOAuthDance.start(crmConnectionFactory, state, scopes, redirectUri);
+        String authorizationUrl = start(crmConnectionFactory, state, scopes, redirectUri);
 
         Runtime.getRuntime().exec(new String[]{"/usr/bin/open", "-a", "/Applications/Google Chrome.app", authorizationUrl});
         String accessToken =
-             // "57f52ff8-2d95-48fe-882a-183c48d821ce" ;
+                // "57f52ff8-2d95-48fe-882a-183c48d821ce" ;
                 safe(JOptionPane.showInputDialog(null, "What's the 'access_token'?"));
         Connection<CustomerServiceOperations> connection = crmConnectionFactory.createConnection(new AccessGrant(accessToken));
 
         UserProfile userProfile = connection.fetchUserProfile();
-        System.out.println("obtained connection: " +   userProfile.getUsername() + "."  );
+        System.out.println("obtained connection: " + userProfile.getUsername() + ".");
 
         CustomerServiceOperations customerServiceOperations = connection.getApi();
         Collection<Customer> customerCollection = customerServiceOperations.searchCustomers("andy");
         for (Customer c : customerCollection) {
-            System.out.println( c.toString() );
+            System.out.println(c.toString());
         }
 
-        User self =customerServiceOperations.currentUser();
+        User self = customerServiceOperations.currentUser();
 
 
-        Customer customer = customerServiceOperations.createCustomer( self.getId(), "josh","long" , new java.util.Date());
+        Customer customer = customerServiceOperations.createCustomer(self.getId(), "josh", "long", new java.util.Date());
 
         System.out.println(customer.toString());
 
@@ -150,14 +175,13 @@ public class Main {
             return new JdbcUsersConnectionRepository(dataSource, locator, Encryptors.noOpText());
         }
 
-
         @Bean
         public CrmApiAdapter crmApiAdapter() {
             return new CrmApiAdapter();
         }
 
         @Bean
-        public CrmConnectionFactory crmConnectionFactory(CrmServiceProvider crmServiceProvider,   CrmApiAdapter crmApiAdapter) {
+        public CrmConnectionFactory crmConnectionFactory(CrmServiceProvider crmServiceProvider, CrmApiAdapter crmApiAdapter) {
             return new CrmConnectionFactory(crmServiceProvider, crmApiAdapter);
         }
 
