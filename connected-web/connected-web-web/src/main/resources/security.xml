@@ -59,10 +59,12 @@
             resource-ids="crm"/>
     </oauth:client-details-service>
 
-    <oauth:authorization-server client-details-service-ref="clientDetailsService"
-                                token-services-ref="tokenServices"
-                               ><!-- todo restore this for the ajax client!
-                                    todo user-approval-handler-ref="oauthTokenServicesUserApprovalHandler"-->
+    <oauth:authorization-server
+        client-details-service-ref="clientDetailsService"
+        token-services-ref="tokenServices">
+
+        <!-- todo restore this for the ajax client! todo user-approval-handler-ref="oauthTokenServicesUserApprovalHandler"-->
+
         <oauth:authorization-code/>
         <oauth:implicit/>
         <oauth:refresh-token/>
